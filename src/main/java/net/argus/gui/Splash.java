@@ -20,6 +20,8 @@ import javax.swing.SwingUtilities;
 import net.argus.file.Properties;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
+import net.argus.util.Display;
+import net.argus.util.SClass;
 
 public class Splash extends Frame {
 	
@@ -33,20 +35,28 @@ public class Splash extends Frame {
 	private ImageIcon icon;
 	public String statusText;
 	
-	public Splash(String title, String iconPath, Frame fen, int time, Properties config) {
-		super(title, iconPath, config);
+	public Splash(String title, ImageIcon icon, Frame fen, int time, Properties config) {
+		super(title, null, config);
 		this.setDefaultCloseOperation(Frame.DISPOSE_ON_CLOSE);
+		
 		try{robot = new Robot();}catch(Exception e){e.printStackTrace();}
+		
 		contentpane = new SplashContent();
-		this.icon = new ImageIcon(iconPath);
+		
+		this.icon = icon;
+		
+		Label img = new Label(icon);
+		
 		this.setContentPane(contentpane);
-		this.getContentPane().add(new JLabel(icon));
+		this.getContentPane().add(img);
 		this.pack();
 		this.setLocationRelativeTo(null);
+		
 		createCapture();
+		
 		this.setVisible(true);
 		
-		new PanelRepaint(fen, this).initImage(config);
+		new PanelRepaint(fen, this).initImage();
 		
 		try{Thread.sleep(time);}catch(Exception e){e.printStackTrace();}
 		this.setVisible(false);	
@@ -72,7 +82,7 @@ public class Splash extends Frame {
 		try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
 	}
 	
-	private void createCapture() {
+	public void createCapture() {
 		try{
 			Point point = new Point(0, 0);
 			SwingUtilities.convertPointToScreen(point, contentpane);
@@ -158,7 +168,7 @@ public class Splash extends Frame {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			if(image != null) g.drawImage(image, 0, 0, this);
-				
+			
 			/*Graphics2D g2d = (Graphics2D) g.create();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			int h = Display.getHeightDisplay(config) - 100;
@@ -176,8 +186,8 @@ public class Splash extends Frame {
 		public void run() {
 			while(!parent.isVisible()) {System.out.print("");}
 			while(parent.isVisible()) {
-				try {Thread.sleep(100);}catch(InterruptedException e) {e.printStackTrace();}
 				status.setText("Loading " + statusText);
+				
 			}
 			
 		}
@@ -187,14 +197,16 @@ public class Splash extends Frame {
 	public static void main(String[] args) {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
-		String iconPath = "C:\\Users\\Jean\\Documents\\Django\\java\\Project\\Save\\res\\logo.png";
-		boolean[] isE = new boolean[3];
-		isE[0] = true;
-		isE[1] = true;
-		isE[2] = true;
+		
+		String iconPath = SClass.getPath("res/favIcon32x32.png");
+		boolean[] isE = new boolean[] {true, true, true};
+		
 		Frame fen = new Frame("School", iconPath, isE, config);
-		Panel pan = new Panel(config, "C:\\Users\\Jean\\Documents\\Django\\java\\Project\\Save/res/background.jpg", fen);
-		new Splash("school", iconPath, fen, 30000, false, config);
+		Panel pan = new Panel();
+		
+		new Splash("Splash", null, fen, 1000, config);
+		
+		fen.setIcon(SClass.getPath("res/favIcon16x16.png"));
 		fen.add(pan);
 		fen.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
 		fen.setVisible(true);

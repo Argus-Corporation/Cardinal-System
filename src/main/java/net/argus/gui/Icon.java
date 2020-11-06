@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public abstract class Icon {
-
 	
 	public static ImageIcon getIcon(String iconPath) {
 		BufferedImage img = null;

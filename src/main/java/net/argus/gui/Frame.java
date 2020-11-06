@@ -31,7 +31,8 @@ public class Frame extends JFrame {
 	
 	protected TopPanel topPan;
 	
-	protected ImageIcon icon;
+	protected ImageIcon iconFrame;
+	protected ImageIcon iconOs;
 	
 	protected boolean undecorated;
 	protected boolean fullScreen;
@@ -49,11 +50,12 @@ public class Frame extends JFrame {
 		this.config = config;
 		this.undecorated = config.getBoolean("frame.undecorated");
 		
-		icon = new ImageIcon(pathIcon);
+		iconFrame = new ImageIcon(pathIcon);
+		iconOs = new ImageIcon(pathIcon);
 		
-		this.setIconImage(icon.getImage());
+		this.setIconImage(iconOs.getImage());
 		
-		icon = Icon.getIcon(pathIcon);
+		iconFrame = Icon.getIcon(pathIcon);
 		
 		this.setSize(config.getDimension("frame.size"));
 		this.normalSize = this.getSize();
@@ -64,7 +66,7 @@ public class Frame extends JFrame {
 		this.setAlwaysOnTop(config.getBoolean("frame.alwaysontop"));
 		
 		if(undecorated) {
-			topPan = new TopPanel(this, icon, but, config);
+			topPan = new TopPanel(this, iconFrame, but, config);
 			this.add(BorderLayout.NORTH, topPan);
 			
 			getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
@@ -100,6 +102,11 @@ public class Frame extends JFrame {
 		super.removeAll();
 		this.add(BorderLayout.NORTH, topPan);
 		this.repaint();
+	}
+	
+	public void setIcon(String iconPath) {
+		iconFrame = Icon.getIcon(iconPath);
+		topPan.setIcon(iconFrame);
 	}
 	
 	public void setTitleUndeco(String title) {topPan.setTitle(title);}

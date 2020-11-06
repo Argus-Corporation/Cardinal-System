@@ -30,6 +30,7 @@ public class TopPanel extends JPanel {
 	public boolean fullScreen;
 	private JLabel labelTitle;
 	private static final String esp = "                   ";
+	private JLabel iconFrame;
 	private static Point compCoords;
 	
 	public TopPanel(Frame fen, ImageIcon icon, boolean[] but, Properties config) {
@@ -43,7 +44,7 @@ public class TopPanel extends JPanel {
 		JPanel center = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		center.setOpaque(false);
 		
-		JLabel iconFrame = new JLabel(icon);
+		iconFrame = new JLabel(icon);
 		center.add(iconFrame);
 		
 		labelTitle = new JLabel(fen.getTitle() + esp);
@@ -84,7 +85,9 @@ public class TopPanel extends JPanel {
 
 	}
 	
-	
+	public void setIcon(ImageIcon icon) {
+		iconFrame.setIcon(icon);;
+	}
 	
 	public void setTitle(String title) {
 		labelTitle.setText(title + esp);

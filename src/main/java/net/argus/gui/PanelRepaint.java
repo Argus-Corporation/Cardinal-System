@@ -3,7 +3,6 @@ package net.argus.gui;
 import java.awt.Container;
 import java.awt.Dimension;
 
-import net.argus.file.Properties;
 import net.argus.util.Display;
 
 public class PanelRepaint {
@@ -46,12 +45,6 @@ public class PanelRepaint {
 				j++;
 			}
 		}
-	}
-	
-	public void initImage(Properties config) {
-		common();
-		Display.getWidhtDisplay(config);
-		Display.getHeightDisplay(config);
 	}
 	
 	public void initImage() {common();}
