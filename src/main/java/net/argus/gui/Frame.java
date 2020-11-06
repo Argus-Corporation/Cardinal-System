@@ -120,10 +120,7 @@ public class Frame extends JFrame {
 		
 		Properties config = new Properties("config", "bin");
 		String sIcon = SClass.getPath("/res/logo.png");
-		boolean[] isE = new boolean[3];
-		isE[0] = true;
-		isE[1] = true;
-		isE[2] = true;
+		boolean[] isE = new boolean[] {true, true, true};
 		Frame fen = new Frame("armin", sIcon, isE, config);
 		//new Splash("dfsd", sIcon, fen, 1000, config);
 		
