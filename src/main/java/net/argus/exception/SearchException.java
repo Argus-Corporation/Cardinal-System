@@ -1,13 +1,13 @@
 package net.argus.exception;
 
-public class PropertiseException extends Exception {
+public class SearchException extends Exception {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3276622351211387934L;
 
-	public PropertiseException(String messErr) {
+	public SearchException(String messErr) {
 		System.err.print(messErr);
 	}
 

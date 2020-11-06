@@ -20,7 +20,6 @@ import javax.swing.SwingUtilities;
 import net.argus.file.Properties;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
-import net.argus.util.Display;
 import net.argus.util.SClass;
 
 public class Splash extends Frame {
@@ -32,7 +31,7 @@ public class Splash extends Frame {
 	
 	private SplashContent contentpane;
 	private Robot robot;
-	private ImageIcon icon;
+	//private ImageIcon icon;
 	public String statusText;
 	
 	public Splash(String title, ImageIcon icon, Frame fen, int time, Properties config) {
@@ -42,8 +41,6 @@ public class Splash extends Frame {
 		try{robot = new Robot();}catch(Exception e){e.printStackTrace();}
 		
 		contentpane = new SplashContent();
-		
-		this.icon = icon;
 		
 		Label img = new Label(icon);
 		
@@ -70,7 +67,7 @@ public class Splash extends Frame {
 		this.setSize(820,  570);
 		Properties spashConfig = new Properties("splash", "bin");
 		contentpane = new SplashContent(this, iconPath, this, spashConfig);
-		this.icon = new ImageIcon(iconPath);
+		
 		this.setContentPane(contentpane);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

@@ -11,7 +11,6 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
-import net.argus.system.UserSystem;
 import net.argus.util.debug.Debug;
 
 public class Input extends Sound {
@@ -25,15 +24,16 @@ public class Input extends Sound {
     
     private Runnable getRecordRunable() {
     	return new Runnable() {
-			public void run() {
-				try {
-		            AudioFormat format = getAudioFormat();
+    		public void run() {
+    			try {
+    				AudioFormat format = getAudioFormat();
 		            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 		 
 		            // checks if system supports the data line
 		            if (!AudioSystem.isLineSupported(info)) {
 		            	Debug.log("Line not supported");
-		                UserSystem.exit(0);
+		            	stop();
+		            	return;
 		            }
 		            line = (TargetDataLine) AudioSystem.getLine(info);
 		            line.open(format);
@@ -41,7 +41,7 @@ public class Input extends Sound {
 		 
 		            AudioInputStream ais = new AudioInputStream(line);
 		            Debug.log("Start recording");
-		            
+		            System.out.println(ais.read());
 		            // start recording
 		            AudioSystem.write(ais, fileType, file);
 		            
@@ -64,10 +64,12 @@ public class Input extends Sound {
     /**
      * Closes the target data line to finish capturing and recording
      */
-    void stop() {
-        line.stop();
-        line.close();
-        Debug.log("Finished");
+    private void stop() {
+       if(line != null) {
+    	   line.stop();
+    	   line.close();
+    	   Debug.log("Finished");
+       }
     }
 	
 	public static void main(String[] args) throws InterruptedException {

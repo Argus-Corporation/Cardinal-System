@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import net.argus.exception.PositionException;
+import net.argus.exception.SearchException;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
