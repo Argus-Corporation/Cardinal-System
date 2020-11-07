@@ -11,7 +11,7 @@ public class CSSEngine {
 		css.execut();
 	}
 	
-	public static void engine(String fileName, String rep) throws FileNotFoundException {
+	public static void run(String fileName, String rep) throws FileNotFoundException {
 		new CSSFile(fileName, rep).execut();
 	}
 	

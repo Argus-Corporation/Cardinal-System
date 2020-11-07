@@ -46,7 +46,7 @@ public class ExampleClient {
 	
 	public ExampleClient() throws UnknownHostException, IOException {
 		Properties config = new Properties("client_config", "bin");
-		CSSEngine.engine("client", "bin/css");
+		CSSEngine.run("client", "bin/css");
 		
 		fen = new Frame("[ARGUS] Client", SClass.getPath("/res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
 		fen.setLocationRelativeTo(null);

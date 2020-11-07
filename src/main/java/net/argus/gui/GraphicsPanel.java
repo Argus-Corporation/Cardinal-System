@@ -13,6 +13,7 @@ import net.argus.graphic.GraphicsListener;
 import net.argus.graphic.Vector2;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
+import net.argus.util.Display;
 import net.argus.util.SClass;
 
 public class GraphicsPanel extends Panel {
@@ -66,7 +67,7 @@ public class GraphicsPanel extends Panel {
 		g2.setColor(color!=null?color:g2.getColor());
 		
 		g2.setStroke(new BasicStroke(lineSize));
-		 
+		
 		if(graphicsListener != null) 
 			for(float i = -10000; i < 10000; i += 1f)
 				g2.draw(new Line2D.Float(x + i, y + graphicsListener.fonction(i), x + i + 1, y + graphicsListener.fonction(i + 1)));
@@ -89,8 +90,10 @@ public class GraphicsPanel extends Panel {
 				return x * x;
 			}
 		});
-		gp.setColor(Color.CYAN);
+		gp.setColor(Color.BLACK);
 		fen.add(gp);
+		
+		new Splash("test", Icon.getIcon(SClass.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), fen, 2000, config);
 		
 		fen.setVisible(true);
 		

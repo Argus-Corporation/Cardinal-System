@@ -158,7 +158,7 @@ public class Frame extends JFrame {
 			}
 		});
 	
-		CSSEngine.engine("test", "bin");
+		CSSEngine.run("test", "bin");
 		
 		Label lab = new Label("bonjour", true);
 		fen.add(lab);
