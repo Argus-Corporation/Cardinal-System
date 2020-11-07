@@ -173,14 +173,6 @@ public class ExampleClient {
 		Look.chageLook(UIManager.getSystemLookAndFeelClassName());
 		new ExampleClient();
 		
-		/*for(int i = 0; i < 1000; i++) {
-			Client cli = new Client("0.0.0.0", 11066, 0x11066);
-			cli.setPseudo("ddos");
-			cli.setPassword("rt");
-			cli.start();
-			Thread.sleep(10);
-		}*/
-	//	UserSystem.exit(0);
 	}
 
 }
