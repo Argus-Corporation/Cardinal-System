@@ -15,7 +15,7 @@ import javax.imageio.stream.ImageInputStream;
 
 public class GIF {
 	
-	public static BufferedImage[] readGifImages(String f) {
+	public static BufferedImage[] getImages(String f) {
 		BufferedInputStream in=null;
 		
 		//stream image
@@ -67,7 +67,7 @@ public class GIF {
 			ImageReader reader = (ImageReader) readers.next();
 			return reader;
 		}
-		return  null;
+		return null;
 	}
 
 }

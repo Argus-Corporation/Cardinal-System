@@ -114,6 +114,8 @@ public class RondButton extends JButton {
 							
 							int taskBarHeight = scrnSize.height - winSize.height;
 							
+							fen.savePosition();
+							
 							fen.setSize(scrnSize.width, scrnSize.height - taskBarHeight);
 							fen.setLocationRelativeTo(null);
 							fen.setFullScreen(true);
@@ -127,7 +129,7 @@ public class RondButton extends JButton {
 							Dimension defaultSize = fen.getNormalSize();
 							fen.setSize(defaultSize);
 							
-							fen.setLocationRelativeTo(null);
+							fen.setLocation(fen.getSavePosition());
 							fen.setFullScreen(false);
 							top.fullScreen = false;
 							id = FLECHE;

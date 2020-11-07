@@ -3,6 +3,7 @@ package net.argus.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
@@ -41,6 +42,8 @@ public class Frame extends JFrame {
 	protected String imagePath;
 	
 	protected Dimension normalSize;
+	
+	protected Point position;
 	
 	protected FrameListener fenListener;
 
@@ -116,9 +119,12 @@ public class Frame extends JFrame {
 	
 	public TopPanel getTopPanel() {return this.topPan;}
 	public Dimension getNormalSize() {return normalSize;}
+	public Point getSavePosition() {return position;}
 	
 	public void setNoramlSize(Dimension normalSize) {this.normalSize = normalSize;}
 	public void addFrameListener(FrameListener fenListener) {this.fenListener = fenListener;}
+	
+	public void savePosition() {this.position = this.getLocation();}
 	
 	public Dimension getFrameSize() {return new Dimension(getSize().width, getSize().height - getTopPanel().getPreferredSize().height);}
 	

@@ -156,7 +156,7 @@ public class Properties extends AbstractFileSave {
 	@Deprecated
 	/**
 	 * Cette methode retourne la clef Color corespondante a la clef
-	 * @param key
+	 * @param kek
 	 * @return
 	 */
 	public Color getColor(String key) {
