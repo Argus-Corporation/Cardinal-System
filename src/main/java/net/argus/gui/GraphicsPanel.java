@@ -8,13 +8,13 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.graphic.GraphicsListener;
 import net.argus.graphic.Vector2;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
-import net.argus.util.SClass;
 
 public class GraphicsPanel extends Panel {
 	
@@ -80,20 +80,20 @@ public class GraphicsPanel extends Panel {
 	public static void main(String[] args) throws InterruptedException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
-		Frame fen = new Frame("test", SClass.getPath("res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
-		fen.setIcon(SClass.getPath("res/favIcon16x16.png"));
+		Frame fen = new Frame("Graphics", FileManager.getPath("res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
+		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		
 		GraphicsPanel gp = new GraphicsPanel(new GraphicsListener() {
 			
 			@Override
 			public float fonction(float x) {
-				return x * x;
+				return 2 * x * x* x;
 			}
 		});
 		gp.setColor(Color.BLACK);
 		fen.add(gp);
 		
-		new Splash("test", Icon.getIcon(SClass.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), fen, 2000, config);
+		new Splash("test", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), fen, 2000, config);
 		
 		fen.setVisible(true);
 		

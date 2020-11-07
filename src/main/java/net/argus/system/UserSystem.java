@@ -1,5 +1,7 @@
 package net.argus.system;
 
+import java.util.Scanner;
+
 import net.argus.file.Loggeur;
 import net.argus.util.RunTime;
 import net.argus.util.ThreadManager;
@@ -9,6 +11,7 @@ public class UserSystem {
 	
 	public static Loggeur log;
 	public static RunTime runTime = RunTime.getRunTime();
+	public static Scanner in = new Scanner(System.in);
 	
 	private static InitializedSystemManager manager = new InitializedSystemManager() {
 		public void preInit(String[] args) {runTime.start(); ThreadManager.SYSTEM.setTemporaryName();}

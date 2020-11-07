@@ -13,13 +13,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import net.argus.Lang;
+import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSEngine;
 import net.argus.gui.animation.FrameAnimation;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Direction;
-import net.argus.util.SClass;
 
 public class Frame extends JFrame {
 
@@ -132,7 +132,7 @@ public class Frame extends JFrame {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		Properties config = new Properties("config", "bin");
-		String sIcon = SClass.getPath("/res/logo.png");
+		String sIcon = FileManager.getPath("res/logo.png");
 		boolean[] isE = new boolean[] {true, true, true};
 		Frame fen = new Frame("armin", sIcon, isE, config);
 		//new Splash("dfsd", sIcon, fen, 1000, config);

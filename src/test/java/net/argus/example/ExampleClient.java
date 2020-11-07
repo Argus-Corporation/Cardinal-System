@@ -18,6 +18,7 @@ import net.argus.client.ClientManager;
 import net.argus.client.ProcessClient;
 import net.argus.client.ProcessListener;
 import net.argus.exception.SecurityException;
+import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSEngine;
 import net.argus.gui.Button;
@@ -34,7 +35,6 @@ import net.argus.system.UserSystem;
 import net.argus.util.Display;
 import net.argus.util.Package;
 import net.argus.util.PackageType;
-import net.argus.util.SClass;
 
 public class ExampleClient {
 	
@@ -48,9 +48,9 @@ public class ExampleClient {
 		Properties config = new Properties("client_config", "bin");
 		CSSEngine.run("client", "bin/css");
 		
-		fen = new Frame("[ARGUS] Client", SClass.getPath("/res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
+		fen = new Frame("[ARGUS] Client", FileManager.getPath("res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
 		fen.setLocationRelativeTo(null);
-		fen.setIcon(SClass.getPath("/res/favIcon16x16.png"));
+		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		
 		Panel south = new Panel();
 		allMsg = new JEditorPane();
@@ -98,7 +98,7 @@ public class ExampleClient {
 		fen.add(BorderLayout.CENTER, sp);
 		fen.add(BorderLayout.SOUTH, south);
 		
-		new Splash(fen.getName(), Icon.getIcon(SClass.getPath("res/logo.png"), Display.getWidhtDisplay() - 50), fen, 2000, config);
+		new Splash(fen.getName(), Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 50), fen, 2000, config);
 		
 		fen.setVisible(true);
 		setClient();

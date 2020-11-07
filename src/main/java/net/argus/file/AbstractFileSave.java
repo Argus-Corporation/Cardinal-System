@@ -14,13 +14,11 @@ import net.argus.exception.PositionException;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
-import net.argus.util.SClass;
 import net.argus.util.debug.Debug;
 
 public class AbstractFileSave {
 	
 	protected String path;
-	protected String mainPath;
 	protected File file;
 	
 	protected String fileName;
@@ -34,16 +32,14 @@ public class AbstractFileSave {
 		this.extention = extention;
 		this.rep = rep;
 		
-		this.path = SClass.getPath(null);
+		if(this.rep == null) this.rep = "";
+		this.rep += "/";
 		
-		if(rep == null) rep = "";
+		this.path = FileManager.getPath(null);
 		
-		rep += "/";
+		new File(this.path + this.rep).mkdirs();
 		
-		this.mainPath = path;
-		new File(this.path + rep).mkdirs();
-		
-		this.path += rep + fileName + "." + extention;
+		this.path += this.rep + fileName + "." + extention;
 		this.file = new File(this.path);
 		
 		try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
@@ -168,7 +164,7 @@ public class AbstractFileSave {
 				first = first.substring(0, first.lastIndexOf("%"));
 				second = value.substring(value.lastIndexOf("%") + 1);
 				
-				value = first + afs.getMainPath() + second;
+				value = first + System.getProperty("user.dir") + second;
 			}else if(value.contains("%widthDisplay%")){
 				first = value.substring(0, value.lastIndexOf("%"));
 				first = first.substring(0, first.lastIndexOf("%"));
@@ -195,13 +191,11 @@ public class AbstractFileSave {
 	}
 	
 	public String getPath() {return path;}
-	public String getMainPath() {return mainPath;}
 	public String getFileName() {return fileName;}
 	public String getExtention() {return extention;}
 	public String getRepertory() {return rep;}
 	
 	public void setPath(String path) {this.path = path;}
-	public void setMainPath(String mainPath) {this.mainPath = mainPath;}
 	public void setFileName(String fileName) {this.fileName = fileName;}
 	public void setExtention(String extention) {this.extention = extention;}
 	public void setRepertory(String rep) {this.rep = rep;}

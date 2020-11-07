@@ -17,10 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
-import net.argus.util.SClass;
+import net.argus.util.Display;
 
 public class Splash extends Frame {
 	
@@ -31,10 +32,9 @@ public class Splash extends Frame {
 	
 	private SplashContent contentpane;
 	private Robot robot;
-	//private ImageIcon icon;
 	public String statusText;
 	
-	public Splash(String title, ImageIcon icon, Frame fen, int time, Properties config) {
+	public Splash(String title, ImageIcon splashImage, Frame fen, int time, Properties config) {
 		super(title, null, config);
 		this.setDefaultCloseOperation(Frame.DISPOSE_ON_CLOSE);
 		
@@ -42,7 +42,7 @@ public class Splash extends Frame {
 		
 		contentpane = new SplashContent();
 		
-		Label img = new Label(icon);
+		Label img = new Label(splashImage);
 		
 		this.setContentPane(contentpane);
 		this.getContentPane().add(img);
@@ -195,15 +195,15 @@ public class Splash extends Frame {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
 		
-		String iconPath = SClass.getPath("res/favIcon32x32.png");
+		String iconPath = FileManager.getPath("res/favIcon32x32.png");
 		boolean[] isE = new boolean[] {true, true, true};
 		
 		Frame fen = new Frame("School", iconPath, isE, config);
 		Panel pan = new Panel();
 		
-		new Splash("Splash", null, fen, 1000, config);
+		new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), fen, 1000, config);
 		
-		fen.setIcon(SClass.getPath("res/favIcon16x16.png"));
+		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		fen.add(pan);
 		fen.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
 		fen.setVisible(true);
