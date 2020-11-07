@@ -13,6 +13,7 @@ import java.awt.Robot;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -23,7 +24,7 @@ import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 
-public class Splash extends Frame {
+public class Splash extends JFrame {
 	
 	/**
 	 * 
@@ -31,11 +32,19 @@ public class Splash extends Frame {
 	private static final long serialVersionUID = -2295168357935250694L;
 	
 	private SplashContent contentpane;
-	private Robot robot;
 	public String statusText;
+	private Robot robot;
 	
-	public Splash(String title, ImageIcon splashImage, Frame fen, int time, Properties config) {
-		super(title, null, config);
+	private int time;
+	
+	private boolean valid;
+	
+	public Splash(String title, ImageIcon splashImage, int time) {
+		super();
+		valid = false;
+		this.time = time;
+		
+		this.setUndecorated(true);
 		this.setDefaultCloseOperation(Frame.DISPOSE_ON_CLOSE);
 		
 		try{robot = new Robot();}catch(Exception e){e.printStackTrace();}
@@ -48,25 +57,19 @@ public class Splash extends Frame {
 		this.getContentPane().add(img);
 		this.pack();
 		this.setLocationRelativeTo(null);
-		
 		createCapture();
 		
-		this.setVisible(true);
-		
-		new PanelRepaint(fen, this).initImage();
-		
-		try{Thread.sleep(time);}catch(Exception e){e.printStackTrace();}
-		this.setVisible(false);	
-		try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
 	}
 	
+	@Deprecated
 	public Splash(String title, String iconPath, Frame fen, int time, boolean nul, Properties config) {
-		super(title, iconPath, config); 
+		super(title); 
 		this.setDefaultCloseOperation(Frame.DISPOSE_ON_CLOSE);
 		try{robot = new Robot();}catch(Exception e){e.printStackTrace();}
 		this.setSize(820,  570);
+		@SuppressWarnings("unused")
 		Properties spashConfig = new Properties("splash", "bin");
-		contentpane = new SplashContent(this, iconPath, this, spashConfig);
+		//contentpane = new SplashContent(this, iconPath, this, spashConfig);
 		
 		this.setContentPane(contentpane);
 		this.setLocationRelativeTo(null);
@@ -83,15 +86,31 @@ public class Splash extends Frame {
 		try{
 			Point point = new Point(0, 0);
 			SwingUtilities.convertPointToScreen(point, contentpane);
-			setVisible(false);
+			
 			Image image = robot.createScreenCapture(new Rectangle(point, contentpane.getSize()));
-			setVisible(true);
+			
 			MediaTracker mt = new MediaTracker(this);
 			mt.addImage(image,0);
 			mt.waitForAll();
 			contentpane.setImage(image);
 		}catch(Exception e){e.printStackTrace();}
 	}
+	
+	public void play() {
+		new Thread(new Runnable() {
+			public void run() {
+			
+				setVisible(true);
+				
+				try{Thread.sleep(time);}catch(Exception e){e.printStackTrace();}
+				setVisible(false);	
+				try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
+				valid = true;
+			}
+		}).start();
+	}
+	
+	public boolean isValid() {return valid;}
 
 	
 	private class SplashContent extends JPanel implements Runnable {
@@ -110,7 +129,7 @@ public class Splash extends Frame {
 			setOpaque(false);
 		}
 		
-		@SuppressWarnings("deprecation")
+		@SuppressWarnings({ "deprecation", "unused" })
 		public SplashContent(Frame fen, String iconPath, Splash parent, Properties splashConfig) {
 			super();
 			this.parent = parent;
@@ -194,18 +213,24 @@ public class Splash extends Frame {
 	public static void main(String[] args) {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
+		Splash splash = new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 1000);
+		splash.play();
 		
 		String iconPath = FileManager.getPath("res/favIcon32x32.png");
 		boolean[] isE = new boolean[] {true, true, true};
 		
 		Frame fen = new Frame("School", iconPath, isE, config);
-		Panel pan = new Panel();
 		
-		new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), fen, 1000, config);
+		Panel pan = new Panel(config, FileManager.getPath("res/favIcon16x16.png"), fen);
+		new PanelRepaint(fen, splash).initImage();
 		
 		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		fen.add(pan);
-		fen.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
+		
+		while(!splash.isValid()) {
+			fen.setVisible(false);
+		}
+			
 		fen.setVisible(true);
 	}
 }

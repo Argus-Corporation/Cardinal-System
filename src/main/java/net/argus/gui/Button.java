@@ -3,7 +3,7 @@ package net.argus.gui;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import net.argus.Lang;
+import net.argus.lang.Lang;
 
 public class Button extends JButton implements Element {
 	

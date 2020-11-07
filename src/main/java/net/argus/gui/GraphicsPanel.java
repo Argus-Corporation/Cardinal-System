@@ -80,6 +80,10 @@ public class GraphicsPanel extends Panel {
 	public static void main(String[] args) throws InterruptedException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
+		
+		Splash sp = new Splash("test", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 2000);
+		sp.play();
+		
 		Frame fen = new Frame("Graphics", FileManager.getPath("res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
 		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		
@@ -93,8 +97,9 @@ public class GraphicsPanel extends Panel {
 		gp.setColor(Color.BLACK);
 		fen.add(gp);
 		
-		new Splash("test", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), fen, 2000, config);
-		
+		while(!sp.isValid()) {
+			fen.setVisible(false);
+		}
 		fen.setVisible(true);
 		
 	}

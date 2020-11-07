@@ -3,7 +3,7 @@ package net.argus.gui;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import net.argus.Lang;
+import net.argus.lang.Lang;
 
 public class Label extends JLabel implements Element {
 

@@ -2,7 +2,7 @@ package net.argus.file;
 
 import java.io.FileNotFoundException;
 
-import net.argus.Lang;
+import net.argus.lang.Lang;
 
 public class FileLang extends AbstractFileSave {
 	

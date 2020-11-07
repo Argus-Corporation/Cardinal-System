@@ -1,4 +1,4 @@
-package net.argus;
+package net.argus.lang;
 
 public enum LangType {
 	

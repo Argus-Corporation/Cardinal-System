@@ -46,6 +46,9 @@ public class ExampleClient {
 	
 	public ExampleClient() throws UnknownHostException, IOException {
 		Properties config = new Properties("client_config", "bin");
+		Splash spl = new Splash("ExampleClient", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 50), 2000);
+		spl.play();
+		
 		CSSEngine.run("client", "bin/css");
 		
 		fen = new Frame("[ARGUS] Client", FileManager.getPath("res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
@@ -98,7 +101,9 @@ public class ExampleClient {
 		fen.add(BorderLayout.CENTER, sp);
 		fen.add(BorderLayout.SOUTH, south);
 		
-		new Splash(fen.getName(), Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 50), fen, 2000, config);
+		while(!spl.isValid()) {
+			fen.setVisible(false);
+		}
 		
 		fen.setVisible(true);
 		setClient();

@@ -1,4 +1,4 @@
-package net.argus;
+package net.argus.lang;
 
 import net.argus.file.FileLang;
 import net.argus.file.FileSave;

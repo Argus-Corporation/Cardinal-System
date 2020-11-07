@@ -12,11 +12,11 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import net.argus.Lang;
 import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSEngine;
 import net.argus.gui.animation.FrameAnimation;
+import net.argus.lang.Lang;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Direction;
