@@ -3,6 +3,8 @@ package net.argus.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.number.Binary;
+import net.argus.number.Hexadecimal;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.debug.Debug;
@@ -67,6 +69,8 @@ public class Math {
 	
 	public static native double sqrt(double n);
 	
+	public static native double pow(double a, double b);
+	
 	public static native int random(int min, int max);
 	
 	public static double getPercentage(double i, double numberMax) {return i * 100.0D / numberMax;}
@@ -96,8 +100,8 @@ public class Math {
 	public static void main(String[] args) {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
-		//System.out.println(toBinary(101));
-		System.out.println(new Binary(100101110));
+		//System.out.println(6*pow(16, 2) + 12 * 16 + 5);
+		System.out.println(new Hexadecimal("6c5").toInt());
 		UserSystem.exit(0);
 	}
 	

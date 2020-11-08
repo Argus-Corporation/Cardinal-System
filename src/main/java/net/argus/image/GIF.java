@@ -69,5 +69,18 @@ public class GIF {
 		}
 		return null;
 	}
+	
+	void test(int a, int b) {
+		//System.out.println(Math.pow(2, 3));
+		int a0 = a;
+		for(int i = 1; i < b; i++) {
+			a = a*a0;
+		}
+		System.out.println(a);
+	}
+	
+	public static void main(String[] args) {
+		new GIF().test(2, 3);
+	}
 
 }

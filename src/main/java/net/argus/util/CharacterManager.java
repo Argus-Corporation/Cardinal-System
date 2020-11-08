@@ -18,7 +18,6 @@ public class CharacterManager {
 		chars[0] = first;
 		
 		return new String(chars);
-		
 	}
 
 }
