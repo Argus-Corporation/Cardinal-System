@@ -9,11 +9,13 @@ public class Terminal extends Thread {
 	
 	private String directory = System.getProperty("user.home");
 	private String userName = System.getProperty("user.name");
+	private String pcName = System.getProperty("user");
 	
 	private boolean running;
 	
 	public Terminal() {
 		running = true;
+		System.out.println(pcName);
 	}
 	
 	public void run() {
