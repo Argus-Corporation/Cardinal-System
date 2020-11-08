@@ -28,7 +28,7 @@ public class Launcher {
 	    String[] userArgs = manifest.getValue("Launcher-Args").split(" ");
 	    StringTokenizer vmArgsToken = new StringTokenizer(vmArgs, " ");
 	    int count = vmArgsToken.countTokens();
-	    
+	    System.out.println(nativePath + "   natpath");
 	    try {
 	    	extractNatives(file, nativePath);
 	    	
@@ -54,7 +54,7 @@ public class Launcher {
 	    	writeConsoleOutput(process);
 	    	
 	    	process.waitFor();
-	    }finally {deleteNativePath(nativePath);}
+	    }finally {/*deleteNativePath(nativePath);*/}
 	    
 	}
 	  
@@ -78,7 +78,7 @@ public class Launcher {
 	    	
 	    	if(isNativeFile(entry.getName())) {
 	    		new File(String.valueOf(nativePath) + File.separator + nativeFile.substring(0, nativeFile.lastIndexOf('/'))).mkdirs();
-
+	    		
 		    	InputStream in = jarFile.getInputStream(jarFile.getEntry(entry.getName()));
 		    	OutputStream out = new FileOutputStream(String.valueOf(nativePath) + File.separator + nativeFile);
 		    	
@@ -98,15 +98,18 @@ public class Launcher {
 	public boolean isNativeFile(String entryName) {
 		String osName = System.getProperty("os.name");
 		String name = entryName.toLowerCase();
-		if(osName.startsWith("Win"))
-			if(name.endsWith(".dll"))
-				return true; 
-		else if(osName.startsWith("Linux"))
-			if(name.endsWith(".so"))
+		
+		System.out.print("[Os: " + osName + "  Amd: " + System.getProperty("os.arch"));
+		System.out.print("  Name: " + name);
+		System.out.println("  isOs: " + osName.startsWith("Linux") + "  isSo: " + name.endsWith(".so") + "]");
+		
+		
+		if(name.endsWith(".dll") || name.endsWith(".so") || name.endsWith(".jnilib") || name.endsWith(".dylib"))
 			return true; 
-		else if((osName.startsWith("Mac") || osName.startsWith("Darwin")) && (
-				name.endsWith(".jnilib") || name.endsWith(".dylib")))
-			return true;
+		
+		/*if(osName.startsWith("Win")) {
+		}else if(osName.startsWith("Linux")) {
+		}else if((osName.startsWith("Mac") || osName.startsWith("Darwin")));*/
 		
 		return false;
 	}

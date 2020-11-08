@@ -2,6 +2,7 @@ package net.argus.example;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import net.argus.gui.animation.FrameAnimation;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
+import net.argus.util.Notification;
 import net.argus.util.Package;
 import net.argus.util.PackageType;
 
@@ -144,12 +146,16 @@ public class ExampleClient {
 				String[] value = new String[2];
 				value[0] = "SYSTEM";
 				value[1] = msg;
-				setMessage(value);
+				client.getProcessListener().addSystemMessage(value);
 			}
 		});
 		
 		client.addProcessListener(new ProcessListener() {
-			public void addSystemMessage(String[] value) {addMessage(value);}
+			public void addSystemMessage(String[] value) {
+				addMessage(value);
+				if(!fen.isActive())
+					Notification.showNotification("Vous avez un nouveau message: " + value[1], value[0], "Argus", MessageType.NONE, FileManager.getPath("res/favIcon16x16.png"));
+			}
 			public void addMessage(String[] value) {setMessage(value);}
 		});
 		
@@ -167,6 +173,8 @@ public class ExampleClient {
 	}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
+		System.out.println("Library.path: " + System.getProperty("java.library.path"));
+		
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Thread.currentThread().setName("client");
 		

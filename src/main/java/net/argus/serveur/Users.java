@@ -49,10 +49,11 @@ public class Users {
 	
 	public void closeAll(int userId) throws IOException, SecurityException {
 		for(int i = 0; i < clients.length; i++) {
-			if(clients[i] != null && i != userId)
-				ThreadManager.stop(clients[i].getProcessServeur());
-			
-			clients[i].logOut("Kick all");
+			if(clients[i] != null) {
+				if(i != userId)
+					ThreadManager.stop(clients[i].getProcessServeur());
+				clients[i].logOut("Kick all");
+			}
 		}
 	}
 	

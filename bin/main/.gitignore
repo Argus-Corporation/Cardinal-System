@@ -1,2 +1,6 @@
 /net/
 /font/
+/natives/
+/math64.so
+/runtime64.so
+/images/

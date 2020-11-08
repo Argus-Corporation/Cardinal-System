@@ -77,6 +77,9 @@ public class Client {
 	public String getHost() {return host;}
 	public int getPort() {return port;}
 	
+	public ProcessListener getProcessListener() {return process.getProcessListener();} 
+	public ClientManager getClientManager() {return process.getClientManager();} 
+	
 	public String getPseudo() {return client.getPseudo();}
 	public String getPassword() {return client.getPassword();}
 	

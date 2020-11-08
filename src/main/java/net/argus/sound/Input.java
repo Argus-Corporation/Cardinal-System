@@ -1,7 +1,6 @@
 package net.argus.sound;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -13,6 +12,7 @@ import javax.sound.sampled.TargetDataLine;
 
 import net.argus.util.debug.Debug;
 
+@Deprecated
 public class Input extends Sound {
  
     private TargetDataLine line;
@@ -41,12 +41,12 @@ public class Input extends Sound {
 		 
 		            AudioInputStream ais = new AudioInputStream(line);
 		            Debug.log("Start recording");
-		            System.out.println(ais.read());
+		           System.out.println(ais);
 		            // start recording
-		            AudioSystem.write(ais, fileType, file);
+		           //AudioSystem.write(ais, fileType, file);
 		            
 		 
-		        } catch (LineUnavailableException | IOException e) {}
+		        } catch (LineUnavailableException e) {}
 			}
 		};
     }

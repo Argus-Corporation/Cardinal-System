@@ -97,6 +97,9 @@ public class ProcessClient extends Thread {
 		
 	}
 	
+	public ProcessListener getProcessListener() {return proListener;}
+	public ClientManager getClientManager() {return manager;}
+	
 	public void addProcessListener(ProcessListener processListener) {this.proListener = processListener;}
 	public void addClientManager(ClientManager clientManager) {this.manager = clientManager;}
 	
