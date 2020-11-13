@@ -46,7 +46,11 @@ public class Launcher {
 	    	
 	    	for(String uArg : userArgs)
 	    		arguments.add(uArg);
-	      
+	    	
+	    	
+	    	for(int i = 0; i < arguments.size(); i++)
+	    		System.out.print(arguments.get(i));
+	    	
 	    	ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 	    	processBuilder.redirectErrorStream(true);
 	    	
@@ -76,10 +80,23 @@ public class Launcher {
 	    	JarEntry entry = entities.nextElement();
 	    	String nativeFile = entry.getName();
 	    	
-	    	if(isNativeFile(entry.getName())) {
+	    	if(nativeFile.contains("/") && isNativeFile(entry.getName())) {
 	    		new File(String.valueOf(nativePath) + File.separator + nativeFile.substring(0, nativeFile.lastIndexOf('/'))).mkdirs();
 	    		
 		    	InputStream in = jarFile.getInputStream(jarFile.getEntry(entry.getName()));
+		    	OutputStream out = new FileOutputStream(String.valueOf(nativePath) + File.separator + nativeFile);
+		    	
+		    	byte[] buffer = new byte[65536];
+		    	int bufferSize;
+		    	
+		    	while((bufferSize = in.read(buffer, 0, buffer.length)) != -1)
+		    		out.write(buffer, 0, bufferSize);
+		    	
+		    	in.close();
+		    	out.close();
+	    	}
+	    	if(!nativeFile.contains("/") && isNativeFile(entry.getName())) {
+	    		InputStream in = jarFile.getInputStream(jarFile.getEntry(entry.getName()));
 		    	OutputStream out = new FileOutputStream(String.valueOf(nativePath) + File.separator + nativeFile);
 		    	
 		    	byte[] buffer = new byte[65536];

@@ -16,7 +16,7 @@ import javax.imageio.stream.ImageInputStream;
 public class GIF {
 	
 	public static BufferedImage[] getImages(String f) {
-		BufferedInputStream in=null;
+		BufferedInputStream in = null;
 		
 		//stream image
 		ImageInputStream stream = null;
@@ -61,26 +61,13 @@ public class GIF {
 		return  img.toArray(new BufferedImage[img.size()]);
 	}
 	
-	private static  ImageReader getReader(String format) {
+	private static ImageReader getReader(String format) {
 		Iterator<?> readers = ImageIO.getImageReadersBySuffix(format);
 		if(readers.hasNext()) {
 			ImageReader reader = (ImageReader) readers.next();
 			return reader;
 		}
 		return null;
-	}
-	
-	void test(int a, int b) {
-		//System.out.println(Math.pow(2, 3));
-		int a0 = a;
-		for(int i = 1; i < b; i++) {
-			a = a*a0;
-		}
-		System.out.println(a);
-	}
-	
-	public static void main(String[] args) {
-		new GIF().test(2, 3);
 	}
 
 }

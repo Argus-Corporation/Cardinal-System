@@ -1,7 +1,9 @@
 package net.argus.serveur;
 
+import net.argus.util.Package;
+
 public interface ServeurManager {
 	
-	public void receiveMessage(int msgType);
+	public void receivePackage(Package pack, ProcessServeur thisObj);
 
 }

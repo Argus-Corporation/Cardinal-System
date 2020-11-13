@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.argus.number.Binary;
 import net.argus.number.Hexadecimal;
+import net.argus.number.Hexadecimal.CharHex;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.debug.Debug;
@@ -73,11 +74,13 @@ public class Math {
 	
 	public static native int random(int min, int max);
 	
-	public static double getPercentage(double i, double numberMax) {return i * 100.0D / numberMax;}
-	
-	private static native int[] toIntArray0(int number, int size);
+	private static native int[] toIntArray0(int number, int len);
 	
 	public static int[] toIntArray(int number) {return toIntArray0(number, Integer.toString(number).length());}
+	
+	public static double getPercentage(double i, double numberMax) {return i * 100.0D / numberMax;}
+	
+	public static int abs(int a) { return (a < 0) ? -a : a;}
 	
 	public static Binary toBinary(long n) {
 		List<Long> bin = new ArrayList<Long>();
@@ -95,13 +98,28 @@ public class Math {
 		return new Binary(binS);
 	}
 	
+	public static Hexadecimal toHexadecimal(long n) {
+		List<Character> hex = new ArrayList<Character>();
+		String hexs = "";
+		long n0 = n;
+
+		do {
+			hex.add(CharHex.getChar((int) (n0%16)));
+			n0 = n0 / 16;
+		}while(n0 > 0);
+		
+		for(int i = hex.size() - 1; i >= 0; i--)
+			hexs += hex.get(i);
+		
+		return new Hexadecimal(hexs);
+	}
+	
 	static {UserSystem.loadLibrary("math");}
 	
 	public static void main(String[] args) {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
-		//System.out.println(6*pow(16, 2) + 12 * 16 + 5);
-		System.out.println(new Hexadecimal("6c5").toInt());
+		System.out.println(new Hexadecimal("5457465517e5665a465274b654fffffff654265465d458414c54").toLong());
 		UserSystem.exit(0);
 	}
 	

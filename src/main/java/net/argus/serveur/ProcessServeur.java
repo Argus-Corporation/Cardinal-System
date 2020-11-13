@@ -36,7 +36,7 @@ public class ProcessServeur extends Thread {
 		new Commands();
 	}
 	
-	public void sendMessageToAllCLient(PackageType pt, String msg) throws SecurityException {
+	public void sendMessageToAllCLient(int pt, String msg) throws SecurityException {
 		ServeurSocketClient user;
 		for(int i = 0; i < Users.getServeurSocketClient().length; i++) {
 			if((user = Users.getServeurSocketClient(i)) != null && user.getUserId() != userId) {
@@ -50,9 +50,9 @@ public class ProcessServeur extends Thread {
 		client.sendPackage(new Package(PackageType.PSEUDO, "SYSTEM ALERTE"));			
 	}
 	
-	public void sendMessage(PackageType pt, int userId, String msg) throws SecurityException {
+	public void sendMessage(int pt, int userId, String msg) throws SecurityException {
 		Users.getServeurSocketClient(userId).sendPackage(new Package(pt, msg));
-		if(pt == PackageType.SYSTEM) 
+		if(pt == PackageType.SYSTEM.getId()) 
 			Users.getServeurSocketClient(userId).sendPackage(new Package(PackageType.PSEUDO, "SYSTEM ALERTE"));			
 		else
 			Users.getServeurSocketClient(userId).sendPackage(new Package(PackageType.PSEUDO, pseudo));			
@@ -67,7 +67,7 @@ public class ProcessServeur extends Thread {
 		
 		Package pack = getPackage();
 		
-		msgId = pack.getPackageType().getId();
+		msgId = pack.getType();
 		msg = pack.getMessage();
 		
 		switch(msgId) {
@@ -81,7 +81,7 @@ public class ProcessServeur extends Thread {
 				
 				pseudo = CharacterManager.cut(pseudo, ' ');
 				
-				sendMessage(PackageType.PSEUDO, userId, pseudo);
+				sendMessage(PackageType.PSEUDO.getId(), userId, pseudo);
 				
 				currentThread().setName("SERVEUR: " + pseudo.toUpperCase());
 				client.setPseudo(pseudo);
@@ -90,7 +90,7 @@ public class ProcessServeur extends Thread {
 	
 			case MESSAGE:
 				Debug.log("Message from " + pseudo + ": " + msg);
-				sendMessageToAllCLient(PackageType.MESSAGE, msg);
+				sendMessageToAllCLient(PackageType.MESSAGE.getId(), msg);
 				break;
 				
 			case SYSTEM:
@@ -132,7 +132,7 @@ public class ProcessServeur extends Thread {
 			case LOG_OUT:
 				client.close(msg);
 				
-				sendMessageToAllCLient(PackageType.SYSTEM, pseudo + " just disconnected");
+				sendMessageToAllCLient(PackageType.SYSTEM.getId(), pseudo + " just disconnected");
 				ThreadManager.stop(this);
 				break;
 				
@@ -143,20 +143,20 @@ public class ProcessServeur extends Thread {
 				break;
 		}
 		
-		if(manager != null) manager.receiveMessage(msgId);
+		if(manager != null) manager.receivePackage(pack, this);
 	}
 	
 	public void run() {
 		ThreadManager.addThread(this);	
 		running = true;
 		
-		sendMessageToAllCLient(PackageType.SYSTEM, "A client has just connected");
+		sendMessageToAllCLient(PackageType.SYSTEM.getId(), "A client has just connected");
 		while(client.getServeurParent().isRunning()) {
 			try {receiveMessage();}
 			catch(IOException | SecurityException e) {
 				Debug.log("ERROR: Client diconected");
 				
-				try {if(running)sendMessageToAllCLient(PackageType.SYSTEM, pseudo + " just disconnected");
+				try {if(running)sendMessageToAllCLient(PackageType.SYSTEM.getId(), pseudo + " just disconnected");
 				}catch(SecurityException e1) {e1.printStackTrace();}
 				
 				ThreadManager.stop(this);

@@ -15,6 +15,7 @@ public class ProcessClient extends Thread {
 	
 	private ClientManager manager;
 	
+	private Client mainClient;
 	private SocketClient client;
 	
 	public static final int LOG_OUT = -2;
@@ -23,8 +24,9 @@ public class ProcessClient extends Thread {
 	public static final int PSEUDO = 2;
 	public static final int ARRAY = 3;
 	
-	public ProcessClient(SocketClient client) {
+	public ProcessClient(SocketClient client, Client mainClient) {
 		this.client = client;
+		this.mainClient = mainClient;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -36,7 +38,7 @@ public class ProcessClient extends Thread {
 			
 			Package pack = client.receivePackage();
 			
-			type = pack.getPackageType().getId();
+			type = pack.getType();
 			
 			switch(type) {
 				case MESSAGE:
@@ -44,7 +46,7 @@ public class ProcessClient extends Thread {
 					
 					Package pseudoPack = client.receivePackage();
 					
-					type = pseudoPack.getPackageType().getId();
+					type = pseudoPack.getType();
 					switch(type) {
 						case PSEUDO:
 							pseudo = pseudoPack.getMessage();
@@ -63,7 +65,7 @@ public class ProcessClient extends Thread {
 					
 					Package sysPack = client.receivePackage();
 					
-					type = sysPack.getPackageType().getId();
+					type = sysPack.getType();
 					switch(type) {
 						case PSEUDO:
 							pseudo = sysPack.getMessage();
@@ -92,13 +94,14 @@ public class ProcessClient extends Thread {
 					
 					stop();
 			}
-			if(manager != null) manager.receiveMessage(type);
+			if(manager != null) manager.receivePackage(pack, this);
 		}catch(IOException e) {}
 		
 	}
 	
 	public ProcessListener getProcessListener() {return proListener;}
 	public ClientManager getClientManager() {return manager;}
+	public SocketClient getClient() {return client;}
 	
 	public void addProcessListener(ProcessListener processListener) {this.proListener = processListener;}
 	public void addClientManager(ClientManager clientManager) {this.manager = clientManager;}
@@ -119,7 +122,7 @@ public class ProcessClient extends Thread {
 				stop();
 			}
 		}catch(IOException | SecurityException e) {e.printStackTrace();}
-		while(Client.isRunning()) {
+		while(mainClient.isRunning()) {
 			try {receive();}
 			catch(SecurityException e) {e.printStackTrace();}
 		}

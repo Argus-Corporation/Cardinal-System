@@ -97,18 +97,20 @@ public class ServeurSocketClient {
 	}
 	
 	public synchronized void sendPackage(Package pack) throws SecurityException {
-		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(pack.getPackageType().getId())):pack.getPackageType().getId());
+		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(pack.getType())):pack.getType());
 		msgSend.flush();
 		
 		msgSend.println(clientUseKey&&key!=null?!pack.getMessage().equals("")?key.crypt(pack.getMessage()):pack.getMessage():pack.getMessage());
 		msgSend.flush();
 	}
 	
-	public synchronized void sendArray(PackageType contentArray, String[] array) {
+	public synchronized void sendArray(PackageType contentArray, String[] array) {sendArray(contentArray.getId(), array);}
+	
+	public synchronized void sendArray(int contentArray, String[] array) {
 		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(PackageType.ARRAY.getId())):PackageType.ARRAY.getId());
 		msgSend.flush();
 		
-		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(contentArray.getId())):contentArray.getId());
+		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(contentArray)):contentArray);
 		msgSend.flush();
 		
 		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(array.length)):array.length);
@@ -120,15 +122,15 @@ public class ServeurSocketClient {
 		}
 	}
 	
-	private PackageType receiveIdPackage() throws SecurityException {
-		try{return PackageType.getPackageType(Integer.valueOf(receiveMessage()));}
-		catch(NumberFormatException e) {return PackageType.LOG_OUT;}
+	private int receiveIdPackage() throws SecurityException {
+		try{return Integer.valueOf(receiveMessage());}
+		catch(NumberFormatException e) {return PackageType.LOG_OUT.getId();}
 	}
 	
 	public Package receivePackage() {
 		Package pack = new Package();
 		
-		pack.setPackageType(receiveIdPackage());
+		pack.setType(receiveIdPackage());
 		pack.setMessage(receiveMessage());
 		
 		return pack;

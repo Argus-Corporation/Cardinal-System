@@ -1,12 +1,11 @@
 package net.argus.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayManager {
 	
 	public Object convert(Object[] array) {
-		String str = "";
+		String str = null;
 		for(int i = 0; i < array.length; i++)
 			str += array[i];
 			
@@ -42,6 +41,15 @@ public class ArrayManager {
 		
 		for(int i = sub; i < newArray.length; i++)
 			newArray[i] = array[i + 1];
+		
+		return newArray;
+	}
+	
+	public static char[] remove(char[] array, int min, int max) {
+		char[] newArray = new char[max - min];
+		
+		for(int i = min, j = 0; j < newArray.length; i++, j++)
+			newArray[j] = array[i];
 		
 		return newArray;
 	}
@@ -114,13 +122,21 @@ public class ArrayManager {
 		return result;
 	}
 	
+	public static int indexOf(char[] array, char index) {
+		for(int i = 0; i < array.length; i++)
+			if(array[i] == index)
+				return i;
+		return -1;
+	}
+	
 	public static void main(String[] args) {
-		List<String> list = new ArrayList<String>();
+		/*List<String> list = new ArrayList<String>();
 		
 		list.add("fds");
-		list.add("sqfqs");
+		list.add("sqfqs");*/
+		char[] str = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
 		
-		System.out.println(convert(list)[0]);
+		System.out.println(remove(str, 3, 5));
 	}
 
 }

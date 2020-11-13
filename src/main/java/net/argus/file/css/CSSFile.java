@@ -32,8 +32,8 @@ public class CSSFile extends AbstractFileSave {
 		boolean valid = false;
 		String lines = "";
 		
-		for(int i = 0; i < file.length; i++)
-			lines += file[i];
+		for(String str : file)
+			lines += str;
 		
 		char[] charLines = ArrayManager.remove(lines.toCharArray(), ' ');
 		charLines = ArrayManager.remove(charLines, '\t');

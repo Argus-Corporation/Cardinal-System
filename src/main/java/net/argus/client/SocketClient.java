@@ -61,9 +61,9 @@ public class SocketClient {
 	}
 	
 	public void sendPackage(Package pack) {
-		if(ArrayManager.isExist(pack.getMessage().toCharArray(), 0) && pack.getMessage().toCharArray()[0] == '/') pack.setPackageType(PackageType.COMMANDE);
+		if(ArrayManager.isExist(pack.getMessage().toCharArray(), 0) && pack.getMessage().toCharArray()[0] == '/') pack.setType(PackageType.COMMANDE);
 		
-		msgSend.println(serverUseKey&&key!=null?key.crypt(Integer.toString(pack.getPackageType().getId())):pack.getPackageType().getId());
+		msgSend.println(serverUseKey&&key!=null?key.crypt(Integer.toString(pack.getType())):pack.getType());
 		msgSend.flush();
 		
 		msgSend.println(serverUseKey&&key!=null?!pack.getMessage().equals("")?key.crypt(pack.getMessage()):pack.getMessage():pack.getMessage());
@@ -79,15 +79,15 @@ public class SocketClient {
 		Debug.log("You are disconnected: " + msg);
 	}
 	
-	private PackageType receiveIdPackage() throws SecurityException {
-		try{return PackageType.getPackageType(Integer.valueOf(receiveMessage()));}
-		catch(NumberFormatException e) {return PackageType.LOG_OUT;}
+	private int receiveIdPackage() throws SecurityException {
+		try{return Integer.valueOf(receiveMessage());}
+		catch(NumberFormatException e) {return -2;}
 	}
 	
 	public Package receivePackage() throws SecurityException{
 		Package pack = new Package();
 		
-		pack.setPackageType(receiveIdPackage());
+		pack.setType(receiveIdPackage());
 		pack.setMessage(receiveMessage());
 		
 		return pack;

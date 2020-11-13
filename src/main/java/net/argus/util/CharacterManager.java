@@ -2,6 +2,12 @@ package net.argus.util;
 
 public class CharacterManager {
 	
+	public static boolean isNumber(char car) {
+		try {Integer.valueOf(String.valueOf(car));}
+		catch(NumberFormatException e) {return false;}
+		return true;
+	}
+	
 	public static String cut(String enter, char cut) {
 		char[] carater = enter.toCharArray();
 		for(int i = 0; i < carater.length; i++) {
@@ -19,5 +25,4 @@ public class CharacterManager {
 		
 		return new String(chars);
 	}
-
 }

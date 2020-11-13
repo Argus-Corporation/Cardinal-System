@@ -2,13 +2,7 @@ package net.argus.number;
 
 import net.argus.util.Math;
 
-public class Binary extends Number {
-	
-	/**
-	 * 
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Binary {
 	
 	private String value;
 	
@@ -42,27 +36,6 @@ public class Binary extends Number {
 		
 		return true;
 		
-	}
-	
-	
-	@Override
-	public int intValue() {
-		return Integer.valueOf(value);
-	}
-
-	@Override
-	public long longValue() {
-		return Long.valueOf(value);
-	}
-
-	@Override
-	public float floatValue() {
-		return Float.valueOf(value);
-	}
-
-	@Override
-	public double doubleValue() {
-		return Double.valueOf(value);
 	}
 	
 	@Override

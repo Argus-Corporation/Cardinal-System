@@ -107,7 +107,7 @@ public class AbstractFileSave {
 	 * Cette méthode retourne le fichier compler sous forme de tableau
 	 * @return str[]
 	 */
-	protected String[] getFile() {
+	public String[] getFile() {
 		String[] str = new String[getNumberLine()];
 		try {
 			for(int i = 0; i < str.length; i++) {

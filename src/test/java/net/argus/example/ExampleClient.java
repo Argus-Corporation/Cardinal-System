@@ -124,10 +124,13 @@ public class ExampleClient {
 		client.setPseudo(pseudo);
 		
 		client.addClientManager(new ClientManager() {
-			public void receiveMessage(int msgType) throws SecurityException {
-				switch(msgType) {
+			public void receivePackage(Package pack, ProcessClient thisObj) throws SecurityException {
+				int msgId = pack.getType();
+				//String msg = pack.getMessage();
+				
+				switch(msgId) {
 					case ProcessClient.ARRAY:
-						int arrayType = client.getSocketClient().receivePackage().getPackageType().getId();
+						int arrayType = client.getSocketClient().receivePackage().getType();
 						
 						switch(arrayType) {
 							case ProcessClient.PSEUDO:

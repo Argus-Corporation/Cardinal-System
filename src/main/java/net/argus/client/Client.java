@@ -28,7 +28,7 @@ public class Client {
 	
 	private SocketClient client;
 	private ProcessClient process;
-	private static boolean running;
+	private boolean running;
 	
 	public Client(String host, int port, int version, Key key) throws UnknownHostException, IOException {
 		Thread.currentThread().setName("CLIENT");
@@ -38,7 +38,7 @@ public class Client {
 		this.port = port;
 		
 		client = new SocketClient(host, port, key);
-		process = new ProcessClient(client);
+		process = new ProcessClient(client, this);
 	}
 	
 	public Client(String host, int port, int version) throws UnknownHostException, IOException {
@@ -49,7 +49,7 @@ public class Client {
 		this.port = port;
 		
 		client = new SocketClient(host, port);
-		process = new ProcessClient(client);
+		process = new ProcessClient(client, this);
 	}
 	
 	public void start() throws UnknownHostException, IOException {
@@ -86,7 +86,7 @@ public class Client {
 	public ProcessClient getProcessClient() {return process;}
 	public SocketClient getSocketClient() {return client;}
 	
-	public static boolean isRunning() {return running;}
+	public boolean isRunning() {return running;}
 	public static int getVersion() {return CLIENT_VERSION;}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
@@ -119,7 +119,7 @@ public class Client {
 		};
 		
 		ClientManager manager = new ClientManager() {
-			public void receiveMessage(int msgType) {
+			public void receivePackage(Package pack, ProcessClient thisObj) {
 				//Debug.log("ID: " + msgType);
 				
 			}

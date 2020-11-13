@@ -1,4 +1,4 @@
-package net.argus.gui;
+package net.argus.image;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,7 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public abstract class Sprite {
+import net.argus.gui.Frame;
+
+public class Sprite {
 	
 	public static Image[] getSprite(ImageIcon source, Dimension spriteDim) {
 		return getSprite(source, new Dimension(), spriteDim);
