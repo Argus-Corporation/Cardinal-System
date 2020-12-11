@@ -2,15 +2,18 @@ package net.argus.serveur;
 
 import java.io.IOException;
 
+import net.argus.exception.SecurityException;
 import net.argus.serveur.command.Command;
 import net.argus.serveur.command.Commands;
 import net.argus.serveur.role.Role;
 import net.argus.serveur.role.Roles;
 import net.argus.util.CharacterManager;
-import net.argus.util.Package;
-import net.argus.util.PackageType;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
+import net.argus.util.pack.Package;
+import net.argus.util.pack.PackageBuilder;
+import net.argus.util.pack.PackageObject;
+import net.argus.util.pack.PackageType;
 
 public class ProcessServeur extends Thread {
 	
@@ -20,6 +23,7 @@ public class ProcessServeur extends Thread {
 	
 	private String pseudo;
 	private boolean running;
+	private boolean processLogOuting;
 	
 	private static ServeurManager manager;
 	
@@ -29,6 +33,8 @@ public class ProcessServeur extends Thread {
 	public static final int MESSAGE = 0;
 	public static final int SYSTEM = 1;
 	public static final int PSEUDO = 2;
+	public static final int ARRAY = 3;
+	public static final int FILE = 4;
 	
 	public ProcessServeur(ServeurSocketClient client, int userId) {
 		this.client = client;
@@ -46,19 +52,25 @@ public class ProcessServeur extends Thread {
 	}
 	
 	public void sendMessage(String msg) throws SecurityException {
-		client.sendPackage(new Package(PackageType.SYSTEM, msg));
-		client.sendPackage(new Package(PackageType.PSEUDO, "SYSTEM ALERTE"));			
+		client.sendPackage(new Package(new PackageBuilder(PackageType.SYSTEM.getId()).addValue("message", msg).addValue("pseudo", "SYSTEM ALERT")));		
 	}
 	
 	public void sendMessage(int pt, int userId, String msg) throws SecurityException {
-		Users.getServeurSocketClient(userId).sendPackage(new Package(pt, msg));
+		String pseudo;
+		
 		if(pt == PackageType.SYSTEM.getId()) 
-			Users.getServeurSocketClient(userId).sendPackage(new Package(PackageType.PSEUDO, "SYSTEM ALERTE"));			
+			pseudo = "SYSTEM ALERTE";			
 		else
-			Users.getServeurSocketClient(userId).sendPackage(new Package(PackageType.PSEUDO, pseudo));			
+			pseudo = this.pseudo;	
+		
+		PackageBuilder bui = new PackageBuilder(pt);
+		bui.addValue("message", msg);
+		bui.addValue("pseudo", pseudo);
+		
+		Users.getServeurSocketClient(userId).sendPackage(new Package(bui));
 	}
 	
-	public Package getPackage() {return client.receivePackage();}
+	public Package getPackage() throws SecurityException {return client.nextPackage();}
 	
 	
 	public void receiveMessage() throws IOException, SecurityException {
@@ -68,14 +80,16 @@ public class ProcessServeur extends Thread {
 		Package pack = getPackage();
 		
 		msgId = pack.getType();
-		msg = pack.getMessage();
+		
 		
 		switch(msgId) {
 			case PSEUDO:
-				pseudo = msg;
+				pseudo = pack.getValue("pseudo");
+				
 				int numberPseudo = 1;
+				
 				while(Users.isClientPseudoExist(pseudo)) {
-					pseudo = msg + "(" + numberPseudo + ")";
+					pseudo = pseudo + "(" + numberPseudo + ")";
 					numberPseudo++;
 				}
 				
@@ -89,12 +103,16 @@ public class ProcessServeur extends Thread {
 				break;
 	
 			case MESSAGE:
+				msg = pack.getValue("message");
 				Debug.log("Message from " + pseudo + ": " + msg);
+				
 				sendMessageToAllCLient(PackageType.MESSAGE.getId(), msg);
 				break;
 				
 			case SYSTEM:
 				int ver = 0;
+				
+				msg = pack.getValue("version");
 				
 				try {ver = Integer.valueOf(msg);}
 				catch(Exception e) {
@@ -114,6 +132,8 @@ public class ProcessServeur extends Thread {
 				String com;
 				Command command;
 				
+				msg = pack.getValue("command");
+				
 				try {com = msg.toUpperCase().substring(0, msg.indexOf(" "));}
 				catch(IndexOutOfBoundsException e) {com = msg.toUpperCase();}
 				
@@ -130,16 +150,42 @@ public class ProcessServeur extends Thread {
 				break;
 				
 			case LOG_OUT:
-				client.close(msg);
+				msg = pack.getValue("message");
 				
 				sendMessageToAllCLient(PackageType.SYSTEM.getId(), pseudo + " just disconnected");
+				
+				client.close(msg);
 				ThreadManager.stop(this);
 				break;
 				
 			case PASSWORD:
-				String password = msg;
+				String password = pack.getValue("password");
 				
 				client.setRole(Role.getRole(password) == null ? Roles.DEFAULT : Role.getRole(password));
+				break;
+				
+			case FILE:
+				PackageBuilder bui = new PackageBuilder(FILE);
+				PackageObject obj = new PackageObject("value");
+				
+				obj.addItem("fileName", pack.getObject("value").getValue("fileName").toString());
+				obj.addItem("extention", pack.getObject("value").getValue("extention").toString());
+				obj.addItemArray("data", pack.getObject("value").getArrayValue("data"));
+				
+				bui.addValue("value", obj);
+				
+				//for(CJSONObject pse : pack.getArray("clientReceivers"))
+					//Users.getServeurSocketClient(pse.toString()).sendPackage(new Package(bui));
+				
+				new Thread(new Runnable() {
+					public void run() {
+						try {
+							Users.getServeurSocketClient("lol").sendPackage(new Package(bui));
+						}catch(SecurityException e) {e.printStackTrace();}
+						
+					}
+				}).start();
+				
 				break;
 		}
 		
@@ -150,16 +196,20 @@ public class ProcessServeur extends Thread {
 		ThreadManager.addThread(this);	
 		running = true;
 		
-		sendMessageToAllCLient(PackageType.SYSTEM.getId(), "A client has just connected");
+		try {sendMessageToAllCLient(PackageType.SYSTEM.getId(), "A client has just connected");}
+		catch(SecurityException e2) {e2.printStackTrace();}
+		
 		while(client.getServeurParent().isRunning()) {
 			try {receiveMessage();}
 			catch(IOException | SecurityException e) {
-				Debug.log("ERROR: Client diconected");
+				if(!processLogOuting) {
+					Debug.log("ERROR: Client diconected");
 				
-				try {if(running)sendMessageToAllCLient(PackageType.SYSTEM.getId(), pseudo + " just disconnected");
-				}catch(SecurityException e1) {e1.printStackTrace();}
-				
-				ThreadManager.stop(this);
+					try {if(running) sendMessageToAllCLient(PackageType.SYSTEM.getId(), pseudo + " just disconnected");}
+					catch(SecurityException e1) {e1.printStackTrace();}
+					
+					ThreadManager.stop(this);
+				}
 			}
 		}
 	}
@@ -169,5 +219,6 @@ public class ProcessServeur extends Thread {
 	public String getPseudo() {return pseudo;}
 	public int getUserId() {return userId;}
 	public void setRunning(boolean running) {this.running = running;}
+	public void setprocessLogOuting(boolean processLogOuting) {this.processLogOuting = processLogOuting;}
 
 }

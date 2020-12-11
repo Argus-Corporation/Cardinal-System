@@ -10,7 +10,7 @@ import java.util.List;
 
 import net.argus.file.FileManager;
 import net.argus.file.Properties;
-import net.argus.graphic.GraphicsListener;
+import net.argus.graphic.Fonction;
 import net.argus.graphic.Vector2;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
@@ -24,14 +24,14 @@ public class GraphicsPanel extends Panel {
 	private static final long serialVersionUID = -4924292783008457853L;
 	
 	private List<Vector2> vactors = new ArrayList<Vector2>();
-	private GraphicsListener graphicsListener;
+	private Fonction graphicsListener;
 	
 	private int lineSize = 2;
 	private Color color;
 	private int x, y;
 	
 	
-	public GraphicsPanel(GraphicsListener graphicsListener) {this.graphicsListener = graphicsListener;}
+	public GraphicsPanel(Fonction graphicsListener) {this.graphicsListener = graphicsListener;}
 	
 	public GraphicsPanel() {}
 	
@@ -45,14 +45,14 @@ public class GraphicsPanel extends Panel {
 	}
 	
 	/****GETTERS****/
-	public GraphicsListener getGraphicsListener() {return graphicsListener;}
+	public Fonction getGraphicsListener() {return graphicsListener;}
 	public Color getColor() {return color;}
 	public int getLineSize() {return lineSize;}
 	
 	/****SETTERS****/
 	public void setColor(Color color) {this.color = color;}
 	public void setLineSize(int lineSize) {this.lineSize = lineSize;}
-	public void addGraphicsListener(GraphicsListener graphicsListener) {this.graphicsListener = graphicsListener;}
+	public void addGraphicsListener(Fonction graphicsListener) {this.graphicsListener = graphicsListener;}
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -70,7 +70,7 @@ public class GraphicsPanel extends Panel {
 		
 		if(graphicsListener != null) 
 			for(float i = -10000; i < 10000; i += 1f)
-				g2.draw(new Line2D.Float(x + i, y + graphicsListener.fonction(i), x + i + 1, y + graphicsListener.fonction(i + 1)));
+				g2.draw(new Line2D.Float(x + i, y + graphicsListener.fonction(i, 0), x + i + 1, y + graphicsListener.fonction(i + 1, 0)));
 		
 		else
 			for(int i = 0; i < vactors.size() - 1; i++)
@@ -87,10 +87,10 @@ public class GraphicsPanel extends Panel {
 		Frame fen = new Frame("Graphics", FileManager.getPath("res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
 		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		
-		GraphicsPanel gp = new GraphicsPanel(new GraphicsListener() {
+		GraphicsPanel gp = new GraphicsPanel(new Fonction() {
 			
 			@Override
-			public float fonction(float x) {
+			public float fonction(float x, float y) {
 				return 2 * x * x* x;
 			}
 		});

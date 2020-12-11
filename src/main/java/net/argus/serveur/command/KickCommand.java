@@ -2,6 +2,7 @@ package net.argus.serveur.command;
 
 import java.io.IOException;
 
+import net.argus.exception.SecurityException;
 import net.argus.serveur.ServeurSocketClient;
 import net.argus.serveur.Users;
 import net.argus.util.ThreadManager;
@@ -18,7 +19,7 @@ public class KickCommand extends Command {
 		String arg = "";
 		ServeurSocketClient userTarget;
 		
-		userTarget = Users.getServeurSocketClient(com[1]);	
+		userTarget = Users.getServeurSocketClient(com[1]);
 		
 		if(userTarget == null) {
 			ssc.getProcessServeur().sendMessage(com[1] + " not found");
@@ -32,6 +33,7 @@ public class KickCommand extends Command {
 		arg = arg.substring(0, arg.length() - 1);
 		
 		if(userTarget.getRole().getRank() <= ssc.getRole().getRank()) {
+			userTarget.getProcessServeur().setprocessLogOuting(true);
 			userTarget.logOut(arg);
 			ThreadManager.stop(userTarget.getProcessServeur());
 		}else {

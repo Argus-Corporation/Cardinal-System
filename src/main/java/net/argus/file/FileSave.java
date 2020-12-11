@@ -1,5 +1,6 @@
 package net.argus.file;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +18,6 @@ public class FileSave extends AbstractFileSave {
 	 * @param fileName
 	 * @param extention
 	 * @param repertoir
-	 * @param firstType
 	 * @param info[]
 	 */
 	public FileSave(String fileName, String extention, String rep, String[] info) {
@@ -31,11 +31,24 @@ public class FileSave extends AbstractFileSave {
 	 * Ce constructeur permer d'initialiser FileSave et de cr�er le fichier si il n'existe pas
 	 * @param fileName
 	 * @param repertoir
-	 * @param firstType
 	 * @param info[]
 	 */
 	public FileSave(String fileName, String rep, String[] info) {
 		this(fileName, "save", rep, info);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser FileSave et de cr�er le fichier si il n'existe pas
+	 * @param fileName
+	 * @param extention
+	 * @param path
+	 * @param info[]
+	 */
+	public FileSave(String fileName, String extention, File path, String[] info) {
+		super(fileName, extention, path);
+		this.firstType = info[0];
+		this.idType = info[1];
+		this.secondType = info[2];
 	}
 	
 	/**

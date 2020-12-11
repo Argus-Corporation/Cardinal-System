@@ -2,6 +2,7 @@ package net.argus.serveur.command;
 
 import java.io.IOException;
 
+import net.argus.exception.SecurityException;
 import net.argus.serveur.ServeurSocketClient;
 
 public class KickAllCommand extends Command {

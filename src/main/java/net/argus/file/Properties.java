@@ -3,7 +3,9 @@ package net.argus.file;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -19,8 +21,6 @@ public class Properties extends AbstractFileSave {
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
 	 * @param fileName
 	 * @param rep
-	 * @param projectName
-	 * @param class
 	 */
 	public Properties(String fileName, String rep) {
 		this(fileName, EXTENTION, rep);
@@ -28,14 +28,31 @@ public class Properties extends AbstractFileSave {
 	
 	/**
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
+	 * @param fileName
+	 * @param path
+	 */
+	public Properties(String fileName, File path) {
+		this(fileName, EXTENTION, path);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
 	 * @param fileName 
 	 * @param extention
 	 * @param rep
-	 * @param projectName
-	 * @param class
 	 */
 	protected Properties(String fileName, String extention, String rep) {
 		super(fileName, extention, rep);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
+	 * @param fileName 
+	 * @param extention
+	 * @param path
+	 */
+	protected Properties(String fileName, String extention, File path) {
+		super(fileName, extention, path);
 	}
 	
 	/**
@@ -79,6 +96,22 @@ public class Properties extends AbstractFileSave {
 		int line = getIdKey(key);
 		
 		data.set(line - 1, key + "=" + value);
+		
+		clear();
+		write(data);
+	}
+	
+	/**
+	 * Cette methode permer de remplacer une clef par une autre
+	 * @param key
+	 * @param value
+	 * @throws IOException 
+	 */
+	public void setKey(String key, Object value) throws IOException {
+		copyFile();	
+		int line = getIdKey(key);
+		
+		data.set(line - 1, key + "=" + value.toString());
 		
 		clear();
 		write(data);
@@ -186,12 +219,23 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la clef Dimension corespondante a la clef
 	 * @param key
 	 * @return dimention
-	 * @throws FileNotFoundException 
 	 */
 	public Dimension getDimension(String key) {
 		String[] line = getString(key).split(":");
 		
 		try {return new Dimension(Integer.valueOf(line[0]), Integer.valueOf(line[1]));
+		}catch(IndexOutOfBoundsException | NumberFormatException e) {return null;}
+	}
+	
+	/**
+	 * Cette methode retourne la clef Point corespondante a la clef
+	 * @param key
+	 * @return point
+	 */
+	public Point getPoint(String key) {
+		String[] line = getString(key).split(":");
+		
+		try {return new Point(Integer.valueOf(line[0]), Integer.valueOf(line[1]));
 		}catch(IndexOutOfBoundsException | NumberFormatException e) {return null;}
 	}
 	
@@ -213,17 +257,30 @@ public class Properties extends AbstractFileSave {
 	 * Cette méthode retourne les clef String[] corespondante a la clef
  	 * @param key
 	 * @return
-	 * @throws FileNotFoundException 
 	 */
 	public String[] getMultiString(String key) {
 		return getString(key).split(":");
 	}
 	
 	/**
+	 * Cette méthode retourne les clef int[] corespondante a la clef
+ 	 * @param key
+	 * @return
+	 */
+	public int[] getMultiInteger(String key) {
+		String[] strs = getMultiString(key);
+		int[] is = new int[strs.length];
+		
+		for(int i = 0; i < is.length; i++)
+			is[i] = Integer.valueOf(strs[i]);
+		
+		return is;
+	}
+	
+	/**
 	 * Cette methode retourne vrai si la clef exist
 	 * @param key
 	 * @return exist
-	 * @throws FileNotFoundException 
 	 */
 	public boolean containsKey(String key) {
 		try {

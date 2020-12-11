@@ -1,5 +1,8 @@
 package net.argus.number;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.argus.util.Math;
 
 public class Binary {
@@ -35,7 +38,22 @@ public class Binary {
 				return false;
 		
 		return true;
+	}
+	
+	public static Binary valueOf(int n) {
+		List<Long> bin = new ArrayList<Long>();
+		String binS = "";
+		long n0 = n;
 		
+		do {
+			bin.add(n0%2);
+			n0 = n0 / 2;
+		}while(n0 > 0);
+		
+		for(int i = bin.size() - 1; i >= 0; i--)
+			binS += bin.get(i);
+		
+		return new Binary(binS);
 	}
 	
 	@Override

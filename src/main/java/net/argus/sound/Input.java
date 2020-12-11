@@ -4,7 +4,6 @@ import java.io.File;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
@@ -39,11 +38,10 @@ public class Input extends Sound {
 		            line.open(format);
 		            line.start();   // start capturing
 		 
-		            AudioInputStream ais = new AudioInputStream(line);
+		         //   AudioInputStream ais = new AudioInputStream(line);
 		            Debug.log("Start recording");
-		           System.out.println(ais);
 		            // start recording
-		           //AudioSystem.write(ais, fileType, file);
+		      //     AudioSystem.write(ais, fileType, file);
 		            
 		 
 		        } catch (LineUnavailableException e) {}

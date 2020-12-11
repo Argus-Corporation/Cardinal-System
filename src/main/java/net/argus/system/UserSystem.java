@@ -13,6 +13,9 @@ public class UserSystem {
 	public static RunTime runTime = RunTime.getRunTime();
 	public static Scanner in = new Scanner(System.in);
 	
+	public static final String LIBRARY_WINDOWS = "dll";
+	public static final String LIBRARY_LINUX = "so";
+	
 	private static InitializedSystemManager manager = new InitializedSystemManager() {
 		public void preInit(String[] args) {runTime.start(); ThreadManager.SYSTEM.setTemporaryName();}
 		public void init(String[] args) {log = new Loggeur("log");}
@@ -23,7 +26,16 @@ public class UserSystem {
 	
 	public static void setDefaultInitializedSystemManager(InitializedSystemManager manager) {UserSystem.manager = manager;}
 	
-	public static void loadLibrary(String name) {System.loadLibrary("natives/" + name + System.getProperty("os.arch").substring(3));}
+	public static void loadLibrary(String name) {
+		String extention = LIBRARY_WINDOWS;
+		
+		if(System.getProperty("os.name").startsWith("Win"))
+			extention = LIBRARY_WINDOWS;
+		else if(System.getProperty("os.name").startsWith("Linux"))
+			extention = LIBRARY_LINUX;
+		
+		System.load(System.getProperty("java.library.path") + "/natives/" + name + System.getProperty("os.arch").substring(3) + "." + extention);
+	}
 	
 	public static void exit(int status) {
 		Debug.log("Program run in " + runTime.stop() + " milliseconde");

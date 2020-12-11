@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.exception.SecurityException;
 import net.argus.serveur.ServeurSocketClient;
 import net.argus.serveur.command.structure.Structure;
 import net.argus.util.ArrayManager;
@@ -15,7 +16,7 @@ public class Command {
 	
 	protected CommandListener listener;
 	
-	protected Structure structure = new Structure().add("commande");
+	protected Structure structure = new Structure().add("command");
 	
 	protected boolean activate;
 	protected String commandName;
@@ -57,11 +58,9 @@ public class Command {
 	
 	public static Command getCommand(String commandName) {
 		commandName = commandName.toUpperCase();
-		for(int i = 0; i < coms.size(); i++) {
-			if(coms.get(i).getCommandName().equals(commandName)) {
+		for(int i = 0; i < coms.size(); i++)
+			if(coms.get(i).getCommandName().equals(commandName))
 				return coms.get(i);
-			}
-		}
 		
 		Debug.log("Command not found");
 		return null;

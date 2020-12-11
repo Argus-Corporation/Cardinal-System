@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.argus.number.Binary;
 import net.argus.number.Hexadecimal;
+import net.argus.number.Quaternaire;
 import net.argus.number.Hexadecimal.CharHex;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
@@ -80,7 +81,7 @@ public class Math {
 	
 	public static double getPercentage(double i, double numberMax) {return i * 100.0D / numberMax;}
 	
-	public static int abs(int a) { return (a < 0) ? -a : a;}
+	public static int abs(int a) {return (a < 0) ? -a : a;}
 	
 	public static Binary toBinary(long n) {
 		List<Long> bin = new ArrayList<Long>();
@@ -112,6 +113,22 @@ public class Math {
 			hexs += hex.get(i);
 		
 		return new Hexadecimal(hexs);
+	}
+	
+	public static Quaternaire toQuaternaire(int n) {
+		List<Long> bin = new ArrayList<Long>();
+		String binS = "";
+		long n0 = n;
+		
+		do {
+			bin.add(n0%4);
+			n0 = n0 / 4;
+		}while(n0 > 0);
+		
+		for(int i = bin.size() - 1; i >= 0; i--)
+			binS += bin.get(i);
+		
+		return new Quaternaire(binS);
 	}
 	
 	static {UserSystem.loadLibrary("math");}

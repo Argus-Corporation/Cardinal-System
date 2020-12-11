@@ -1,7 +1,7 @@
 package net.argus.client;
 
 import net.argus.exception.SecurityException;
-import net.argus.util.Package;
+import net.argus.util.pack.Package;
 
 public interface ClientManager {
 	

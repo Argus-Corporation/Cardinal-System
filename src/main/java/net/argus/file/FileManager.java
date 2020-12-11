@@ -1,5 +1,7 @@
 package net.argus.file;
 
+import java.io.File;
+
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Identifiant;
@@ -18,7 +20,7 @@ public class FileManager {
 		
 		if(res == null) res = "";
 		
-		path = mainPath + "\\" + res;
+		path = mainPath + File.separator + res;
 		
 		return path;
 	}

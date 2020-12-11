@@ -1,15 +1,22 @@
 package net.argus.file;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import net.argus.lang.Lang;
+import net.argus.lang.LangType;
+import net.argus.system.Temp;
 
 public class FileLang extends AbstractFileSave {
 	
 	private static final String extention = "lang";
 
 	public FileLang(Properties config) {
-		super(Lang.normalized(config.getString("lang"), config), extention, config.getString("lang.repertoirfile"));
+		super(Lang.normalized(config.getString("lang"), config), extention, new File((config.getBoolean("lang.temp")?Temp.getTempDir():FileManager.getMainPath()) + "/" + config.getString("lang.repertoirfile")));
+	}
+	
+	public FileLang(String langName, FileLang old) {
+		super(LangType.getLangType(langName).getName(), extention, new File(old.getPath().substring(0, old.getPath().lastIndexOf("/"))));
 	}
 	
 	public String getElementString(String elementName) {

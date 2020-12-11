@@ -7,9 +7,7 @@ import net.argus.util.ArrayManager;
 
 public class CJSONPareser {
 	
-	public static CJSON parse(CJSONFile file) {
-		char[] chars = getFile(file.getFile());
-		
+	public static CJSON parse(char[] chars) {
 		List<CJSONObject> objs = new ArrayList<CJSONObject>();
 		
 		while(ArrayManager.isExist(chars, 0)) {
@@ -20,6 +18,18 @@ public class CJSONPareser {
 		
 	}
 	
+	public static CJSON parse(String file) {
+		return parse(getFile(file));
+	}
+	
+	public static CJSON parse(CJSONFile file) {
+		return parse(getFile(file.getFile()));
+	}
+	
+	private static char[] getFile(String file) {
+		return getFile(new String[] {file});
+	}
+		
 	private static char[] getFile(String[] file) {
 		boolean valid = false;
 		String lines = "";

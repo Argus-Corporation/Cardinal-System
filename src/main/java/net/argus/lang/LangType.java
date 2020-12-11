@@ -2,13 +2,15 @@ package net.argus.lang;
 
 public enum LangType {
 	
-	en_US("en_US", 0), fr_FR("fr_FR", 1);
+	en_US("en_US", "english", 0), fr_FR("fr_FR", "français", 1);
 	
-	private final String name;
-	private final int id;
+	private String name;
+	private String relName;
+	private int id;
 	
-	LangType(String name, int id) {
+	LangType(String name, String relName, int id) {
 		this.name = name;
+		this.relName = relName;
 		this.id = id;
 	}
 	
@@ -30,7 +32,17 @@ public enum LangType {
 		return en_US;
 	}
 	
+	public static LangType getLangType(String relName, int nul) {
+		LangType[] lts = values();
+		
+		for(LangType lt : lts)
+			if(relName.equals(lt.getRelName())) return lt;
+		
+		return en_US;
+	}
+	
 	public String getName() {return name;}
+	public String getRelName() {return relName;}
 	public int getId() {return id;}
 
 }

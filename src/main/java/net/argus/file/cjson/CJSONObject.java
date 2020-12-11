@@ -17,7 +17,15 @@ public class CJSONObject {
 		this.arrays = arrays;
 	}
 	
-	public CJSONObject() {this(null, null, null);}
+	public CJSONObject(CJSONString name) {
+		this.name = name;
+	}
+	
+	public CJSONObject(String name) {
+		this(new CJSONString(name));
+	}
+	
+	public CJSONObject() {}
 	
 	public static CJSONObject nextObject(char[] chars) {
 		List<CJSONItem> items = new ArrayList<CJSONItem>();
@@ -32,6 +40,7 @@ public class CJSONObject {
 		while(chars[0] != '}') {
 			CJSONString name = CJSONString.nextString(chars);
 			chars = ArrayManager.remove(chars, ArrayManager.indexOf(chars, ':') + 1, chars.length);
+			
 			
 			if(chars[0] == '[') {
 				CJSONItemArray array = CJSONItemArray.nextArray(chars);
@@ -71,13 +80,24 @@ public class CJSONObject {
 		return null;
 	}
 	
+	public CJSONObject getValue(int index) {return items.get(index).getValue();}
+	
 	public CJSONObject[] getArrayValue(String arrayName) {return getArrayValue(new CJSONString(arrayName));}
+	
+	public byte[] getByte(String arrayName) {return getByte(new CJSONString(arrayName));}
 	
 	public CJSONObject[] getArrayValue(CJSONString name) {
 		for(CJSONItemArray obj : arrays) {
-			//System.out.println(obj.getName());
 			if(obj.getName().equals(name))
 				return obj.getValues();
+		}
+		return null;
+	}
+	
+	public byte[] getByte(CJSONString name) {
+		for(CJSONItemArray obj : arrays) {
+			if(obj.getName().equals(name))
+				return obj.getByte();
 		}
 		return null;
 	}
@@ -85,6 +105,8 @@ public class CJSONObject {
 	public void setItems(List<CJSONItem> items) {this.items = items;}
 	public void setArray(List<CJSONItemArray> arrays) {this.arrays = arrays;}
 	public void setName(CJSONString name) {this.name = name;}
-	
 
+	public void addItem(CJSONItem item) {items.add(item);}
+	public void addItemArray(CJSONItemArray array) {arrays.add(array);}
+	
 }

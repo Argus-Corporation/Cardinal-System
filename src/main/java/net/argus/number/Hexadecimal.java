@@ -1,5 +1,8 @@
 package net.argus.number;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.argus.util.Math;
 
 public class Hexadecimal {
@@ -8,8 +11,9 @@ public class Hexadecimal {
 	
 	public enum CharHex {
 		
-		a0(0, '0'), a1(1, '1'), a2(2, '2'), a3(3, '3'), a4(4, '4'), a5(5, '5'), a6(6, '6'), a7(7, '7'),
-		a8(8, '8'), a9(9, '9'), A(10, 'A'), B(11, 'B'), C(12, 'C'), D(13, 'D'), E(14, 'E'), F(15, 'F');
+		a0(0, '0'), a1(1, '1'), a2(2, '2'), a3(3, '3'), a4(4, '4'),
+		a5(5, '5'), a6(6, '6'), a7(7, '7'), a8(8, '8'), a9(9, '9'),
+		A(10, 'A'), B(11, 'B'), C(12, 'C'), D(13, 'D'), E(14, 'E'), F(15, 'F');
 		
 		int value;
 		char ch;
@@ -54,6 +58,22 @@ public class Hexadecimal {
 		}
 		
 		return true;
+	}
+	
+	public static Hexadecimal valueOf(int n) {
+		List<Character> hex = new ArrayList<Character>();
+		String hexs = "";
+		long n0 = n;
+
+		do {
+			hex.add(CharHex.getChar((int) (n0%16)));
+			n0 = n0 / 16;
+		}while(n0 > 0);
+		
+		for(int i = hex.size() - 1; i >= 0; i--)
+			hexs += hex.get(i);
+		
+		return new Hexadecimal(hexs);
 	}
 	
 	@Override

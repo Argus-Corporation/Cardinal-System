@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -21,6 +22,7 @@ import net.argus.client.ProcessListener;
 import net.argus.exception.SecurityException;
 import net.argus.file.FileManager;
 import net.argus.file.Properties;
+import net.argus.file.cjson.CJSONObject;
 import net.argus.file.css.CSSEngine;
 import net.argus.gui.Button;
 import net.argus.gui.Frame;
@@ -35,8 +37,9 @@ import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 import net.argus.util.Notification;
-import net.argus.util.Package;
-import net.argus.util.PackageType;
+import net.argus.util.pack.Package;
+import net.argus.util.pack.PackageBuilder;
+import net.argus.util.pack.PackageType;
 
 public class ExampleClient {
 	
@@ -76,7 +79,7 @@ public class ExampleClient {
 			@SuppressWarnings("deprecation")
 			public void frameClosing() {
 				if(client.isConnected()) {
-						client.sendPackage(new Package(PackageType.LOG_OUT, "Frame Closing"));
+						client.sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("message", "Frame Closing")));
 					
 					client.getProcessClient().stop();
 				}
@@ -87,7 +90,11 @@ public class ExampleClient {
 		});
 		
 		send.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent arg0) {
-			client.sendPackage(new Package(PackageType.MESSAGE, msg.getText()));
+			if(msg.getText().toCharArray()[0] == '/')
+				client.sendPackage(new Package(new PackageBuilder(PackageType.COMMANDE.getId()).addValue("command", msg.getText())));
+			else
+				client.sendPackage(new Package(new PackageBuilder(PackageType.MESSAGE.getId()).addValue("message", msg.getText())));
+			
 			setMessage(new String[] {"Vous", msg.getText()});
 			msg.copyData();
 			msg.setText("");
@@ -95,7 +102,11 @@ public class ExampleClient {
 		}});
 		
 		msg.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent arg0) {
-			send.getActionListeners()[0].actionPerformed(arg0);
+			//send.getActionListeners()[0].actionPerformed(arg0);  
+			
+			try {client.sendFile(new File("D:\\Django\\document 1\\Git\\config.cjson"), new String[] {"lol"});}
+			catch(SecurityException | IOException e) {e.printStackTrace();}
+			
 		}});	
 		
 		south.add(msg);
@@ -103,10 +114,9 @@ public class ExampleClient {
 		fen.add(BorderLayout.CENTER, sp);
 		fen.add(BorderLayout.SOUTH, south);
 		
-		while(!spl.isValid()) {
+		while(!spl.isValid())
 			fen.setVisible(false);
-		}
-		
+			
 		fen.setVisible(true);
 		setClient();
 	}
@@ -118,7 +128,7 @@ public class ExampleClient {
 		String pseudo = JOptionPane.showInputDialog(fen, "Pseudo", "Client", JOptionPane.DEFAULT_OPTION);
 		String password = JOptionPane.showInputDialog(fen, "Password", "Client", JOptionPane.DEFAULT_OPTION);
 		
-		client = new Client(host, port, 0x11066);
+		client = new Client(host, port);
 		
 		client.setPassword(password);
 		client.setPseudo(pseudo);
@@ -130,14 +140,15 @@ public class ExampleClient {
 				
 				switch(msgId) {
 					case ProcessClient.ARRAY:
-						int arrayType = client.getSocketClient().receivePackage().getType();
+						int arrayType = Integer.valueOf(pack.getObject("value").getValue("type").toString());
 						
 						switch(arrayType) {
 							case ProcessClient.PSEUDO:
-								String[] pseudos = client.getSocketClient().receiveArray();
-								for(int i = 0; i < pseudos.length; i++) {
-									setMessage(new String[] {"", pseudos[i]});
-								}
+								CJSONObject[] array = pack.getObject("value").getArrayValue("array");
+								
+								for(int i = 0; i < array.length; i++)
+									setMessage(new String[] {"", array[i].toString()});
+									
 								break;
 						}
 						break;
@@ -157,7 +168,7 @@ public class ExampleClient {
 			public void addSystemMessage(String[] value) {
 				addMessage(value);
 				if(!fen.isActive())
-					Notification.showNotification("Vous avez un nouveau message: " + value[1], value[0], "Argus", MessageType.NONE, FileManager.getPath("res/favIcon16x16.png"));
+					Notification.showNotification("Vous avez un nouveau message de " + value[0], value[1], "Argus", MessageType.NONE, FileManager.getPath("res/favIcon16x16.png"));
 			}
 			public void addMessage(String[] value) {setMessage(value);}
 		});
@@ -173,6 +184,7 @@ public class ExampleClient {
 	
 	public void setMessage(String[] value) {
 		allMsg.setText(allMsg.getText() + value[0] + ": " + value[1] + "\n");
+		//allMsg.set
 	}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
@@ -184,6 +196,9 @@ public class ExampleClient {
 		Look.chageLook(UIManager.getSystemLookAndFeelClassName());
 		new ExampleClient();
 		
+		/*Thread.sleep(5000);
+		
+		ec.client.getSocketClient().senFile(new AbstractFileSave("manifest", "cjson", ""));*/
 	}
 
 }

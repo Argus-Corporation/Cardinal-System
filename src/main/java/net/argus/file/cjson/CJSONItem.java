@@ -1,31 +1,54 @@
 package net.argus.file.cjson;
 
-import net.argus.util.CharacterManager;
-
 public class CJSONItem {
 	
 	private CJSONString name;
 	private CJSONObject value;
 	
-	public CJSONItem(CJSONString name, CJSONString value) {
+	public CJSONItem(CJSONString name, CJSONObject value) {
 		this.name = name;
 		this.value = value;
 	}
 	
-	public CJSONItem() {this(null, null);}
+	public CJSONItem(String name, CJSONObject value) {
+		this(new CJSONString(name), value);
+	}
+	
+	public CJSONItem(String name, String value) {
+		this(name, new CJSONString(value));
+	}
+	
+	public CJSONItem(String name) {
+		this(name, new String());
+	}
+	
+	public CJSONItem() {this(null);}
 	
 	public static CJSONItem nextItem(char[] chars) {
 		CJSONItem item = new CJSONItem();
 		
-		if(chars[0] == '"')
-			item.setValue(CJSONString.nextString(chars));
-		else if(CharacterManager.isNumber(chars[0])) {
-			if(CJSONNumber.nextIsInteger(chars)) {
+		switch(CJSONType.nextType(chars)) {
+			case OBJECT:
+				item.setValue(CJSONObject.nextObject(chars));
+				break;
+
+			case STRING:
+				item.setValue(CJSONString.nextString(chars));
+				break;
+				
+			case INTEGER:
 				item.setValue(CJSONInteger.nextInt(chars));
-			}else
-				item.setValue(CJSONFloat.nextFloat(chars));
-		}else if(chars[0] == '{')
-			item.setValue(CJSONObject.nextObject(chars));
+				break;
+			
+			case FLOAT:
+				item.setValue(CJSONFloat.nextFloat(chars));				
+				break;
+				
+			case BOOLEAN:
+				item.setValue(CJSONBoolean.nextBoolean(chars));
+				break;
+			
+		}
 		
 		return item;
 	}

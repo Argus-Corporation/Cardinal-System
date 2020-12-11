@@ -8,6 +8,7 @@ import net.argus.file.FileSave;
 import net.argus.security.Key;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
+import net.argus.exception.SecurityException;
 
 public class Users {
 	
@@ -27,7 +28,7 @@ public class Users {
 		clients = new ServeurSocketClient[maxClient];
 	}
 	
-	public synchronized void addUser(Serveur serveur, Socket client) throws IOException {
+	public synchronized void addUser(Serveur serveur, Socket client) throws SecurityException, IOException {
 		for(int i = 0; i < clients.length; i++) {
 			if(clients[i] == null) {
 				try {

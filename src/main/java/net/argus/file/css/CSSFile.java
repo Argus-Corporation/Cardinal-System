@@ -2,6 +2,7 @@ package net.argus.file.css;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,13 @@ public class CSSFile extends AbstractFileSave {
 	private String fileComplied;
 	private String[] words;
 	
-	public CSSFile(String fileName, String rep) throws FileNotFoundException {
+	public CSSFile(String fileName, String rep) {
 		super(fileName, EXTENTION, rep);
+		fileComplied = compile(getFile());
+	}
+	
+	public CSSFile(String fileName, File path) {
+		super(fileName, EXTENTION, path);
 		fileComplied = compile(getFile());
 	}
 	

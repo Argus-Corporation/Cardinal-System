@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -13,15 +14,17 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+import net.argus.exception.SecurityException;
 import net.argus.security.Key;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
-import net.argus.util.Package;
-import net.argus.util.PackageType;
+import net.argus.util.pack.Package;
+import net.argus.util.pack.PackageBuilder;
+import net.argus.util.pack.PackageType;
 
 public class Client {
 	
-	private static int CLIENT_VERSION;
+	private static final int CLIENT_VERSION = 011220;
 	
 	private String host;
 	private int port;
@@ -30,9 +33,8 @@ public class Client {
 	private ProcessClient process;
 	private boolean running;
 	
-	public Client(String host, int port, int version, Key key) throws UnknownHostException, IOException {
+	public Client(String host, int port, Key key) throws UnknownHostException, IOException {
 		Thread.currentThread().setName("CLIENT");
-		Client.CLIENT_VERSION = version;
 		
 		this.host = host;
 		this.port = port;
@@ -41,9 +43,8 @@ public class Client {
 		process = new ProcessClient(client, this);
 	}
 	
-	public Client(String host, int port, int version) throws UnknownHostException, IOException {
+	public Client(String host, int port) throws UnknownHostException, IOException {
 		Thread.currentThread().setName("CLIENT");
-		Client.CLIENT_VERSION = version;
 		
 		this.host = host;
 		this.port = port;
@@ -71,6 +72,7 @@ public class Client {
 	public Client setPseudo(String pseudo) {client.setPseudo(pseudo); return this;}
 	public Client setPassword(String password) {client.setPassword(password); return this;}
 	public Client sendPackage(Package pack) {client.sendPackage(pack); return this;}
+	public Client sendFile(File file, String[] clientRecievers) throws SecurityException, IOException {client.sendFile(file, clientRecievers); return this;}
 	
 	public boolean isConnected() {return client.isConnected();}
 	
@@ -130,7 +132,7 @@ public class Client {
 		//Key key = new Key("$^ù$$;mm^$^dmsf$^sdµdPµ^mm$µMPµ;p:,$^;m:$^,;:877687^$ù*%µMPµ%m");
 		
 		//Client client = new Client("176.163.39.11", 11066, 0x11066, key);
-		Client client = new Client("0.0.0.0", 11066, 0x11066);
+		Client client = new Client("0.0.0.0", 11066);
 		
 		client.addProcessListener(listener);
 		client.addClientManager(manager);
@@ -138,7 +140,7 @@ public class Client {
 		
 		send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.sendPackage(new Package(PackageType.MESSAGE, tf.getText()));
+				client.sendPackage(new Package(new PackageBuilder(PackageType.MESSAGE.getId()).addValue("message", tf.getText())));
 				tf.setText("");
 				
 			}
@@ -152,7 +154,7 @@ public class Client {
 			public void windowClosed(WindowEvent e) {}
 			public void windowActivated(WindowEvent e) {}
 			public void windowClosing(WindowEvent e) {
-				client.sendPackage(new Package(PackageType.LOG_OUT, "Frame Closing"));
+				client.sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("message", "Frame Closing")));
 				try {client.getSocketClient().close("Frame Closing");}
 				catch(IOException e1) {e1.printStackTrace();}
 			}

@@ -2,6 +2,12 @@ package net.argus.util;
 
 public class CharacterManager {
 	
+	public static boolean isBoolean(String str) {
+		if(str.toLowerCase().equals("true") || str.toLowerCase().equals("false"))
+			return true;
+		return false;
+	}
+	
 	public static boolean isNumber(char car) {
 		try {Integer.valueOf(String.valueOf(car));}
 		catch(NumberFormatException e) {return false;}

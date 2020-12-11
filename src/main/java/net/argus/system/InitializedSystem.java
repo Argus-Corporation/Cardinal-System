@@ -5,11 +5,10 @@ import java.net.UnknownHostException;
 
 public class InitializedSystem {
 	
-	private static boolean init;
+	public static boolean init;
 	
 	public static void initSystem(String[]args, InitializedSystemManager manager) {
 		manager.preInit(args);
-		
 		System.setProperty("project.name", Argument.getArgument(args, "project.name"));
 		
 		try {System.setProperty("user", InetAddress.getLocalHost().getHostName());}

@@ -5,6 +5,7 @@ import java.io.File;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 
+@Deprecated
 public class Terminal extends Thread {
 	
 	private String directory = System.getProperty("user.dir");
@@ -26,7 +27,6 @@ public class Terminal extends Thread {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void execut(String[] com) {
 		switch(com[0]) {
 			case "echo":

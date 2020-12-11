@@ -6,12 +6,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import net.argus.exception.SecurityException;
 import net.argus.security.Key;
 import net.argus.serveur.role.Role;
 import net.argus.serveur.role.Roles;
-import net.argus.util.Package;
-import net.argus.util.PackageType;
 import net.argus.util.debug.Debug;
+import net.argus.util.pack.Package;
+import net.argus.util.pack.PackageBuilder;
+import net.argus.util.pack.PackageObject;
+import net.argus.util.pack.PackagePareser;
+import net.argus.util.pack.PackageType;
 
 public class ServeurSocketClient {
 	
@@ -33,7 +37,7 @@ public class ServeurSocketClient {
 	
 	private int userId;
 	
-	public ServeurSocketClient(Serveur serveur, Socket socket, Key key, int userId) throws IOException, IllegalAccessException {
+	public ServeurSocketClient(Serveur serveur, Socket socket, Key key, int userId) throws SecurityException, IOException, IllegalAccessException {
 		this.serveur = serveur;
 		this.socket = socket;
 		this.userId = userId;
@@ -62,7 +66,7 @@ public class ServeurSocketClient {
 		if(valid) process.start();
 	}
 	
-	public ServeurSocketClient(Serveur serveur, Socket socket, int userId) throws IOException, IllegalAccessException {
+	public ServeurSocketClient(Serveur serveur, Socket socket, int userId) throws SecurityException, IOException, IllegalAccessException {
 		this.serveur = serveur;
 		this.socket = socket;
 		this.userId = userId;
@@ -97,46 +101,46 @@ public class ServeurSocketClient {
 	}
 	
 	public synchronized void sendPackage(Package pack) throws SecurityException {
-		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(pack.getType())):pack.getType());
-		msgSend.flush();
+		send(pack);
+	}
+	
+	public synchronized void sendArray(PackageType contentArray, String[] array) throws SecurityException {sendArray(contentArray.getId(), array);}
+	
+	public synchronized void sendArray(int contentArray, String[] array) throws SecurityException {
+		PackageBuilder bui = new PackageBuilder(PackageType.ARRAY.getId());
+		PackageObject objArray = new PackageObject("value");
 		
-		msgSend.println(clientUseKey&&key!=null?!pack.getMessage().equals("")?key.crypt(pack.getMessage()):pack.getMessage():pack.getMessage());
+		objArray.addItem("type", String.valueOf(contentArray));
+		objArray.addItemArray("array", array);
+		
+		bui.addValue(objArray);
+
+		sendPackage(new Package(bui));
+	}
+	
+	/*public synchronized void sendFile(Package packageFile) throws SecurityException {
+		PackageBuilder bui = new PackageBuilder(PackageType.FILE.getId());
+		PackageObject objFile = new PackageObject("value");
+		
+		objFile.addItem("file", file);
+		
+		bui.addValue(objFile);
+		
+		sendPackage(new Package(bui));
+	}*/
+	
+	public synchronized void send(Object str) {
+		msgSend.println(clientUseKey&&key!=null?key.crypt(str.toString()):str.toString());
 		msgSend.flush();
 	}
 	
-	public synchronized void sendArray(PackageType contentArray, String[] array) {sendArray(contentArray.getId(), array);}
-	
-	public synchronized void sendArray(int contentArray, String[] array) {
-		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(PackageType.ARRAY.getId())):PackageType.ARRAY.getId());
-		msgSend.flush();
-		
-		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(contentArray)):contentArray);
-		msgSend.flush();
-		
-		msgSend.println(clientUseKey&&key!=null?key.crypt(Integer.toString(array.length)):array.length);
-		msgSend.flush();
-		
-		for(int i = 0; i < array.length; i++) {
-			msgSend.println(clientUseKey&&key!=null?!array[i].equals("")?key.crypt(array[i]):array[i]:array[i]);
-			msgSend.flush();
-		}
+	public Package nextPackage() throws SecurityException {
+		String n = nextString();
+		//System.out.println(n + "  next");
+		return PackagePareser.parse(n);
 	}
 	
-	private int receiveIdPackage() throws SecurityException {
-		try{return Integer.valueOf(receiveMessage());}
-		catch(NumberFormatException e) {return PackageType.LOG_OUT.getId();}
-	}
-	
-	public Package receivePackage() {
-		Package pack = new Package();
-		
-		pack.setType(receiveIdPackage());
-		pack.setMessage(receiveMessage());
-		
-		return pack;
-	}
-	
-	private String receiveMessage() throws SecurityException {
+	private String nextString() throws SecurityException {
 		String msg = null;
 		
 		try{msg = msgRecei.readLine();}
@@ -156,7 +160,7 @@ public class ServeurSocketClient {
 	}
 	
 	public synchronized void logOut(String msg) throws IOException, SecurityException {
-		sendPackage(new Package(PackageType.LOG_OUT, msg));
+		sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("message", msg)));
 		Debug.log("Request of Log Out sended to " + process.getPseudo());
 		close(msg);
 	}

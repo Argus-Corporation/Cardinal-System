@@ -2,6 +2,7 @@ package net.argus.serveur.command;
 
 import java.io.IOException;
 
+import net.argus.exception.SecurityException;
 import net.argus.serveur.ServeurSocketClient;
 import net.argus.serveur.role.Role;
 import net.argus.util.debug.Debug;

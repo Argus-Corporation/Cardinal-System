@@ -10,7 +10,7 @@ import net.argus.system.UserSystem;
 public class ExampleServeur {
 	
 	public ExampleServeur() throws IOException {
-		Serveur serv = new Serveur(0x11066, 100000, 11066);
+		Serveur serv = new Serveur(100000, 11066);
 		
 		new Role("admin").setPassword("rt").setRank(10).registry();
 		new Role("modo").setPassword("io").setRank(5).registry();
@@ -18,7 +18,7 @@ public class ExampleServeur {
 		serv.start();
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		new ExampleServeur();
 	}

@@ -9,6 +9,7 @@ import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
+import net.argus.exception.SecurityException;;
 
 public class Serveur extends Thread {
 	
@@ -17,12 +18,11 @@ public class Serveur extends Thread {
 	
 	private boolean running;
 	
-	private int SERVEUR_VERSION;
+	private static final int SERVEUR_VERSION = 011220;
 	private int port;
 	
-	public Serveur(int version, int maxClient, int port, Key key) throws IOException {
+	public Serveur(int maxClient, int port, Key key) throws IOException {
 		ThreadManager.addThread(this);
-		SERVEUR_VERSION = version;
 		this.port = port;
 		
 		serveur = new ServerSocket(port);
@@ -32,9 +32,8 @@ public class Serveur extends Thread {
 		users = new Users(maxClient, key);
 	}
 	
-	public Serveur(int version, int maxClient, int port) throws IOException {
+	public Serveur(int maxClient, int port) throws IOException {
 		ThreadManager.addThread(this);
-		SERVEUR_VERSION = version;
 		this.port = port;
 		
 		serveur = new ServerSocket(port);
@@ -51,14 +50,17 @@ public class Serveur extends Thread {
 		
 	}
 	
-	private void loop(){
+	private void loop() {
 		try {
 			while(running)
 				users.addUser(this, serveur.accept());
 			
 		}catch(IOException e) {
-			Debug.log("Server Stopped");
+			Debug.log("Error: IOExeption");
+		}catch(SecurityException e) {
+			Debug.log("Error: SecurityExeption");
 		}
+		Debug.log("Server Stopped");
 	}
 	
 	public void stop(int userId) throws IOException, SecurityException {
@@ -87,7 +89,7 @@ public class Serveur extends Thread {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 	//	Key key = new Key("$^ù$$;mm^$^dmsf$^sdµdPµ^mm$µMPµ;p:,$^;m:$^,;:877687^$ù*%µMPµ%m");
 		
-		Serveur serveur = new Serveur(0x11066, 10, 11066);
+		Serveur serveur = new Serveur(10, 11066);
 		
 		new Role("admin").setPassword("re").setRank(10).registry();
 		new Role("admin").setPassword("r5e").setRank(1000).registry();

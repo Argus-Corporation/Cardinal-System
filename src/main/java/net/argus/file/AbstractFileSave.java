@@ -33,9 +33,14 @@ public class AbstractFileSave {
 		this.rep = rep;
 		
 		if(this.rep == null) this.rep = "";
-		this.rep += "/";
+		this.rep += File.separator;
 		
 		this.path = FileManager.getPath(null);
+		
+		this.path = path.substring(0, path.length() - 1);
+		
+		if(!this.rep.equals(File.separator))
+			this.path += File.separator;
 		
 		new File(this.path + this.rep).mkdirs();
 		
@@ -44,6 +49,38 @@ public class AbstractFileSave {
 		
 		try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
 		}catch(IOException e) {e.printStackTrace();}
+		
+		Debug.log("File Loaded: " + getPath());
+	}
+	
+	public AbstractFileSave(String fileName, String extention, File path) {
+		this.fileName = fileName;
+		this.extention = extention;
+		this.path = path.getPath();
+
+		path.mkdirs();
+		
+		this.path += "/" + fileName + "." + extention;
+		this.file = new File(this.path);
+		
+		try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
+		}catch(IOException e) {e.printStackTrace();}
+		
+		Debug.log("File Loaded: " + getPath());
+	}
+	
+	public AbstractFileSave(File path) {
+		this.fileName = path.toString().substring(path.toString().lastIndexOf(File.separator) + 1, path.toString().lastIndexOf('.'));
+		this.extention = path.toString().substring(path.toString().lastIndexOf('.') + 1);
+		this.path = path.getPath();
+		
+		this.path = regulary(this.path, null);
+		
+		this.file = path;
+		
+		
+		/*try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
+		}catch(IOException e) {e.printStackTrace();}*/
 		
 		Debug.log("File Loaded: " + getPath());
 	}
@@ -115,6 +152,14 @@ public class AbstractFileSave {
 			}
 		}catch(FileNotFoundException e) {}
 		return str;
+	}
+	
+	public String getFileInOneLine() {
+		String lines = "";
+		for(String line : getFile())
+			lines += line;
+		
+		return lines;
 	}
 	
 	/**
