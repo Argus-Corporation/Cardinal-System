@@ -6,8 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
+import net.argus.client.info.Info;
+import net.argus.client.info.Infos;
 import net.argus.exception.SecurityException;
 import net.argus.util.debug.Debug;
 import net.argus.util.pack.Package;
@@ -33,6 +34,8 @@ public class ProcessClient extends Thread {
 	public ProcessClient(SocketClient client, Client mainClient) {
 		this.client = client;
 		this.mainClient = mainClient;
+		
+		new Infos();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -69,7 +72,7 @@ public class ProcessClient extends Thread {
 					
 				case LOG_OUT:
 					msg = pack.getValue("message");
-					switch(msg!=null?msg:"") {
+					/*switch(msg != null ? msg : "") {
 						case "version":
 							JOptionPane.showMessageDialog(null, "Obsolete version " + 0x12345, "Alert Server", JOptionPane.ERROR_MESSAGE);
 							break;
@@ -79,7 +82,10 @@ public class ProcessClient extends Thread {
 						case "close":
 							JOptionPane.showMessageDialog(null, "Serveur close " + 0x79895, "Alert Server", JOptionPane.ERROR_MESSAGE);
 							break;
-					}
+					}*/
+					
+					Info info = Info.getInfo(msg);
+					if(info != null) info.run();
 					
 					client.close(msg);
 					

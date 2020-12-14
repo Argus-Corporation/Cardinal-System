@@ -5,10 +5,12 @@ import java.io.IOException;
 import net.argus.exception.SecurityException;
 import net.argus.io.ftp.FTPClient;
 
-public class Test {
+public class ExampleFTPClient {
 	
 	public static void main(String[] args) throws IOException, SecurityException {
-	
+		FTPClient client = new FTPClient("host", "user", "password");
+		
+		client.transfert("C:/path/test.txt", "/floder/");
 	}
 
 }

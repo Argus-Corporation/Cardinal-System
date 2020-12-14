@@ -37,11 +37,15 @@ public class InputSound extends Sound {
 			
 			while (bytesRead < 100000) { 
 				numBytesRead = microphone.read(data, 0, CHUNK_SIZE); 
+				
+				System.out.println(data);
+				
 				bytesRead += numBytesRead; 
 				// write the mic data to a stream for use later 
 				out.write(data, 0, numBytesRead); 
 				// write mic data to stream for immediate playback 
 				speakers.write(data, 0, numBytesRead); 
+				
 			} 
 			speakers.drain(); 
 			speakers.close(); 

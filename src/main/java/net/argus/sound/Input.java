@@ -38,10 +38,11 @@ public class Input extends Sound {
 		            line.open(format);
 		            line.start();   // start capturing
 		 
-		         //   AudioInputStream ais = new AudioInputStream(line);
+		            //AudioInputStream ais = new AudioInputStream(line);
 		            Debug.log("Start recording");
 		            // start recording
-		      //     AudioSystem.write(ais, fileType, file);
+		            
+		         //   AudioSystem.write(ais, fileType, file);
 		            
 		 
 		        } catch (LineUnavailableException e) {}
