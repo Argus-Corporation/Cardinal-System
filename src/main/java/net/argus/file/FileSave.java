@@ -68,7 +68,7 @@ public class FileSave extends AbstractFileSave {
 					return line.substring(firstType.length() + idType.length() + sId.length() + secondType.length() + 3);
 				}
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return null;
 	}
 	
@@ -187,9 +187,9 @@ public class FileSave extends AbstractFileSave {
 	 * Cette methode retourne le num�ro de la ligne o� se trouve "search"
 	 * @param search
 	 * @return int
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
 	 */
-	public int getId(String search) throws FileNotFoundException {		
+	public int getId(String search) throws IOException {		
 		String line = null;
 		
 		for(int i = 1; i < getNumberLine() + 1; i++) {

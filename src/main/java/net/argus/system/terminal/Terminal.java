@@ -64,7 +64,7 @@ public class Terminal extends Thread {
 				break;
 				
 			case "exit":
-				currentThread().stop();
+				stop();
 				break;
 		}
 	}

@@ -1,14 +1,15 @@
 package net.argus.file;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import net.argus.exception.PositionException;
 import net.argus.system.InitializedSystem;
@@ -90,21 +91,21 @@ public class AbstractFileSave {
 	 * Cette methode permer de retourner le nombre total de ligne dans le fichier
 	 * @param line
 	 * @return
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
-	public String getLine(int line) throws FileNotFoundException {
+	public String getLine(int line) throws IOException {
 		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(this.file);
+		BufferedReader read = new BufferedReader(new FileReader(file));
 		
 		for(int i = 1; i < line; i++) {
-			try {scan.nextLine();}
+			try{read.readLine();}
 			catch(NoSuchElementException e) {}
 
 		}
 		
 		String str = null;
 		
-		try {str = scan.nextLine();}
+		try {str = read.readLine();}
 		catch(NoSuchElementException e) {}
 		
 		return str;
@@ -121,7 +122,7 @@ public class AbstractFileSave {
 			
 			while(getLine(line) != null)
 				line++;
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return line - 1;
 	}
 
@@ -150,7 +151,7 @@ public class AbstractFileSave {
 			for(int i = 0; i < str.length; i++) {
 				str[i] = getLine(i + 1);
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return str;
 	}
 	
@@ -186,12 +187,11 @@ public class AbstractFileSave {
 	
 	/**
 	 * Cette methode permer de copier l'integraliter du fichier dans l'ArrayList data
-	 * @throws FileNotFoundException 
 	 */
 	protected void copyFile() {
 		data.clear();
 		try {for(int i = 1; i < getNumberLine() + 1; i++) data.add(getLine(i));}
-		catch(FileNotFoundException e) {}
+		catch(IOException e) {}
 	}
 	
 	/**
@@ -248,7 +248,10 @@ public class AbstractFileSave {
 	public static void main(String[] args) throws IOException, PositionException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
-		//AbstractFileSave fs = new AbstractFileSave("test", "abs", "");
+		AbstractFileSave fs = new AbstractFileSave(new File("D:\\Django\\Document 1\\Game\\cube.meta"));
+		for(int i = 0; i < fs.getNumberLine(); i++) {
+			System.out.println(fs.getLine(i));
+		}
 		UserSystem.exit(0);
 	}
 	

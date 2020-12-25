@@ -30,7 +30,7 @@ public class Info {
 		this.type = type;
 	}
 	
-	public void run() {
+	public void show() {
 		JOptionPane.showMessageDialog(null, msg + ": " + code, "Alert Server", type);
 	}
 	

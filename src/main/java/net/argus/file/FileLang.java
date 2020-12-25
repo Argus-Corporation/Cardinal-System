@@ -1,7 +1,7 @@
 package net.argus.file;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import net.argus.lang.Lang;
 import net.argus.lang.LangType;
@@ -30,7 +30,7 @@ public class FileLang extends AbstractFileSave {
 				if(key.equals(elementName))
 					elementName = getValue(getLine(i));
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return elementName;
 	}
 	

@@ -131,7 +131,6 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la ligne ou se touve le parametre
 	 * @param key
 	 * @return numberLine
-	 * @throws FileNotFoundException 
 	 */
 	public int getIdKey(String key) {
 		copyFile();
@@ -146,7 +145,7 @@ public class Properties extends AbstractFileSave {
 				if(lineKey.equals(key))
 					return i;
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		
 		return 0;
 	}
@@ -155,13 +154,12 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la clef String corespondante a la clef
 	 * @param key
 	 * @return result
-	 * @throws FileNotFoundException 
 	 */
 	public String getString(String key) {
 		String line = null;
 		
 		try {line = getLine(getIdKey(key));}
-		catch(FileNotFoundException e) {}
+		catch(IOException e) {}
 		
 		return getValue(line);
 	}
@@ -289,7 +287,7 @@ public class Properties extends AbstractFileSave {
 					return true;
 				}
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return false;
 	}
 	

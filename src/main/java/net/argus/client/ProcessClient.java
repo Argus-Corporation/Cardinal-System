@@ -85,7 +85,7 @@ public class ProcessClient extends Thread {
 					}*/
 					
 					Info info = Info.getInfo(msg);
-					if(info != null) info.run();
+					if(info != null) info.show();
 					
 					client.close(msg);
 					

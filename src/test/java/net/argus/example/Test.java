@@ -1,14 +1,14 @@
 package net.argus.example;
 
-import java.io.IOException;
-
-import net.argus.exception.SecurityException;
-import net.argus.io.ftp.FTPClient;
-
 public class Test {
 	
-	public static void main(String[] args) throws IOException, SecurityException {
-	
+	public static void main(String[] args) {
+		int x = 1;
+		
+		while(x != 10) {
+			x += 2;
+		}
+		System.out.println(x);
 	}
 
 }
