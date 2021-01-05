@@ -100,7 +100,7 @@ public class CSSFile extends AbstractFileSave {
 		String type = "";
 		boolean open = false;
 		
-		ThreadManager.setTemporaryName("css");
+		ThreadManager.UPDATE_UI.setTemporaryName();
 		
 		for(int i = 0; i < words.length; i++) {
 			String value = words[i];
@@ -152,7 +152,7 @@ public class CSSFile extends AbstractFileSave {
 				}catch(ArrayIndexOutOfBoundsException e) {}
 			}
 		}
-		ThreadManager.restorOldParameter(0);
+		ThreadManager.UPDATE_UI.restorOldParameter();
 		
 	}
 	

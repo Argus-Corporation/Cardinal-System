@@ -26,6 +26,10 @@ public class PackageBuilder extends CJSONBuilder {
 		addObject(mainObj);
 	}
 	
+	public PackageBuilder(PackageType type) {
+		this(type.getId());
+	}
+	
 	public PackageBuilder addManifestValue(String name, String value) {addManifestValue(name, new CJSONString(value)); return this;}
 	public PackageBuilder addManifestValue(String name, CJSONObject value) {manifest.addItem(new PackageItem(name, value)); return this;}
 	

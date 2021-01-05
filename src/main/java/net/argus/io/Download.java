@@ -10,27 +10,32 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.argus.util.ThreadManager;
+import net.argus.util.debug.Debug;
+
 public class Download {
 	
 	private URL mainURL;
+	
+	private boolean multiDown;
 	
 	public Download(URL mainURL) {
 		this.mainURL = mainURL;
 	}
 	
-	public int download(String file, File path) {
-		try {
-			byte[] data = getFile(file);
-			write(data, new File(path + "/" + file));
-		}catch(Throwable e) {return -1;}
-		return 0;
+	public void download(String file, File path) {
+		ThreadManager.DOWNLOAD.start(new ThreadDownload(file, path));
  	}
 	
+	public synchronized byte[] getFileSync(String file) throws IOException {
+		return getFile(file);
+	}
+	
 	public byte[] getFile(String file) throws IOException {
-		mainURL = new URL(mainURL + file);
+		URL dowURL = new URL(mainURL + "/" + file);
 		
 		byte[] data = new byte[length()];
-		DataInputStream dataIn = new DataInputStream(mainURL.openStream());
+		DataInputStream dataIn = new DataInputStream(dowURL.openStream());
 		dataIn.readFully(data, 0, data.length);
 		dataIn.close();
 		
@@ -65,6 +70,31 @@ public class Download {
 		}catch(IOException e) {}
 		
 		return length;
+	}
+	
+	public void setMultiDownload(boolean multiDown) {this.multiDown = multiDown;}
+	
+	class ThreadDownload extends Thread {
+		
+		private String file;
+		private File path;
+		
+		
+		public ThreadDownload(String file, File path) {
+			this.file = file;
+			this.path = path;
+		}
+		
+		@Override
+		public void run() {
+			byte[] data;
+			try {
+				data = multiDown?getFile(file):getFileSync(file);
+				Debug.log("File downloaded");
+				write(data, new File(path + "/" + file));
+			}catch(Throwable e) {Debug.log("Download filed");}
+		}
+		
 	}
 	
 	public static void main(String[] args) throws MalformedURLException {

@@ -32,6 +32,14 @@ public class Package {
 		return builder.getPackage().getValue(name);
 	}
 	
+	public static Package getErrorPackage() {
+		PackageBuilder bui = new PackageBuilder(PackageType.LOG_OUT);
+		
+		bui.addItem(new PackageItem("message", "error"));
+		
+		return new Package(bui);
+	}
+	
 	@Override
 	public String toString() {
 		return builder.getFile();

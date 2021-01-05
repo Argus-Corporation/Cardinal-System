@@ -78,18 +78,17 @@ public class ProcessServeur extends Thread {
 		String msg;
 		
 		Package pack = getPackage();
-		
 		msgId = pack.getType();
-		
 		
 		switch(msgId) {
 			case PSEUDO:
 				pseudo = pack.getValue("pseudo");
 				
 				int numberPseudo = 1;
+				String basePseudo = pseudo;
 				
 				while(Users.isClientPseudoExist(pseudo)) {
-					pseudo = pseudo + "(" + numberPseudo + ")";
+					pseudo = basePseudo + "(" + numberPseudo + ")";
 					numberPseudo++;
 				}
 				
@@ -202,6 +201,9 @@ public class ProcessServeur extends Thread {
 		while(client.getServeurParent().isRunning()) {
 			try {receiveMessage();}
 			catch(IOException | SecurityException e) {
+				try {client.logOut(-1);}
+				catch(IOException | SecurityException e2) {e2.printStackTrace();}
+				
 				if(!processLogOuting) {
 					Debug.log("ERROR: Client diconected");
 				

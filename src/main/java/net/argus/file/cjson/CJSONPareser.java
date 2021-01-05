@@ -45,6 +45,10 @@ public class CJSONPareser {
 			valid = true;
 			
 			for(int i = 0; i < characters.length; i++) {
+				if(characters[i] == '\\') {
+					i += 2;
+				}
+				
 				if(characters[i] == '"') {
 					strOpen = !strOpen;
 				}

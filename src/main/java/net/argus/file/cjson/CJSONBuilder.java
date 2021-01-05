@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.argus.util.CharacterManager;
+import net.argus.util.StringManager;
 
 public class CJSONBuilder {
 	
@@ -55,7 +56,7 @@ public class CJSONBuilder {
 						CharacterManager.isBoolean(mainItem.getValue().toString()))
 					file += mainItem.getValue();
 				else
-					file += "\"" +  mainItem.getValue() + "\"";
+					file += "\"" +  StringManager.secureString(mainItem.getValue().toString()) + "\"";
 			
 			file += ", ";
 		}

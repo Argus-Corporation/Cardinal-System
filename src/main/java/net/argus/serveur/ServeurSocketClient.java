@@ -134,10 +134,15 @@ public class ServeurSocketClient {
 		msgSend.flush();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Package nextPackage() throws SecurityException {
 		String n = nextString();
-		//System.out.println(n + "  next");
-		return PackagePareser.parse(n);
+		
+		if(n != null)
+			return PackagePareser.parse(n);
+		
+		Thread.currentThread().stop();
+		return null;
 	}
 	
 	private String nextString() throws SecurityException {
@@ -165,10 +170,15 @@ public class ServeurSocketClient {
 		close(msg);
 	}
 	
+	public synchronized void logOut(int status) throws IOException, SecurityException {
+		logOut(status==-1?"error":"log out");
+	}
+	
 	public synchronized boolean isClientUseKey() {
 		try {clientUseKey = Boolean.valueOf(msgRecei.readLine()); return clientUseKey;}
 		catch(IOException e) {return false;}
 	}
+	
 	
 	public synchronized String getPseudo() {return pseudo;}
 	

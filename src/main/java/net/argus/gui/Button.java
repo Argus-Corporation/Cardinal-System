@@ -19,9 +19,18 @@ public class Button extends JButton implements Element {
 	private static final boolean isFont = true;
 	
 	public Button(String name) {
+		this(name, true);
+	}
+	
+	public Button(String name, boolean lang) {
 		super();
-		this.name = nameType + "." + name + ".name";
-		this.setText();
+		if(lang) {
+			this.name = nameType + "." + name + ".name";
+			this.setText();
+		}else {
+			this.name = name;
+			this.setText(name);
+		}
 	}
 	
 	public Button(ImageIcon icon) {

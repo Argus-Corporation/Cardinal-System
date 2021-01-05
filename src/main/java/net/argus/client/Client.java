@@ -72,6 +72,7 @@ public class Client {
 	public Client setPseudo(String pseudo) {client.setPseudo(pseudo); return this;}
 	public Client setPassword(String password) {client.setPassword(password); return this;}
 	public Client sendPackage(Package pack) {client.sendPackage(pack); return this;}
+	@SuppressWarnings("deprecation")
 	public Client sendFile(File file, String[] clientRecievers) throws SecurityException, IOException {client.sendFile(file, clientRecievers); return this;}
 	
 	public boolean isConnected() {return client.isConnected();}

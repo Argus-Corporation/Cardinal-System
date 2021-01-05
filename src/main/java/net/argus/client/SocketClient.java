@@ -96,6 +96,7 @@ public class SocketClient {
 		Debug.log("You are disconnected: " + msg);
 	}
 	
+	@Deprecated
 	public synchronized void sendFile(File file, String[] clientReceivers) throws SecurityException, IOException {
 		PackageBuilder bui = new PackageBuilder(PackageType.FILE.getId());
 		PackageObject objFile = new PackageObject("value");
@@ -135,8 +136,11 @@ public class SocketClient {
 	
 	public Package nextPackage() throws SecurityException {
 		String n = nextString();
-		System.out.println(n);
-		return PackagePareser.parse(n);
+		
+		if(n != null)
+			return PackagePareser.parse(n);
+		
+		return Package.getErrorPackage();
 	}
 	
 	private String nextString() throws SecurityException {

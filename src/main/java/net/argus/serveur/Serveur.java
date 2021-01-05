@@ -19,6 +19,7 @@ public class Serveur extends Thread {
 	private boolean running;
 	
 	private static final int SERVEUR_VERSION = 011220;
+	
 	private int port;
 	
 	public Serveur(int maxClient, int port, Key key) throws IOException {

@@ -8,6 +8,7 @@ import net.argus.exception.SecurityException;
 import net.argus.serveur.ServeurSocketClient;
 import net.argus.serveur.command.structure.Structure;
 import net.argus.util.ArrayManager;
+import net.argus.util.StringManager;
 import net.argus.util.debug.Debug;
 
 public class Command {
@@ -16,7 +17,7 @@ public class Command {
 	
 	protected CommandListener listener;
 	
-	protected Structure structure = new Structure().add("command");
+	protected Structure structure = new Structure();
 	
 	protected boolean activate;
 	protected String commandName;
@@ -28,31 +29,32 @@ public class Command {
 		this.activate = true;
 	}
 	
-	public void execut(String[] com, ServeurSocketClient ssc) throws SecurityException, IOException {
+	public void execut(String[] com, ServeurSocketClient client) throws SecurityException, IOException {
+		com = StringManager.valueOf(com);
 		if(activate) {
-			if(ssc.getRole().isValidExecuteCommand(this)) {
+			if(client.getRole().isValidExecuteCommand(this)) {
 				if(ArrayManager.isExist(com, structure.getSize() - 1)) {
 					if(listener != null) {
 						listener.preExecute();
-						listener.execute(com, ssc);
+						listener.execute(com, client);
 						listener.postExecute();
 					}else 
-						run(com, ssc);
+						run(com, client);
 				}else {
-					ssc.getProcessServeur().sendMessage("Command structure: " + structure.getStucture());
-					Debug.log("Error: command structure is wrong");
+					client.getProcessServeur().sendMessage("Command structure: " + structure.getStucture());
+					Debug.log("Error: command structure is wrong " + com[0]);
 				}
 			}else {
-				ssc.getProcessServeur().sendMessage("You are not allowed to execute this command");
-				Debug.log("Error: " + ssc.getPseudo() + " is not allowed to execute this command");
+				client.getProcessServeur().sendMessage("You are not allowed to execute this command");
+				Debug.log("Error: " + client.getPseudo() + " is not allowed to execute this command");
 			}
 		}else {
-			ssc.getProcessServeur().sendMessage("This command is not activated");
+			client.getProcessServeur().sendMessage("This command is not activated");
 			Debug.log("Error: this command is not activated");
 		}
 	}
 	
-	protected void run(String[] com, ServeurSocketClient ssc) throws IOException, SecurityException{
+	protected void run(String[] com, ServeurSocketClient Client) throws IOException, SecurityException{
 		Debug.log("Error: execute command not found");
 	}
 	

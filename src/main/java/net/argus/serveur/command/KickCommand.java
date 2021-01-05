@@ -3,8 +3,10 @@ package net.argus.serveur.command;
 import java.io.IOException;
 
 import net.argus.exception.SecurityException;
+import net.argus.serveur.Regular;
 import net.argus.serveur.ServeurSocketClient;
 import net.argus.serveur.Users;
+import net.argus.util.ArrayManager;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
 
@@ -15,30 +17,51 @@ public class KickCommand extends Command {
 	}
 	
 	@Override
-	protected void run(String[] com, ServeurSocketClient ssc) throws SecurityException, IOException {
-		String arg = "";
-		ServeurSocketClient userTarget;
+	protected void run(String[] com, ServeurSocketClient client) throws SecurityException, IOException {
+		String arg = null;
+		ServeurSocketClient userTarget = null;
 		
-		userTarget = Users.getServeurSocketClient(com[1]);
+		if(Regular.isRegular(com[1])) {
+			switch(Regular.getRegular(com[1])) {
+				case a:
+					client.getServeurParent().getUsers().closeAll(client.getUserId());
+					return;
+					
+				case s:
+					userTarget = client;
+					break;
+			}
+		}else {
+			try {userTarget = Users.getServeurSocketClient(com[1]);}
+			catch(NullPointerException e) {
+				client.getProcessServeur().sendMessage("Target client does existed");
+				Debug.log("Error: this client does existed");
+				return;
+			}
+		}
 		
 		if(userTarget == null) {
-			ssc.getProcessServeur().sendMessage(com[1] + " not found");
+			client.getProcessServeur().sendMessage(com[1] + " not found");
 			Debug.log(com[1] + " not found");
 			return;
 		}
 		
-		for(int i = 2; i < com.length; i++)
-			arg += com[i] + " ";
+		if(ArrayManager.isExist(com, 2)) {
+			arg = "";
+			for(int i = 2; i < com.length; i++)
+				arg += com[i] + " ";
+			
+			arg = arg.substring(0, arg.length() - 1);
+		}
 		
-		arg = arg.substring(0, arg.length() - 1);
-		
-		if(userTarget.getRole().getRank() <= ssc.getRole().getRank()) {
+		if(userTarget.getRole().getRank() <= client.getRole().getRank()) {
 			userTarget.getProcessServeur().setprocessLogOuting(true);
-			userTarget.logOut(arg);
+			userTarget.logOut("You are kicked by " + client.getPseudo() + (arg!=null?": " + arg:" "));
 			ThreadManager.stop(userTarget.getProcessServeur());
 		}else {
-			ssc.getProcessServeur().sendMessage("You do not have permission to kicked this client");
+			client.getProcessServeur().sendMessage("You do not have permission to kicked this client");
 			Debug.log("Error: request refused");
+			return;
 		}
 	}
 	

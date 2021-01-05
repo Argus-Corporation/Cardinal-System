@@ -38,7 +38,7 @@ public class Debug {
 	private static void print(Object text) throws IOException {
 		String prefix =  "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "[thread/" + Thread.currentThread().getName().toUpperCase() + "]: ";
 		
-		if(logger != null) {logger.addLog(prefix + text); System.out.println("log");}
+		if(logger != null) {logger.addLog(prefix + text);}
 		else if(InitializedSystem.isSystemInitialized()) UserSystem.log.addLog(prefix + text);
 		
 		System.out.println(prefix + text);
@@ -51,7 +51,8 @@ public class Debug {
 	public static void setLoggeur(Loggeur loggeur) {Debug.logger = loggeur;}
 	
 	public static void addBlackList(String s) {blackList.add(s.toUpperCase());}
-	public static void addBlackList(ThreadManager t) {blackList.add(t.getName().toUpperCase());}
+	public static void addBlackList(Thread t) {addBlackList(t.getName());}
+	public static void addBlackList(ThreadManager t) {addBlackList(t.getName());}
 	
 	public static void removeBlackList(String s) {blackList.remove(s);}
 	public static void removeLoggeur() {Debug.logger = null;}
