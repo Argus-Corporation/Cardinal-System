@@ -52,7 +52,7 @@ public class CJSONBuilder {
 				file += nextObject(mainItem.getValue());
 				file += "} ";
 			}else
-				if(CharacterManager.isNumber(mainItem.getValue().toString().charAt(0)) ||
+				if(!mainItem.getValue().toString().equals("") && CharacterManager.isNumber(mainItem.getValue().toString().charAt(0)) ||
 						CharacterManager.isBoolean(mainItem.getValue().toString()))
 					file += mainItem.getValue();
 				else

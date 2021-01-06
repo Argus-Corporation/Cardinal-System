@@ -22,6 +22,10 @@ public class Filter extends FileFilter {
 		this.description = description;
 	}
 	
+	public Filter(String suffix, String description) {
+		this(new String[] {suffix}, description);
+	}
+	
 	public boolean belongs(String suffix) {
 		for(String suf : suffixs)
 			if(suf.toLowerCase().equals(suffix.toLowerCase()))
@@ -32,6 +36,7 @@ public class Filter extends FileFilter {
 	@Override
 	public boolean accept(File f) {
 		if(f.isDirectory()) return true;
+		
 		String suffix = null;
 		String s = f.getName();
 		

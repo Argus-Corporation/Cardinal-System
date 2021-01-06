@@ -136,7 +136,7 @@ public class SocketClient {
 	
 	public Package nextPackage() throws SecurityException {
 		String n = nextString();
-		
+		System.out.println(n);
 		if(n != null)
 			return PackagePareser.parse(n);
 		

@@ -49,7 +49,6 @@ public class CJSONString extends CJSONObject {
 	public static CJSONString nextString(char[] chars) {
 		boolean openStr = false;
 		int len = chars.length;
-		
 		String str = "";
 		for(int i = 0; i < len; i++) {
 			if(chars[0] == '\\' && chars[1] == '"') {
@@ -69,6 +68,7 @@ public class CJSONString extends CJSONObject {
 				
 			if(chars[0] == '"' && openStr) {
 				openStr = false;
+				
 				return new CJSONString(str);
 			}
 						
@@ -76,7 +76,7 @@ public class CJSONString extends CJSONObject {
 				chars = ArrayManager.remove(chars, 0);
 				openStr = true;
 			}
-				
+			
 			if(openStr) {
 				str += chars[0];
 				chars = ArrayManager.remove(chars, 0);
@@ -87,7 +87,7 @@ public class CJSONString extends CJSONObject {
 			
 		}
 		
-		return null;
+		return new CJSONString("");
 	}
 	
 	@Override

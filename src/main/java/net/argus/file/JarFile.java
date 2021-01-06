@@ -18,6 +18,10 @@ import net.argus.util.ArrayManager;
 
 public class JarFile {
 	
+	public static final String EXTENTION = "jar";
+	
+	public static final Filter JAR_FILTER = new Filter(EXTENTION, "JAR File");
+	
 	private String path;
 	private String mainRootLocation;
 	private List<String> fileName = new ArrayList<String>();

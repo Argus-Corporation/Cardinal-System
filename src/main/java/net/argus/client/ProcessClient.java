@@ -136,9 +136,9 @@ public class ProcessClient extends Thread {
 		try {
 			client.init();
 			
-			client.sendPackage(new Package(new PackageBuilder(PSEUDO).addValue("pseudo", client.getPseudo())));
-			client.sendPackage(new Package(new PackageBuilder(SYSTEM).addValue("version", Integer.toString(Client.getVersion()))));
-			client.sendPackage(new Package(new PackageBuilder(PackageType.PASSWORD.getId()).addValue("password", client.getPassword()!=null?client.getPassword():"")));
+			client.sendPackage(new Package(new PackageBuilder(PackageType.PSEUDO).addValue("pseudo", client.getPseudo())));
+			client.sendPackage(new Package(new PackageBuilder(PackageType.SYSTEM).addValue("version", Integer.toString(Client.getVersion()))));
+			client.sendPackage(new Package(new PackageBuilder(PackageType.PASSWORD).addValue("password", client.getPassword()!=null?client.getPassword():"")));
 			
 			if(client.isUseKey() != client.isServerUseKey()) {
 				client.sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("message", "Client and server is not compatible")));

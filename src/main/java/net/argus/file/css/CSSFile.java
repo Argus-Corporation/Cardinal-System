@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.UIManager;
 
 import net.argus.file.AbstractFileSave;
+import net.argus.file.Filter;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.ArrayManager;
@@ -19,7 +20,9 @@ import net.argus.util.debug.Debug;
 
 public class CSSFile extends AbstractFileSave {
 	
-	private static final String EXTENTION = "css";
+	public static final String EXTENTION = "css";
+	
+	public static final Filter CSS_FILTER = new Filter(EXTENTION, "CSS File");
 	
 	private String fileComplied;
 	private String[] words;
