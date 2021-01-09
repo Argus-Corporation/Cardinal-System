@@ -13,7 +13,7 @@ import net.argus.util.debug.Debug;
 
 public abstract class Command {
 	
-	private static List<Command> coms = new ArrayList<Command>();
+	protected static List<Command> coms = new ArrayList<Command>();
 	
 	protected CommandListener listener;
 	
@@ -54,7 +54,7 @@ public abstract class Command {
 		}
 	}
 	
-	protected void run(String[] com, ServerSocketClient Client) throws IOException, SecurityException{
+	protected void run(String[] com, ServerSocketClient client) throws IOException, SecurityException{
 		Debug.log("Error: execute command not found");
 	}
 	

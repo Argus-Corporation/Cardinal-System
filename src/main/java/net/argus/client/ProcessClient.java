@@ -11,6 +11,7 @@ import javax.swing.JFileChooser;
 import net.argus.client.info.Info;
 import net.argus.client.info.Infos;
 import net.argus.exception.SecurityException;
+import net.argus.file.cjson.CJSONObject;
 import net.argus.util.ErrorCode;
 import net.argus.util.ListenerManager;
 import net.argus.util.debug.Debug;
@@ -63,6 +64,8 @@ public class ProcessClient extends Thread {
 				case PSEUDO:
 					msg = pack.getValue("pseudo");
 					client.setPseudo(msg);
+					setThreadName(msg);
+					
 					Debug.log("Pseudo changed to " + client.getPseudo());
 					break;
 					
@@ -91,6 +94,19 @@ public class ProcessClient extends Thread {
 						if(manager != null) manager.disconnected(msg);
 					
 					stop();
+					break;
+					
+				case ARRAY:
+					CJSONObject valueObj = pack.getObject("value");
+					
+					switch(Integer.valueOf(valueObj.getValue("type").toString())) {
+						case MESSAGE:
+							for(CJSONObject obj : valueObj.getArrayValue("array"))
+								for(ProcessListener manager : processManager.getListeners())	
+									if(manager != null) manager.addSystemMessage(new String[] {null, obj.toString()});
+							break;
+					}
+						
 					break;
 					
 				case FILE:
@@ -124,6 +140,11 @@ public class ProcessClient extends Thread {
 		
 	}
 	
+	public void setThreadName(String name) {
+		setName("CLIENT: " + name.toUpperCase());
+
+	}
+	
 	public SocketClient getClient() {return client;}
 	
 	public List<ProcessListener> getProcessListeners() {return processManager.getListeners();}
@@ -133,7 +154,7 @@ public class ProcessClient extends Thread {
 	public void addClientManager(ClientManager clientManager) {this.clientManager.addListener(clientManager);}
 	
 	public void run() {
-		currentThread().setName("CLIENT: " + client.getPseudo().toUpperCase());
+		setThreadName(client.getPseudo());
 		try {
 			client.init();
 			

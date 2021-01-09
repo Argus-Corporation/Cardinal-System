@@ -33,7 +33,7 @@ public class SocketClient {
 	private boolean serverUseKey = false;
 	private boolean connected;
 	
-	private String pseudo;
+	private String pseudo = "Client";
 	private String password;
 	
 	public SocketClient(String host, int port, Key key) throws IOException {
@@ -160,7 +160,10 @@ public class SocketClient {
 	public boolean isConnected() {return connected;}
 	
 	public SocketClient setKey(Key key) {this.key = key; return this;}
-	public SocketClient setPseudo(String pseudo) {this.pseudo = pseudo; return this;}
+	public SocketClient setPseudo(String pseudo) {
+		if(pseudo != null && !pseudo.equals("")) this.pseudo = pseudo;
+		return this;
+	}
 	public SocketClient setPassword(String password) {this.password = password; return this;}
 
 }

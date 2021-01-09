@@ -3,13 +3,13 @@ package net.argus.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+import net.argus.exception.SecurityException;
 import net.argus.security.Key;
 import net.argus.server.role.Role;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.ThreadManager;
-import net.argus.util.debug.Debug;
-import net.argus.exception.SecurityException;;
+import net.argus.util.debug.Debug;;
 
 public class Server extends Thread {
 	
@@ -48,8 +48,8 @@ public class Server extends Thread {
 	public void run() {
 		setName("SERVER");
 		running = true;
-		loop();
 		
+		loop();
 	}
 	
 	private void loop() {

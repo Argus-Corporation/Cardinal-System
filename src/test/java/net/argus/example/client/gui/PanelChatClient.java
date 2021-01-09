@@ -62,7 +62,10 @@ public class PanelChatClient {
 	}
 	
 	public void addMessage(String[] value) {
-		discussion.setText(discussion.getText() + value[0] + ": " + value[1] + "\n");
+		String pseudo = "";
+		if(value[0] != null && !value[0].equals(""))
+			pseudo = value[0] + ": ";
+		discussion.setText(discussion.getText() + pseudo + value[1] + "\n");
 	}
 	
 	public TextField getTextField() {return msg;}

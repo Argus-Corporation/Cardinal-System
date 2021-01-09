@@ -4,6 +4,8 @@ import net.argus.server.command.structure.Structures;
 
 public class Commands {
 	
+	public static final Command HELP = new HelpCommand("help", 0).registry();
+	
 	public static final Command STOP = new StopCommand("stop", 10).registry();
 	public static final Command KICK = new KickCommand("kick", 5).setStructure(Structures.TARGET).registry();
 	public static final Command BAN = new BanCommand("ban", 10).setStructure(Structures.TARGET).registry();

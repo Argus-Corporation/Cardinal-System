@@ -5,6 +5,7 @@ import java.io.IOException;
 import net.argus.exception.SecurityException;
 import net.argus.server.ServerSocketClient;
 import net.argus.server.Users;
+import net.argus.util.ArrayManager;
 
 public class BanCommand extends Command {
 
@@ -14,16 +15,17 @@ public class BanCommand extends Command {
 	
 	@Override
 	protected void run(String[] com, ServerSocketClient client) throws IOException, SecurityException {
-		ServerSocketClient ban = Users.getServerSocketClient(com[1]);
+		ServerSocketClient target = Users.getServerSocketClient(com[1]);
 		
-		Users.getBanIpFile().wirter(ban.getIp().substring(1));
+		Users.getBanIpFile().wirter(target.getIp().substring(1));
 		
 		String args = "";
-		for(int i = 2; i < com.length; i++)
-			args += com[i] + " ";
-		
-		args = args.substring(0, args.length() - 1);
-		
+		if(ArrayManager.isExist(com, 2)) {
+			for(int i = 2; i < com.length; i++)
+				args += com[i] + " ";
+			
+			args = args.substring(0, args.length() - 1);
+		}
 		Commands.KICK.execut(("/kick " + com[1] + " " + args).split(" "), client);
 	}
 
