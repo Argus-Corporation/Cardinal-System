@@ -19,6 +19,7 @@ public class FileLang extends AbstractFileSave {
 		super(LangType.getLangType(langName).getName(), extention, new File(old.getPath().substring(0, old.getPath().lastIndexOf("/"))));
 	}
 	
+	
 	public String getElementString(String elementName) {
 		return getString(elementName);
 	}
@@ -27,7 +28,7 @@ public class FileLang extends AbstractFileSave {
 		try {
 			for(int i = 1; i < getNumberLine() + 1; i++) {
 				String key = getKey(getLine(i));
-				if(key.equals(elementName))
+				if(key != null && key.equals(elementName))
 					elementName = getValue(getLine(i));
 			}
 		}catch(IOException e) {}
@@ -35,7 +36,11 @@ public class FileLang extends AbstractFileSave {
 	}
 	
 	protected String getKey(String line) {
-		return line.substring(0, line.indexOf('='));
+		try {
+			return line.substring(0, line.indexOf('='));
+		}catch(StringIndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 	
 	protected String getValue(String line) {

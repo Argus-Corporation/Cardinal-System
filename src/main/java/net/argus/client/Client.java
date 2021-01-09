@@ -8,6 +8,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -72,16 +73,12 @@ public class Client {
 	public Client setPseudo(String pseudo) {client.setPseudo(pseudo); return this;}
 	public Client setPassword(String password) {client.setPassword(password); return this;}
 	public Client sendPackage(Package pack) {client.sendPackage(pack); return this;}
+	
 	@SuppressWarnings("deprecation")
 	public Client sendFile(File file, String[] clientRecievers) throws SecurityException, IOException {client.sendFile(file, clientRecievers); return this;}
 	
-	public boolean isConnected() {return client.isConnected();}
-	
 	public String getHost() {return host;}
 	public int getPort() {return port;}
-	
-	public ProcessListener getProcessListener() {return process.getProcessListener();} 
-	public ClientManager getClientManager() {return process.getClientManager();} 
 	
 	public String getPseudo() {return client.getPseudo();}
 	public String getPassword() {return client.getPassword();}
@@ -89,7 +86,12 @@ public class Client {
 	public ProcessClient getProcessClient() {return process;}
 	public SocketClient getSocketClient() {return client;}
 	
+	public List<ProcessListener> getProcessListeners(){return process.getProcessListeners();}
+	public List<ClientManager> getClientManagers(){return process.getClientManagers();}
+	
 	public boolean isRunning() {return running;}
+	public boolean isConnected() {return client.isConnected();}
+	
 	public static int getVersion() {return CLIENT_VERSION;}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {

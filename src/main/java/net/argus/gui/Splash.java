@@ -24,6 +24,7 @@ import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 
+@Deprecated
 public class Splash extends JFrame {
 	
 	/**
@@ -129,7 +130,7 @@ public class Splash extends JFrame {
 			setOpaque(false);
 		}
 		
-		@SuppressWarnings({ "deprecation", "unused" })
+		@SuppressWarnings({"unused"})
 		public SplashContent(Frame fen, String iconPath, Splash parent, Properties splashConfig) {
 			super();
 			this.parent = parent;

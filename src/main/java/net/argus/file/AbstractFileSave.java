@@ -117,12 +117,12 @@ public class AbstractFileSave {
 	 */
 	public int getNumberLine() {
 		int line = 1;
-			try {
+		try {
 			if(getLine(line) == null) return 0;
 			
 			while(getLine(line) != null)
 				line++;
-		}catch(IOException e) {}
+		}catch(IndexOutOfBoundsException | IOException e) {}
 		return line - 1;
 	}
 
@@ -248,10 +248,9 @@ public class AbstractFileSave {
 	public static void main(String[] args) throws IOException, PositionException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
-		AbstractFileSave fs = new AbstractFileSave(new File("D:\\Django\\Document 1\\Game\\cube.meta"));
-		for(int i = 0; i < fs.getNumberLine(); i++) {
-			System.out.println(fs.getLine(i));
-		}
+		//AbstractFileSave fs = new AbstractFileSave(new File("D:\\Django\\Document 1\\Git\\test.lang"));
+		FileLang fileLang = new FileLang(new Properties("config", "bin"));
+		System.out.println(fileLang.getElementString("info.ban.name"));
 		UserSystem.exit(0);
 	}
 	

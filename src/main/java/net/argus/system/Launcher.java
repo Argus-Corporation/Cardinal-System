@@ -11,11 +11,11 @@ import java.util.StringTokenizer;
 
 public class Launcher {
 	
-	public Launcher() throws Exception {
+	public Launcher(String[] args) throws Exception {
 		File file = getCodeSourceLocation();
 		Manifest manifest = new Manifest(file);
 		
-		ArrayList<String> arguments = new ArrayList<String>();
+		List<String> arguments = new ArrayList<String>();
 		
 		String nativePath = Temp.getTempDir();
 	    String mainClass = manifest.getValue("Launcher-Main-Class");
@@ -41,6 +41,9 @@ public class Launcher {
 	    	
 	    	for(String uArg : userArgs)
 	    		arguments.add(uArg);
+	    	
+	    	for(String arg : args)
+	    		arguments.add(arg);
 	    	
 	    	ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 	    	processBuilder.redirectErrorStream(true);
@@ -98,6 +101,6 @@ public class Launcher {
 		} 
 	}
 	  
-	public static void main(String[] args) throws Exception {new Launcher();}
+	public static void main(String[] args) throws Exception {new Launcher(args);}
 
 }

@@ -4,6 +4,7 @@ import net.argus.file.cjson.CJSONFile;
 import net.argus.file.cjson.CJSONObject;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
+import net.argus.util.ErrorCode;
 
 public class Package {
 	
@@ -36,6 +37,16 @@ public class Package {
 		PackageBuilder bui = new PackageBuilder(PackageType.LOG_OUT);
 		
 		bui.addItem(new PackageItem("message", "error"));
+		bui.addItem(new PackageItem("code", String.valueOf(ErrorCode.error.getCode())));
+		
+		return new Package(bui);
+	}
+
+	public static Package getLeavePackage() {
+		PackageBuilder bui = new PackageBuilder(PackageType.LOG_OUT);
+		
+		bui.addItem(new PackageItem("message", "leave"));
+		bui.addItem(new PackageItem("code", String.valueOf(ErrorCode.leave.getCode())));
 		
 		return new Package(bui);
 	}

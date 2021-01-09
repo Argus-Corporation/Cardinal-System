@@ -29,3 +29,17 @@ OptionPane {
 	background-color: 1c1c1e;
 	messageForeground-color: fefefe;
 }
+
+CheckBox {
+	background-color: 1c1c1e;
+	foreground-color: fefefe;
+	font-family: roboto;
+	font-size: 15;
+}
+
+MenuBar {
+	background-color: 1c1c1e;
+	foreground-color: fefefe;
+	font-family: roboto;
+	font-size: 15;
+}

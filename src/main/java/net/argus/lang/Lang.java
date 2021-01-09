@@ -28,6 +28,11 @@ public class Lang {
 	
 	public static void setLang(Properties config) {Lang.lang = new FileLang(config); setLangName(convert(config.getString("lang")));}
 	
+	public static void updateLang(LangType type) {
+		setLangName(type);
+		LangRegistry.update();
+	}
+	
 	public static String getLangName() {return langName;}
 	public static FileLang getLang() {return lang;}
 	

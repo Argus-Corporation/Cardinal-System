@@ -2,7 +2,9 @@ package net.argus.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,6 +22,7 @@ import net.argus.lang.Lang;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Direction;
+import net.argus.util.ListenerManager;
 
 public class Frame extends JFrame {
 
@@ -31,6 +34,7 @@ public class Frame extends JFrame {
 	protected Properties config;
 	
 	protected TopPanel topPan;
+	protected Panel mainPan = new Panel();
 	
 	protected ImageIcon iconFrame;
 	protected ImageIcon iconOs;
@@ -45,13 +49,16 @@ public class Frame extends JFrame {
 	
 	protected Point position;
 	
-	protected FrameListener fenListener;
+	protected ListenerManager<FrameListener> frameManager = new ListenerManager<FrameListener>();
+	//protected FrameListener fenListener;
 
 	public Frame(String title, String pathIcon, boolean[] but, Properties config) {
 		
 		Lang.setLang(config);
 		this.config = config;
 		this.undecorated = config.getBoolean("frame.undecorated");
+		
+		mainPan = new Panel();
 		
 		iconFrame = new ImageIcon(pathIcon);
 		iconOs = new ImageIcon(pathIcon);
@@ -70,7 +77,8 @@ public class Frame extends JFrame {
 		
 		if(undecorated) {
 			topPan = new TopPanel(this, iconFrame, but, config);
-			this.add(BorderLayout.NORTH, topPan);
+			super.add(BorderLayout.NORTH, topPan);
+			super.add(BorderLayout.CENTER, mainPan);
 			
 			getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
 		}
@@ -122,11 +130,29 @@ public class Frame extends JFrame {
 	public Point getSavePosition() {return position;}
 	
 	public void setNoramlSize(Dimension normalSize) {this.normalSize = normalSize;}
-	public void addFrameListener(FrameListener fenListener) {this.fenListener = fenListener;}
+	public void addFrameListener(FrameListener fenListener) {this.frameManager.addListener(fenListener);}
 	
 	public void savePosition() {this.position = this.getLocation();}
 	
 	public Dimension getFrameSize() {return new Dimension(getSize().width, getSize().height - getTopPanel().getPreferredSize().height);}
+	
+	@Override
+	public Component add(Component comp) {
+		return mainPan.add(comp);
+	}
+	
+	@Override
+	public Component add(String name, Component comp) {
+		return mainPan.add(name, comp);
+	}
+	
+	public void setMainLayout(LayoutManager manager) {
+		mainPan.setLayout(manager);
+	}
+	
+	public LayoutManager getMainLayout() {
+		return mainPan.getLayout();
+	}
 	
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());

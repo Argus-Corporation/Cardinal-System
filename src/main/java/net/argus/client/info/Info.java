@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import net.argus.util.ErrorCode;
+
 public class Info {
 	
 	private static List<Info> infos = new ArrayList<Info>();
@@ -19,27 +21,32 @@ public class Info {
     /** No icon is used. */
     public static final int   PLAIN_MESSAGE = -1;
 	
-	private String name, msg;
-	private long code;
+	private ErrorCode code;
 	private int type;
 	
-	public Info(String name, String msg, long code, int type) {
-		this.name = name;
-		this.msg = msg;
+	public Info(ErrorCode code, int type) {
 		this.code = code;
 		this.type = type;
 	}
 	
-	public void show() {
-		JOptionPane.showMessageDialog(null, msg + ": " + code, "Alert Server", type);
+	public void show(String msg) {
+		JOptionPane.showMessageDialog(null, msg + ": " + code.getCode(), "Alert Server", type);
 	}
 	
-	public static Info getInfo(String name) {
+	public static void show(ErrorCode code) {
+		JOptionPane.showMessageDialog(null, code.getMessage() + ": " + code.getCode(), "Alert Server", code.getMessageType());
+	}
+	
+	public static Info getInfo(ErrorCode code) {
 		for(Info info : infos)
-			if(info.name.toUpperCase().equals(name.toUpperCase()))
+			if(info.code.equals(code))
 				return info;
 		
 		return null;
+	}
+	
+	public static Info getInfo(int code) {
+		return getInfo(ErrorCode.valueOf(code));
 	}
 	
 	public Info registry() {

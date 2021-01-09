@@ -7,15 +7,16 @@ public class InitializedSystem {
 	
 	public static boolean init;
 	
-	public static void initSystem(String[]args, InitializedSystemManager manager) {
+	public static void initSystem(String[] args, InitializedSystemManager manager) {
 		manager.preInit(args);
-		System.setProperty("project.name", Argument.getArgument(args, "project.name"));
 		
+		for(int i = 0; i < args.length; i += 2) 
+			System.setProperty(args[i].substring(1), Argument.getArgument(args, args[i].substring(1)));
+			
 		try {System.setProperty("user", InetAddress.getLocalHost().getHostName());}
 		catch(UnknownHostException e) {e.printStackTrace();}
 		
 		System.setProperty("arch", System.getProperty("os.arch").substring(3));
-		System.setProperty("id", Argument.getArgument(args, "id"));
 		manager.init(args);
 		
 		init = true;

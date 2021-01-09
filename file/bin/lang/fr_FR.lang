@@ -1,0 +1,17 @@
+button.send.name=Envoyer
+
+menu.connection.name=Connexion
+menu.lang.name=Langue
+menu.change.name=Changer de langue
+
+menuitem.fast.name=Connexion rapide
+menuitem.join.name=Rejoindre
+menuitem.leave.name=Déconection
+
+info.leave.name=Vous avez été déconnecté
+info.error.name=Erreur
+info.kick.name=Vous avez été expulser
+info.ban.name=Vous êtes banni
+info.crypt.name=Serveur incompatible
+info.full.name=Ce serveur est plein
+info.version.name=Version incompatible

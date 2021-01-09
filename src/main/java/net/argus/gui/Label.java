@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 
 import net.argus.lang.Lang;
 
-public class Label extends JLabel implements Element {
+public class Label extends JLabel implements Element, GUI {
 
 	/**
 	 * 
@@ -45,6 +45,7 @@ public class Label extends JLabel implements Element {
 		setText();
 	}
 	
+	@Override
 	public void setText() {super.setText(lang?Lang.getLang().getElementString(this.name):this.name);}
 
 }

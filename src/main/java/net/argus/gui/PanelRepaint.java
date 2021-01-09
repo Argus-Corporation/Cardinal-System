@@ -8,13 +8,16 @@ import net.argus.util.Display;
 public class PanelRepaint {
 	
 	private Container fen;
+	@SuppressWarnings("deprecation")
 	private Splash sp;
 	
+	@SuppressWarnings("deprecation")
 	public PanelRepaint(Container fen, Splash sp) {
 		this.fen = fen;
 		this.sp = sp;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void common() {
 		sp.statusText = "initialization";
 		for(int i = 0, j = 0; i < Panel.allPanel.size(); i++) {
@@ -31,6 +34,7 @@ public class PanelRepaint {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void common(int diviseur) {
 		sp.statusText = "initialization";
 		for(int i = 0, j = 0; i < Panel.allPanel.size(); i++) {

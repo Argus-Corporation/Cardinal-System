@@ -4,8 +4,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import net.argus.lang.Lang;
+import net.argus.lang.LangRegistry;
 
-public class Button extends JButton implements Element {
+public class Button extends JButton implements Element, GUI {
 	
 	/**
 	 * 
@@ -24,6 +25,7 @@ public class Button extends JButton implements Element {
 	
 	public Button(String name, boolean lang) {
 		super();
+		LangRegistry.addElementLanguage(this);
 		if(lang) {
 			this.name = nameType + "." + name + ".name";
 			this.setText();
@@ -43,6 +45,7 @@ public class Button extends JButton implements Element {
 		this.setFocusPainted(false);
 	}
 	
+	@Override
 	public void setText() {this.setText(Lang.getLang().getElementString(this.name));}
 
 }

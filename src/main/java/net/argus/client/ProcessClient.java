@@ -4,12 +4,15 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 
 import net.argus.client.info.Info;
 import net.argus.client.info.Infos;
 import net.argus.exception.SecurityException;
+import net.argus.util.ErrorCode;
+import net.argus.util.ListenerManager;
 import net.argus.util.debug.Debug;
 import net.argus.util.pack.Package;
 import net.argus.util.pack.PackageBuilder;
@@ -17,9 +20,8 @@ import net.argus.util.pack.PackageType;
 
 public class ProcessClient extends Thread {
 	
-	private ProcessListener proListener;
-	
-	private ClientManager manager;
+	private ListenerManager<ProcessListener> processManager = new ListenerManager<ProcessListener>();
+	private ListenerManager<ClientManager> clientManager = new ListenerManager<ClientManager>();
 	
 	private Client mainClient;
 	private SocketClient client;
@@ -54,7 +56,8 @@ public class ProcessClient extends Thread {
 					msg = pack.getValue("message");
 					pseudo = pack.getValue("pseudo");
 					
-					if(proListener != null) proListener.addMessage(new String[] {pseudo, msg});
+					for(ProcessListener manager : processManager.getListeners())	
+						if(manager != null) manager.addMessage(new String[] {pseudo, msg});
 					break;
 					
 				case PSEUDO:
@@ -67,29 +70,25 @@ public class ProcessClient extends Thread {
 					msg = pack.getValue("message");
 					pseudo = pack.getValue("pseudo");
 					
-					if(proListener != null) proListener.addSystemMessage(new String[] {pseudo, msg});
+					for(ProcessListener manager : processManager.getListeners())	
+						if(manager != null) manager.addSystemMessage(new String[] {pseudo, msg});
 					break;
 					
 				case LOG_OUT:
 					msg = pack.getValue("message");
-					/*switch(msg != null ? msg : "") {
-						case "version":
-							JOptionPane.showMessageDialog(null, "Obsolete version " + 0x12345, "Alert Server", JOptionPane.ERROR_MESSAGE);
-							break;
-						case "corrupt version":
-							JOptionPane.showMessageDialog(null, "Corrupt version " + 0x45973, "Alert Server", JOptionPane.ERROR_MESSAGE);
-							break;
-						case "close":
-							JOptionPane.showMessageDialog(null, "Serveur close " + 0x79895, "Alert Server", JOptionPane.ERROR_MESSAGE);
-							break;
-					}*/
 					
-					Info info = Info.getInfo(msg);
-					if(info != null) info.show();
+					ErrorCode code = ErrorCode.valueOf(Integer.valueOf(pack.getValue("code")));
+					
+					Debug.log("Error code: " + code);
+					
+					Info info = Info.getInfo(code);
+					if(info != null) info.show(msg);
+					else Info.show(code);
 					
 					client.close(msg);
 					
-					if(manager != null) manager.disconnected(msg);
+					for(ClientManager manager : clientManager.getListeners())	
+						if(manager != null) manager.disconnected(msg);
 					
 					stop();
 					break;
@@ -118,19 +117,21 @@ public class ProcessClient extends Thread {
 					
 					break;
 			}
-			if(manager != null) manager.receivePackage(pack, this);
+			
+			for(ClientManager manager : clientManager.getListeners())	
+				if(manager != null) manager.receivePackage(pack, this);
 		}catch(IOException e) {}
 		
 	}
 	
-	public ProcessListener getProcessListener() {return proListener;}
-	public ClientManager getClientManager() {return manager;}
 	public SocketClient getClient() {return client;}
 	
-	public void addProcessListener(ProcessListener processListener) {this.proListener = processListener;}
-	public void addClientManager(ClientManager clientManager) {this.manager = clientManager;}
+	public List<ProcessListener> getProcessListeners() {return processManager.getListeners();}
+	public List<ClientManager> getClientManagers() {return clientManager.getListeners();}
 	
-	@SuppressWarnings("deprecation")
+	public void addProcessListener(ProcessListener processListener) {this.processManager.addListener(processListener);}
+	public void addClientManager(ClientManager clientManager) {this.clientManager.addListener(clientManager);}
+	
 	public void run() {
 		currentThread().setName("CLIENT: " + client.getPseudo().toUpperCase());
 		try {
@@ -140,11 +141,6 @@ public class ProcessClient extends Thread {
 			client.sendPackage(new Package(new PackageBuilder(PackageType.SYSTEM).addValue("version", Integer.toString(Client.getVersion()))));
 			client.sendPackage(new Package(new PackageBuilder(PackageType.PASSWORD).addValue("password", client.getPassword()!=null?client.getPassword():"")));
 			
-			if(client.isUseKey() != client.isServerUseKey()) {
-				client.sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("message", "Client and server is not compatible")));
-				client.close("Client and server is not compatible");
-				stop();
-			}
 		}catch(IOException | SecurityException e) {e.printStackTrace();}
 		
 		while(mainClient.isRunning()) {

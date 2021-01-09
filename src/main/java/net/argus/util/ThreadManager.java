@@ -14,6 +14,7 @@ public class ThreadManager {
 	public static final ThreadManager UPDATE_UI = new ThreadManager("update-ui");
 	public static final ThreadManager PROGRESSE = new ThreadManager("progresse");
 	public static final ThreadManager DOWNLOAD = new ThreadManager("download");
+	public static final ThreadManager SPLASH = new ThreadManager("splash");
 	public static final ThreadManager SYSTEM = new ThreadManager("system");
 	
 	public static List<Thread> threads = new ArrayList<Thread>();
@@ -37,7 +38,7 @@ public class ThreadManager {
 		thread.setName(name);
 		thread.start();
 		
-		Debug.log("Thread started");
+		Debug.log("Thread \"" + name + "\" started");
 		
 		restorOldParameter(0);
 	}
@@ -49,6 +50,10 @@ public class ThreadManager {
 	public static void restorOldParameter(int nul) {currentThread().setName(oldNameStatic);}
 	
 	public static void addThread(Thread thread) {threads.add(thread);}
+	public static void addThread(ThreadManager thread) {addThread(new Thread(thread.name));}
+	
+	@SuppressWarnings("static-access")
+	public static void sleep(long millis) {try {Thread.currentThread().sleep(millis);}catch(InterruptedException e) {e.printStackTrace();}}
 	
 	public static Thread getThread(String name) {
 		for(int i = 0; i < threads.size(); i++) {

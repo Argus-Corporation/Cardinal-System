@@ -100,13 +100,15 @@ public class RondButton extends JButton {
 				if(fen.isActive()) {
 					switch(id) {
 						case CROIX:
-							if(fen.fenListener != null) fen.fenListener.frameClosing();
-							else System.exit(0);
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameClosing();
+								else System.exit(0);
 							break;
 						case BAR:
 							fen.setState(JFrame.ICONIFIED);
 							
-							if(fen.fenListener != null) fen.fenListener.frameMinimalized();
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameMinimalized();
 							break;
 						case FLECHE:
 							Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -122,8 +124,8 @@ public class RondButton extends JButton {
 							
 							top.fullScreen = true;
 							id = INV_FLECHE;
-							
-							if(fen.fenListener != null) fen.fenListener.frameResizing();
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameResizing();
 							break;
 						case INV_FLECHE:
 							Dimension defaultSize = fen.getNormalSize();
@@ -134,7 +136,8 @@ public class RondButton extends JButton {
 							top.fullScreen = false;
 							id = FLECHE;
 							
-							if(fen.fenListener != null) fen.fenListener.frameResizing();
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameResizing();
 							break;
 					}
 					

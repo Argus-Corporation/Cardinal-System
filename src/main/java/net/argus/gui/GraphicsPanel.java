@@ -77,6 +77,7 @@ public class GraphicsPanel extends Panel {
 				g2.draw(new Line2D.Float(vactors.get(i).getX(), vactors.get(i).getY(), vactors.get(i + 1).getX(), vactors.get(i + 1).getY()));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws InterruptedException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
