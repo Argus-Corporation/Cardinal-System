@@ -62,7 +62,7 @@ public class AutoUpdate {
 		catch (IOException e1) {e1.printStackTrace();}
 		String args = "java -jar \"" + FileManager.getMainPath() + "/Update.jar\" -manifest \"" + FileManager.getMainPath() + "/manifest.cjson\" "
 				+ "-return \"" + System.getProperty("name") + ".jar\" ";
-		System.out.println(args);
+		
 		SystemProcess systemProcess = new SystemProcess(args);
 		
 		try {systemProcess.start();}
