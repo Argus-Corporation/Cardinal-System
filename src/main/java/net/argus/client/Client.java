@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -15,7 +14,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import net.argus.exception.SecurityException;
 import net.argus.security.Key;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
@@ -25,7 +23,7 @@ import net.argus.util.pack.PackageType;
 
 public class Client {
 	
-	private static final int CLIENT_VERSION = 011220;
+	private static final int CLIENT_VERSION = 130121100;
 	
 	private String host;
 	private int port;
@@ -74,8 +72,8 @@ public class Client {
 	public Client setPassword(String password) {client.setPassword(password); return this;}
 	public Client sendPackage(Package pack) {client.sendPackage(pack); return this;}
 	
-	@SuppressWarnings("deprecation")
-	public Client sendFile(File file, String[] clientRecievers) throws SecurityException, IOException {client.sendFile(file, clientRecievers); return this;}
+	//@SuppressWarnings("deprecation")
+	//public Client sendFile(File file, String[] clientRecievers) throws SecurityException, IOException {client.sendFile(file, clientRecievers); return this;}
 	
 	public String getHost() {return host;}
 	public int getPort() {return port;}

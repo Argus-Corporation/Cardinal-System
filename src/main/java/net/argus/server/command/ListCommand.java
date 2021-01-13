@@ -24,7 +24,7 @@ public class ListCommand extends Command {
 			if(client != null)
 				pseudos.add(client.getPseudo());
 		
-		ssc.sendArray(PackageType.PSEUDO, ArrayManager.convert(pseudos));
+		ssc.sendArray(PackageType.MESSAGE, ArrayManager.convert(pseudos));
 	}
 
 }

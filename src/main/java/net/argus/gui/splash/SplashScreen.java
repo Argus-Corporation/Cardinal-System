@@ -16,6 +16,7 @@ public class SplashScreen extends JWindow implements Runnable {
 	
 	private int time;
 	
+	private boolean exit;
 	private boolean finish;
 	
 	public SplashScreen(ImageIcon img, boolean alwaysOnTop, int time) {
@@ -37,17 +38,26 @@ public class SplashScreen extends JWindow implements Runnable {
 	public void view() {
 		ThreadManager.SPLASH.start(this);
 	}
+	
+	public void hideSplash() {
+		setVisible(false);
+	}
+	
+	public void exit() {
+		this.exit = true;
+	}
 
 	@Override
 	public void run() {
 		finish = false;
 		
-		try {
-			setVisible(true);
-			Thread.sleep(time);
-			setVisible(false);
-		}catch(InterruptedException e) {e.printStackTrace();}
+		setVisible(true);
 		
+		while(!exit)
+			ThreadManager.sleep(1);
+		
+		ThreadManager.sleep(time);
+		setVisible(false);
 		finish = true;
 	}
 	

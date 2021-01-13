@@ -6,6 +6,7 @@ import net.argus.exception.SecurityException;
 import net.argus.server.ServerSocketClient;
 import net.argus.server.Users;
 import net.argus.util.ArrayManager;
+import net.argus.util.debug.Debug;
 
 public class BanCommand extends Command {
 
@@ -17,16 +18,22 @@ public class BanCommand extends Command {
 	protected void run(String[] com, ServerSocketClient client) throws IOException, SecurityException {
 		ServerSocketClient target = Users.getServerSocketClient(com[1]);
 		
-		Users.getBanIpFile().wirter(target.getIp().substring(1));
-		
-		String args = "";
-		if(ArrayManager.isExist(com, 2)) {
-			for(int i = 2; i < com.length; i++)
-				args += com[i] + " ";
+		if(target != null) {
+			Users.getBanIpFile().wirter(target.getIp().substring(1));
 			
-			args = args.substring(0, args.length() - 1);
+			String args = "";
+			if(ArrayManager.isExist(com, 2)) {
+				for(int i = 2; i < com.length; i++)
+					args += com[i] + " ";
+				
+				args = args.substring(0, args.length() - 1);
+			}
+			
+			Commands.KICK.run(("/kick " + com[1] + " " + args).split(" "), client);
+		}else {
+			client.getProcessServer().sendMessage("client " + com[1] + " doesn't exist");
+			Debug.log("Error: this client doesn't exist");
 		}
-		Commands.KICK.execut(("/kick " + com[1] + " " + args).split(" "), client);
 	}
 
 }

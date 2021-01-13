@@ -38,6 +38,8 @@ public class ThreadManager {
 		thread.setName(name);
 		thread.start();
 		
+		addThread(thread);
+		
 		Debug.log("Thread \"" + name + "\" started");
 		
 		restorOldParameter(0);
@@ -58,6 +60,7 @@ public class ThreadManager {
 	public static Thread getThread(String name) {
 		for(int i = 0; i < threads.size(); i++) {
 			if(threads.get(i).getName().equals(name)) {
+				
 				return threads.get(i);
 			}
 		}
@@ -78,6 +81,7 @@ public class ThreadManager {
 	@SuppressWarnings("deprecation")
 	public static void stop(Thread thread) {
 		threads.remove(thread);
+		
 		thread.stop();
 	}
 	

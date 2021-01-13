@@ -25,8 +25,7 @@ public class Users {
 	}
 	
 	public Users(int maxClient) {
-		Users.maxClient = maxClient;
-		clients = new ServerSocketClient[maxClient];
+		this(maxClient, null);
 	}
 	
 	public synchronized void addUser(Server server, Socket client) throws SecurityException, IOException {
@@ -44,7 +43,7 @@ public class Users {
 		}
 		Debug.log("Server full");
 		
-		try{new ServerSocketClient(server, client, 0);}
+		try{new ServerSocketClient(server, client, -1);}
 		catch(IllegalAccessException e) {}
 		
 	}
@@ -99,7 +98,7 @@ public class Users {
 	
 	public static ServerSocketClient getServerSocketClient(String pseudo) {
 		for(int i = 0; i < clients.length; i++) {
-			if(clients[i].getPseudo().toUpperCase().equals(pseudo.toUpperCase())) {
+			if(clients[i] != null && clients[i].getPseudo().toUpperCase().equals(pseudo.toUpperCase())) {
 				return clients[i];
 			}
 		}

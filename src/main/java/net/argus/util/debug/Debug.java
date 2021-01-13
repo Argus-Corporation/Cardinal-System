@@ -38,8 +38,11 @@ public class Debug {
 	private static void print(Object text) throws IOException {
 		String prefix =  "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "[thread/" + Thread.currentThread().getName().toUpperCase() + "]: ";
 		
-		if(logger != null) {logger.addLog(prefix + text);}
-		else if(InitializedSystem.isSystemInitialized()) UserSystem.log.addLog(prefix + text);
+		if(InitializedSystem.isSystemInitialized() && UserSystem.getBooleanProperty("log"))
+			if(logger != null)
+				logger.addLog(prefix + text);
+			else if(UserSystem.log != null)
+				UserSystem.log.addLog(prefix + text);
 		
 		System.out.println(prefix + text);
 	}

@@ -18,7 +18,7 @@ public class HelpCommand extends Command {
 	protected void run(String[] com, ServerSocketClient client) throws IOException, SecurityException {
 		List<String> commands = new ArrayList<String>();
 		for(Command command : coms)
-			if(command.getRank() <= client.getRole().getRank())
+			if(command.getRank() <= client.getRole().getRank() && command.isActivate())
 				commands.add(command.getCommandName().toLowerCase());
 		
 		client.sendArray(PackageType.MESSAGE, (String[]) commands.toArray(new String[commands.size()]));

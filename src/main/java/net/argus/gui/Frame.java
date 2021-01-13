@@ -18,7 +18,6 @@ import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSEngine;
 import net.argus.gui.animation.FrameAnimation;
-import net.argus.lang.Lang;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Direction;
@@ -30,7 +29,7 @@ public class Frame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -6058458405056389502L;
-
+	
 	protected Properties config;
 	
 	protected TopPanel topPan;
@@ -50,11 +49,8 @@ public class Frame extends JFrame {
 	protected Point position;
 	
 	protected ListenerManager<FrameListener> frameManager = new ListenerManager<FrameListener>();
-	//protected FrameListener fenListener;
 
 	public Frame(String title, String pathIcon, boolean[] but, Properties config) {
-		
-		Lang.setLang(config);
 		this.config = config;
 		this.undecorated = config.getBoolean("frame.undecorated");
 		

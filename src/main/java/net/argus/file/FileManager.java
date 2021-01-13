@@ -34,6 +34,29 @@ public class FileManager {
 		return path;
 	}
 	
+	public static void delete(String path) {
+		delete(new File(path));
+	}
+	
+	public static void delete(File f) {
+		if(f.isDirectory()){
+			if(f.list().length == 0)
+				f.delete();
+			else{
+				String files[] = f.list();
+				
+				for(String tmp : files) {
+					File file = new File(f, tmp);
+					delete(file);
+				}
+				
+				if(f.list().length == 0)
+					f.delete();
+			}
+		}else
+			f.delete();
+	}
+	
 	public static void main(String[] args) {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		

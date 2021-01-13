@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.argus.file.FileManager;
+
 public class Launcher {
 	
 	public Launcher(String[] args) throws Exception {
@@ -39,6 +41,9 @@ public class Launcher {
 	    	arguments.add("-Djava.library.path=" + nativePath);
 	    	arguments.add(mainClass);
 	    	
+	    	arguments.add("-temp");
+	    	arguments.add(nativePath);
+	    	
 	    	for(String uArg : userArgs)
 	    		arguments.add(uArg);
 	    	
@@ -52,7 +57,9 @@ public class Launcher {
 	    	writeConsoleOutput(process);
 	    	
 	    	process.waitFor();
-	    }finally {/*deleteNativePath(nativePath);*/}
+	    }finally {
+	    	FileManager.delete(nativePath);
+	    }
 	    
 	}
 	  
@@ -74,23 +81,6 @@ public class Launcher {
 		ext.add("*.so");
 		
 		cop.copy(ext);
-	}
-	
-	public void deleteNativePath(String directoryName) {
-		File directory = new File(directoryName);
-		File[] files = directory.listFiles();
-		
-		File[] arrayOfFile1;
-		byte b;
-		int i;
-		
-		for(i = (arrayOfFile1 = files).length, b = 0; b < i; ) {
-			File file = arrayOfFile1[b];
-			file.delete();
-			b++;
-		}
-		
-		directory.delete();
 	}
 	
 	public File getCodeSourceLocation() {

@@ -18,13 +18,21 @@ public class Download {
 	private URL mainURL;
 	
 	private boolean multiDown;
+	private boolean newThread = true;
+	
+	private boolean finish;
 	
 	public Download(URL mainURL) {
 		this.mainURL = mainURL;
 	}
 	
 	public void download(String file, File path) {
+		finish = false;
+		
 		ThreadManager.DOWNLOAD.start(new ThreadDownload(file, path));
+		if(!newThread)
+			while(!finish)
+				ThreadManager.sleep(1);
  	}
 	
 	public synchronized byte[] getFileSync(String file) throws IOException {
@@ -34,9 +42,9 @@ public class Download {
 	public byte[] getFile(String file) throws IOException {
 		URL dowURL = new URL(mainURL + "/" + file);
 		
-		byte[] data = new byte[length()];
+		byte[] data = new byte[length(dowURL)];
 		DataInputStream dataIn = new DataInputStream(dowURL.openStream());
-		dataIn.readFully(data, 0, data.length);
+		dataIn.readFully(data);
 		dataIn.close();
 		
 		return data;
@@ -57,11 +65,11 @@ public class Download {
 		dataOut.close();
 	}
 	
-	public int length() {
+	public int length(URL dowURL) {
 		int length = 0;
 		InputStream in;
 		try {
-			in = mainURL.openStream();
+			in = dowURL.openStream();
 			
 			while(in.read() != -1)
 				length++;
@@ -73,6 +81,7 @@ public class Download {
 	}
 	
 	public void setMultiDownload(boolean multiDown) {this.multiDown = multiDown;}
+	public void setNewThread(boolean b) {this.newThread = b;}
 	
 	class ThreadDownload extends Thread {
 		
@@ -88,11 +97,14 @@ public class Download {
 		@Override
 		public void run() {
 			byte[] data;
+			
 			try {
 				data = multiDown?getFile(file):getFileSync(file);
+				
 				Debug.log("File downloaded");
 				write(data, new File(path + "/" + file));
 			}catch(Throwable e) {Debug.log("Download filed");}
+			finish = true;
 		}
 		
 	}

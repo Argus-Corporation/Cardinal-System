@@ -11,6 +11,10 @@ public class CSSEngine {
 		css.execut();
 	}
 	
+	public static void run(File path) {
+		new CSSFile(path).execut();
+	}
+	
 	public static void run(String fileName, File path) {
 		new CSSFile(fileName, path).execut();
 	}

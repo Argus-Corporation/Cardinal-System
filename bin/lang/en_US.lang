@@ -1,0 +1,17 @@
+button.send.name=Send
+
+menu.connection.name=Connection
+menu.lang.name=Language
+menu.change.name=Change language
+
+menuitem.fast.name=Fast connect
+menuitem.join.name=Join
+menuitem.leave.name=Leave
+
+info.leave.name=You are disconnected
+info.error.name=Error
+info.kick.name=You are kicked
+info.ban.name=You are banned
+info.crypt.name=Incompatible server
+info.full.name=This server is full
+info.version.name=Incompatible version

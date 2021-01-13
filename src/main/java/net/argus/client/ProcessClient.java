@@ -44,6 +44,7 @@ public class ProcessClient extends Thread {
 	@SuppressWarnings("deprecation")
 	private void receive() throws SecurityException {
 		try {
+			
 			int type = 0;
 			String msg = "";
 			String pseudo = "";
@@ -62,7 +63,7 @@ public class ProcessClient extends Thread {
 					break;
 					
 				case PSEUDO:
-					msg = pack.getValue("pseudo");
+					msg = pack.getValue("message");
 					client.setPseudo(msg);
 					setThreadName(msg);
 					

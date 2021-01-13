@@ -85,14 +85,14 @@ public class GraphicsPanel extends Panel {
 		Splash sp = new Splash("test", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 2000);
 		sp.play();
 		
-		Frame fen = new Frame("Graphics", FileManager.getPath("res/favIcon32x32.png"), new boolean[] {true, true, true}, config);
-		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
+		Frame fen = new Frame("Graphics", FileManager.getPath("res/favicon32x32.png"), new boolean[] {true, true, true}, config);
+		fen.setIcon(FileManager.getPath("res/favicon16x16.png"));
 		
 		GraphicsPanel gp = new GraphicsPanel(new Fonction() {
 			
 			@Override
 			public float fonction(float x, float y) {
-				return 2 * x * x* x;
+				return x;
 			}
 		});
 		gp.setColor(Color.BLACK);

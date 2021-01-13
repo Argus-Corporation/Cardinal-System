@@ -13,7 +13,6 @@ import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
 import net.argus.util.pack.Package;
 import net.argus.util.pack.PackageBuilder;
-import net.argus.util.pack.PackageObject;
 import net.argus.util.pack.PackageType;
 
 public class ProcessServer extends Thread {
@@ -22,7 +21,6 @@ public class ProcessServer extends Thread {
 	
 	private ServerSocketClient client;
 	
-	private String pseudo;
 	private boolean running;
 	private boolean processLogOuting;
 	
@@ -62,7 +60,7 @@ public class ProcessServer extends Thread {
 		if(pt == PackageType.SYSTEM.getId()) 
 			pseudo = "SYSTEM ALERTE";			
 		else
-			pseudo = this.pseudo;	
+			pseudo = client.getPseudo();	
 		
 		PackageBuilder bui = new PackageBuilder(pt);
 		bui.addValue("message", msg);
@@ -83,28 +81,14 @@ public class ProcessServer extends Thread {
 		
 		switch(msgId) {
 			case PSEUDO:
-				pseudo = pack.getValue("pseudo");
+				msg = pack.getValue("pseudo");
 				
-				int numberPseudo = 1;
-				String basePseudo = pseudo;
-				
-				while(Users.isClientPseudoExist(pseudo)) {
-					pseudo = basePseudo + "(" + numberPseudo + ")";
-					numberPseudo++;
-				}
-				
-				pseudo = CharacterManager.cut(pseudo, ' ');
-				
-				sendMessage(PackageType.PSEUDO.getId(), userId, pseudo);
-				
-				currentThread().setName("SERVER: " + pseudo.toUpperCase());
-				client.setPseudo(pseudo);
-				Debug.log("Pseudo changed to: " + pseudo);
+				setPseudo(msg);
 				break;
 	
 			case MESSAGE:
 				msg = pack.getValue("message");
-				Debug.log("Message from " + pseudo + ": " + msg);
+				Debug.log("Message from " + client.getPseudo() + ": " + msg);
 				
 				sendMessageToAllCLient(PackageType.MESSAGE.getId(), msg);
 				break;
@@ -152,8 +136,6 @@ public class ProcessServer extends Thread {
 			case LOG_OUT:
 				msg = pack.getValue("message");
 				
-				sendMessageToAllCLient(PackageType.SYSTEM.getId(), pseudo + " just disconnected");
-				
 				client.close(msg);
 				ThreadManager.stop(this);
 				break;
@@ -164,7 +146,7 @@ public class ProcessServer extends Thread {
 				client.setRole(Role.getRole(password) == null ? Roles.DEFAULT : Role.getRole(password));
 				break;
 				
-			case FILE:
+			/*case FILE:
 				PackageBuilder bui = new PackageBuilder(FILE);
 				PackageObject obj = new PackageObject("value");
 				
@@ -186,10 +168,28 @@ public class ProcessServer extends Thread {
 					}
 				}).start();
 				
-				break;
+				break;*/
 		}
 		
 		if(manager != null) manager.receivePackage(pack, this);
+	}
+	
+	public void setPseudo(String pseudo) throws SecurityException {
+		int numberPseudo = 1;
+		String basePseudo = pseudo;
+		
+		while(Users.isClientPseudoExist(pseudo)) {
+			pseudo = basePseudo + "(" + numberPseudo + ")";
+			numberPseudo++;
+		}
+		
+		pseudo = CharacterManager.cut(pseudo, ' ');
+		
+		sendMessage(PackageType.PSEUDO.getId(), userId, pseudo);
+		
+		currentThread().setName("SERVER: " + pseudo.toUpperCase());
+		client.setPseudo(pseudo);
+		Debug.log("Pseudo changed to: " + pseudo);
 	}
 	
 	@Override
@@ -197,8 +197,10 @@ public class ProcessServer extends Thread {
 		ThreadManager.addThread(this);	
 		running = true;
 		
-		try {sendMessageToAllCLient(PackageType.SYSTEM.getId(), "A client has just connected");}
-		catch(SecurityException e2) {e2.printStackTrace();}
+		try {
+			sendMessageToAllCLient(PackageType.SYSTEM.getId(), "A client has just connected");
+			sendMessage("You are connected");
+		}catch(SecurityException e2) {e2.printStackTrace();}
 		
 		while(client.getServerParent().isRunning()) {
 			try {receiveMessage();}
@@ -209,7 +211,7 @@ public class ProcessServer extends Thread {
 				if(!processLogOuting) {
 					Debug.log("ERROR: Client diconected");
 				
-					try {if(running) sendMessageToAllCLient(PackageType.SYSTEM.getId(), pseudo + " just disconnected");}
+					try {if(running) sendMessageToAllCLient(PackageType.SYSTEM.getId(), client.getPseudo() + " just disconnected");}
 					catch(SecurityException e1) {e1.printStackTrace();}
 					
 					ThreadManager.stop(this);
@@ -220,7 +222,6 @@ public class ProcessServer extends Thread {
 	
 	public static void addServerManager(ServerManager manager) {ProcessServer.manager = manager;}
 	
-	public String getPseudo() {return pseudo;}
 	public int getUserId() {return userId;}
 	public void setRunning(boolean running) {this.running = running;}
 	public void setprocessLogOuting(boolean processLogOuting) {this.processLogOuting = processLogOuting;}

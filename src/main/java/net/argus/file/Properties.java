@@ -19,6 +19,14 @@ public class Properties extends AbstractFileSave {
 	
 	/**
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
+	 * @param path
+	 */
+	public Properties(File path) {
+		super(path);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
 	 * @param fileName
 	 * @param rep
 	 */
@@ -147,7 +155,7 @@ public class Properties extends AbstractFileSave {
 			}
 		}catch(IOException e) {}
 		
-		return 0;
+		return -1;
 	}
 	
 	/**
@@ -161,7 +169,7 @@ public class Properties extends AbstractFileSave {
 		try {line = getLine(getIdKey(key));}
 		catch(IOException e) {}
 		
-		return getValue(line);
+		return line!=null?getValue(line):null;
 	}
 
 	/**

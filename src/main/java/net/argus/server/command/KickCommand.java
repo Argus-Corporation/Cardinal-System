@@ -22,7 +22,7 @@ public class KickCommand extends Command {
 		String arg = null;
 		ServerSocketClient userTarget = null;
 		
-		if(Regular.isRegular(com[1])) {
+		if(Regular.isExist(com[1])) {
 			switch(Regular.getRegular(com[1])) {
 				case a:
 					client.getServerParent().getUsers().closeAll(client.getUserId());

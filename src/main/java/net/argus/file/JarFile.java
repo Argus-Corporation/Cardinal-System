@@ -11,13 +11,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
 import net.argus.util.ArrayManager;
 
 public class JarFile {
-	
+
 	public static final String EXTENTION = "jar";
 	
 	public static final Filter JAR_FILTER = new Filter(EXTENTION, "JAR File");
@@ -142,6 +143,11 @@ public class JarFile {
 		
 		in.close();
 		out.closeEntry();
+	}
+	
+	@SuppressWarnings("resource")
+	public Attributes getMainAttributes() throws IOException {
+		return new java.util.jar.JarFile(new File(path)).getManifest().getMainAttributes();
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException {

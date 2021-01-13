@@ -63,7 +63,7 @@ public class ServerSocketClient {
 			logOut("Encryption error", ErrorCode.crypt);
 			throw new IllegalAccessException();
 		}
-		
+
 		if((Users.getClientConnected() + 1) > Users.getMaxClient()) {
 			valid = false;
 			logOut("This server is full", ErrorCode.full);
@@ -137,19 +137,23 @@ public class ServerSocketClient {
 		return clientUseKey&&key!=null?!msg.equals("")?key.decrypt(msg):msg:msg;
 	}
 	
-	public synchronized void close(String msg) throws IOException {
+	public synchronized void close(String msg) throws IOException, SecurityException {
+		process.sendMessageToAllCLient(PackageType.SYSTEM.getId(), getPseudo() + " just disconnected");
 		process.setRunning(false);
+		
 		msgSend.close();
 		msgRecei.close();
 		socket.close();
 		Debug.log("Kicked argument: " + msg);
-		Debug.log(process.getPseudo() + " is kicked");
-		Users.getServerSocketClient()[userId] = null;
+		Debug.log(getPseudo() + " is kicked");
+		
+		if(userId != -1)
+			Users.getServerSocketClient()[userId] = null;
 	}
 	
 	public synchronized void logOut(String msg, ErrorCode code) throws IOException, SecurityException {
 		sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("code", String.valueOf(code.getCode())).addValue("message", msg)));
-		Debug.log("Request of Log Out sended to " + process.getPseudo());
+		Debug.log("Request of Log Out sended to " + getPseudo());
 		close(msg);
 	}
 	
@@ -163,7 +167,7 @@ public class ServerSocketClient {
 	}
 	
 	
-	public synchronized String getPseudo() {return pseudo;}
+	public String getPseudo() {return pseudo;}
 	
 	public synchronized int getUserId() {return userId;}
 	public synchronized Server getServerParent() {return server;}

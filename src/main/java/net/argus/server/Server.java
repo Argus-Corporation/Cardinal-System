@@ -18,7 +18,7 @@ public class Server extends Thread {
 	
 	private boolean running;
 	
-	private static final int SERVER_VERSION = 011220;
+	private static final int SERVER_VERSION = 130121100;
 	
 	private int port;
 	
@@ -28,21 +28,19 @@ public class Server extends Thread {
 		
 		server = new ServerSocket(port);
 		Debug.log("Server version: " + SERVER_VERSION);
+		Debug.log("Server port: " + port);
+		Debug.log("Server slot: " + maxClient);
 		Debug.log("Server launched");
 		
 		users = new Users(maxClient, key);
 	}
 	
 	public Server(int maxClient, int port) throws IOException {
-		ThreadManager.addThread(this);
-		this.port = port;
-		
-		server = new ServerSocket(port);
-		Debug.log("Server version: " + SERVER_VERSION);
-		Debug.log("Server port: " + port);
-		Debug.log("Server launched");
-		
-		users = new Users(maxClient);
+		this(maxClient, port, null);
+	}
+	
+	public Server(String maxClient, String port) throws IOException {
+		this(Integer.valueOf(maxClient), Integer.valueOf(port));
 	}
 	
 	public void run() {

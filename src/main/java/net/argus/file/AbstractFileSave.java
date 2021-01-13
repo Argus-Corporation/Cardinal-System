@@ -94,6 +94,9 @@ public class AbstractFileSave {
 	 * @throws IOException 
 	 */
 	public String getLine(int line) throws IOException {
+		if(line == -1)
+			return null;
+		
 		@SuppressWarnings("resource")
 		BufferedReader read = new BufferedReader(new FileReader(file));
 		
@@ -107,7 +110,6 @@ public class AbstractFileSave {
 		
 		try {str = read.readLine();}
 		catch(NoSuchElementException e) {}
-		
 		return str;
 	}
 

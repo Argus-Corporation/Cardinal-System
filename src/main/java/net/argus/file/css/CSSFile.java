@@ -37,6 +37,11 @@ public class CSSFile extends AbstractFileSave {
 		fileComplied = compile(getFile());
 	}
 	
+	public CSSFile(File path) {
+		super(path);
+		fileComplied = compile(getFile());
+	}
+	
 	public String compile(String[] file) {
 		boolean valid = false;
 		String lines = "";

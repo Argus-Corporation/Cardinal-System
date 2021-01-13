@@ -34,11 +34,9 @@ public abstract class Command {
 		if(activate) {
 			if(client.getRole().isValidExecuteCommand(this)) {
 				if(ArrayManager.isExist(com, structure.getSize() - 1)) {
-					if(listener != null) {
-						listener.preExecute();
+					if(listener != null)
 						listener.execute(com, client);
-						listener.postExecute();
-					}else 
+					else 
 						run(com, client);
 				}else {
 					client.getProcessServer().sendMessage("Command structure: " + structure.getStucture());
@@ -59,14 +57,18 @@ public abstract class Command {
 	}
 	
 	public static Command getCommand(String commandName) {
+		if(commandName.charAt(0) == '/')
+			commandName = commandName.substring(1);
+			
 		commandName = commandName.toUpperCase();
 		for(int i = 0; i < coms.size(); i++)
-			if(coms.get(i).getCommandName().equals(commandName))
+			if(coms.get(i).getCommandName().equals("/" + commandName))
 				return coms.get(i);
 		
 		Debug.log("Command not found");
 		return null;
 	}
+	
 	
 	public CommandListener getCommandListener() {return listener;}
 	public String getCommandName() {return commandName;}

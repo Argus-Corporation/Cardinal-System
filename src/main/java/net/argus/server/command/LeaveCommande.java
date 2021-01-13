@@ -15,7 +15,6 @@ public class LeaveCommande extends Command {
 	@Override
 	protected void run(String[] com, ServerSocketClient client) throws IOException, SecurityException {
 		client.logOut("Leave", ErrorCode.leave);
-		super.run(com, client);
 	}
 
 }

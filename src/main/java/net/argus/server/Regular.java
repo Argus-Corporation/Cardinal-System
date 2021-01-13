@@ -12,7 +12,7 @@ public enum Regular {
 		this.value = value;
 	}
 	
-	public static boolean isRegular(String enter) {
+	public static boolean isExist(String enter) {
 		return new ArrayManager<Regular>().convert(Regular.values()).contains(getRegular(enter));
 	}
 	

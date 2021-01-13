@@ -111,14 +111,19 @@ public class FileSave extends AbstractFileSave {
 	 * @param oldValue
 	 * @throws IOException 
 	 */
-	public void deleteValue(String oldValue) throws IOException {
+	public int deleteValue(String oldValue) throws IOException {
 		copyValue();
 		int oldLine = getId(oldValue);
-		clear();
 		
-		data.remove(oldLine - 1);
-		wirter(data);
+		if(oldLine > 0) {
+			data.remove(oldLine - 1);
+			clear();
+			wirter(data);
+			
+			return 0;
+		}
 		
+		return -1;
 	}
 	
 	/**
