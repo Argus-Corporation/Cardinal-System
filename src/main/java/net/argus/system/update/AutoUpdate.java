@@ -13,6 +13,7 @@ import net.argus.file.cjson.CJSONFile;
 import net.argus.file.cjson.CJSONPareser;
 import net.argus.gui.OptionPane;
 import net.argus.io.Download;
+import net.argus.system.Copy;
 import net.argus.system.InitializedSplash;
 import net.argus.system.SystemProcess;
 import net.argus.system.Temp;
@@ -23,6 +24,8 @@ public class AutoUpdate {
 	
 	private CJSON manifest;
 	
+	private String version;
+	
 	public AutoUpdate(CJSONFile manifest) {
 		this.manifest = CJSONPareser.parse(manifest);
 	}
@@ -30,7 +33,7 @@ public class AutoUpdate {
 	public boolean isLatestVersion() {
 		CJSON newManifest = CJSONPareser.parse(downloadManifest());
 		String currentVersion = manifest.getObject("manifest").getValue("version").toString();
-		String version = newManifest.getObject("manifest").getValue("version").toString();
+		version = newManifest.getObject("manifest").getValue("version").toString();
 		
 		Debug.log("Current version: " + currentVersion);
 		
@@ -55,8 +58,11 @@ public class AutoUpdate {
 	}
 	
 	public void downloadNewVersion() {
-		String args = "java -jar \"" + FileManager.getMainPath() + "/Update.jar\" -manifest " + Temp.getTempDir() + "/manifest.cjson "
+		try {Copy.copy(Temp.getTempDir() + "/manifest.cjson", FileManager.getMainPath() + "/manifest.cjson");}
+		catch (IOException e1) {e1.printStackTrace();}
+		String args = "java -jar \"" + FileManager.getMainPath() + "/Update.jar\" -manifest \"" + FileManager.getMainPath() + "/manifest.cjson\" "
 				+ "-return \"" + System.getProperty("name") + ".jar\" ";
+		System.out.println(args);
 		SystemProcess systemProcess = new SystemProcess(args);
 		
 		try {systemProcess.start();}
