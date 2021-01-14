@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import net.argus.file.FileManager;
 import net.argus.file.Properties;
+import net.argus.system.UserSystem;
 
 public class RondButton extends JButton {
 	
@@ -102,7 +103,8 @@ public class RondButton extends JButton {
 						case CROIX:
 							for(FrameListener frameListener : fen.frameManager.getListeners())
 								if(frameListener != null) frameListener.frameClosing();
-								else System.exit(0);
+							
+							UserSystem.exit(0);
 							break;
 						case BAR:
 							fen.setState(JFrame.ICONIFIED);

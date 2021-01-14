@@ -5,22 +5,21 @@ import java.io.IOException;
 
 import net.argus.security.Key;
 import net.argus.system.InitializedSystem;
-import net.argus.system.UserSystem;
 import net.argus.util.debug.Debug;
 
 public class ExampleSecurity {
 	
 	public ExampleSecurity() {
-		Key key = new Key("^m$ù*ù*ù*^fùg*fdg^d*ù*¨%µ%L%Ml£OLµ%ML*$^lµ*Lµ¨Pùk;f");
+		Key key = new Key("^m$ù*ù*ù[*^fùg*sFDHfdg^d*ù*¨%µ%Hµ¨Pùk;f");
 		
-		String text = key.crypt("Hello world!");
+		String text = key.crypt("\"download: {");
 		Debug.log("Text cripted: " + text);
 		
 		Debug.log("Text uncripted: " + key.decrypt(text));
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializedSystem.initSystem(args);
 		new ExampleSecurity();
 	}
 

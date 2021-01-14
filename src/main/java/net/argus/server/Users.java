@@ -15,12 +15,12 @@ public class Users {
 	
 	private static ServerSocketClient[] clients;
 	private static FileSave banList = new FileSave("banip", "", new String[] {"ban", "ip", "name"});
-	private static Key key;
+	private Key key;
 	private static int maxClient;
 	
 	public Users(int maxClient, Key key) {
 		Users.maxClient = maxClient;
-		Users.key = key;
+		this.key = key;
 		clients = new ServerSocketClient[maxClient];
 	}
 	
@@ -51,7 +51,7 @@ public class Users {
 	public void closeAll(int userId) throws IOException, SecurityException {
 		for(int i = 0; i < clients.length; i++) {
 			if(clients[i] != null) {
-				if(i != userId)
+				//if(i != userId)
 					ThreadManager.stop(clients[i].getProcessServer());
 				clients[i].logOut("Kick all", ErrorCode.kick);
 			}
@@ -97,15 +97,14 @@ public class Users {
 	public static ServerSocketClient getServerSocketClient(int userId) {return clients[userId];}
 	
 	public static ServerSocketClient getServerSocketClient(String pseudo) {
-		for(int i = 0; i < clients.length; i++) {
-			if(clients[i] != null && clients[i].getPseudo().toUpperCase().equals(pseudo.toUpperCase())) {
+		for(int i = 0; i < clients.length; i++)
+			if(clients[i] != null && clients[i].getPseudo().toUpperCase().equals(pseudo.toUpperCase()))
 				return clients[i];
-			}
-		}
+		
 		return null;
 	}
 	
-	public static Key getKey() {return key;}
+	public Key getKey() {return key;}
 	public static FileSave getBanIpFile() {return banList;}
 	
 	public static int getMaxClient() {return maxClient;}

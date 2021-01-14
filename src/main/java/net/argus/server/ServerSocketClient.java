@@ -120,7 +120,7 @@ public class ServerSocketClient {
 	@SuppressWarnings("deprecation")
 	public Package nextPackage() throws SecurityException {
 		String n = nextString();
-
+		
 		if(n != null)
 			return PackagePareser.parse(n);
 		

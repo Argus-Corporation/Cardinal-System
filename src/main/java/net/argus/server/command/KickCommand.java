@@ -32,18 +32,12 @@ public class KickCommand extends Command {
 					userTarget = client;
 					break;
 			}
-		}else {
-			try {userTarget = Users.getServerSocketClient(com[1]);}
-			catch(NullPointerException e) {
-				client.getProcessServer().sendMessage("Target client does existed");
-				Debug.log("Error: this client does existed");
-				return;
-			}
-		}
+		}else
+			userTarget = Users.getServerSocketClient(com[1]);
 		
 		if(userTarget == null) {
-			client.getProcessServer().sendMessage(com[1] + " not found");
-			Debug.log(com[1] + " not found");
+			client.getProcessServer().sendMessage("Target client does existed");
+			Debug.log("Error: this client does existed");
 			return;
 		}
 		

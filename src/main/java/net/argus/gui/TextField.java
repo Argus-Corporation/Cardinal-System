@@ -62,7 +62,6 @@ public class TextField extends JTextField implements Element {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_UP && oldData.size()!=0) {
 					if(!touch) dataIndex = dataIndex>0?dataIndex-1:dataIndex;
-					
 					setText(oldData.get(dataIndex));
 					touch = false;
 				}else if(e.getKeyCode() == KeyEvent.VK_DOWN && oldData.size()!=0) {
@@ -71,10 +70,9 @@ public class TextField extends JTextField implements Element {
 					setText(oldData.get(dataIndex));
 					touch = false;
 				}else {
-					dataIndex = oldData.size();
+					dataIndex = oldData.size()>0?oldData.size():0;
 					touch = true;
-				}
-				
+				}	
 			}
 			public void keyReleased(KeyEvent e) {}
 			

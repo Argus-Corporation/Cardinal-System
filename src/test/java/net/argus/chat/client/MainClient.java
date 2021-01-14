@@ -12,7 +12,9 @@ import net.argus.chat.client.gui.Connect;
 import net.argus.chat.client.gui.GUIClient;
 import net.argus.file.FileManager;
 import net.argus.file.css.CSSEngine;
+import net.argus.gui.FrameListener;
 import net.argus.gui.TextField;
+import net.argus.security.Key;
 import net.argus.system.InitializedSplash;
 import net.argus.system.InitializedSystem;
 import net.argus.util.ArrayManager;
@@ -41,6 +43,7 @@ public class MainClient {
 		
 		GUIClient.addSendAction(getSendActionListener());
 		
+		GUIClient.addFrameListener(getFrameListener());
 		InitializedSplash.getSplash().exit();
 		
 		while(!InitializedSplash.getSplash().isFinnish())
@@ -86,16 +89,33 @@ public class MainClient {
 	
 	}
 	
+	public FrameListener getFrameListener() {
+		return new FrameListener() {
+			public void frameResizing() {}
+			@Override
+			@SuppressWarnings("deprecation")
+			public void frameClosing() {
+				if(client != null && client.isConnected()) {
+					client.sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("message", "Frame Closing")));
+					
+					client.getProcessClient().stop();
+				}
+			}	
+			public void frameMinimalized() {}
+		};
+	}
+	
 	public void connect(String host, String pseudo, String password) throws UnknownHostException, IOException {
-		client = new ExampleClient(host, pseudo, password);
+		if(GUIClient.menuBar.isEncrypt())
+			client = new ExampleClient(host, 11067, pseudo, password, new Key("key"));
+		else
+			client = new ExampleClient(host, 11066, pseudo, password);
 		
 		client.addClientManager(new ClientManagerChat(client));
 		client.addProcessListener(new ProcessListenerChat());
 
 		try {
 			client.start();
-			
-			GUIClient.addFrameListener(client.getFrameListener());
 			
 			GUIClient.connect();
 		}catch(IOException e) {
@@ -110,7 +130,7 @@ public class MainClient {
 	}
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(args, true, new InitializedSplash("res/logo.png", Display.getWidhtDisplay() - 50, 1000));
+		InitializedSystem.initSystem(args, true, new InitializedSplash("res/logo.png", Display.getWidhtDisplay() - 50, 0));
 		Thread.currentThread().setName("client");
 		
 		CSSEngine.run("client", "bin/css");

@@ -2,29 +2,38 @@ package net.argus.chat.server;
 
 import java.io.IOException;
 
+import net.argus.security.Key;
 import net.argus.server.Server;
 import net.argus.server.role.Role;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
+import net.argus.util.CloseListener;
 
 public class MainServer {
+	
+	private Server serv, servCrypt;
 	
 	public static int PORT = 11066; 
 	public static int MAX = 100;
 	
-	private static String PASSWORD = "rt";
+	private static String PASSWORD = "password";
 	
 	public MainServer() throws IOException {
 		init();
 		
-		Server serv = new Server(MAX, PORT);
+		serv = new Server(MAX, PORT);
+		servCrypt = new Server(MAX, PORT + 1, new Key("key"));
+		
+		serv.addClostListener(getServerCloseListener());
+		servCrypt.addClostListener(getServerCryptCloseListener());
 		
 		new Role("admin").setPassword(PASSWORD).setRank(10).registry();
 		
 		serv.start();
+		servCrypt.start();
 	}
 	
-	public void init() {
+	private void init() {
 		int port = UserSystem.getIntegerProperty("port");
 		int max = UserSystem.getIntegerProperty("max");
 		
@@ -36,13 +45,27 @@ public class MainServer {
 		PASSWORD = password!=null?password:PASSWORD;
 	}
 	
+	private CloseListener getServerCloseListener() {
+		return new CloseListener() {
+			public void close() {
+				servCrypt.stop(0);
+			}
+		};
+	}
+	
+	private CloseListener getServerCryptCloseListener() {
+		return new CloseListener() {
+			public void close() {
+				serv.stop(0);
+			}
+		};
+	}
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		InitializedSystem.initSystem(args, false);
-		
 		Thread.currentThread().setName("SERVER");
 
 		new MainServer();
-		
 	}
 
 }

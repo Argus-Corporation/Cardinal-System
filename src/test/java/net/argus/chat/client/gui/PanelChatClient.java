@@ -14,7 +14,6 @@ import net.argus.gui.FrameListener;
 import net.argus.gui.Panel;
 import net.argus.gui.TextField;
 import net.argus.gui.animation.FrameAnimation;
-import net.argus.system.UserSystem;
 
 public class PanelChatClient {
 	
@@ -46,7 +45,6 @@ public class PanelChatClient {
 			@Override
 			public void frameClosing() {
 				new FrameAnimation(GUIClient.getFrame()).play();
-				UserSystem.exit(0);
 			}
 			public void frameMinimalized() {}
 		});

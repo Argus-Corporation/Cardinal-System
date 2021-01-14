@@ -1,12 +1,15 @@
 button.send.name=Send
 
 menu.connection.name=Connection
+menu.encrypting.name=Encrypting
 menu.lang.name=Language
 menu.change.name=Change language
 
 menuitem.fast.name=Fast connect
 menuitem.join.name=Join
 menuitem.leave.name=Leave
+
+menucheckitem.encrypt.name=Encrypt
 
 info.leave.name=You are disconnected
 info.error.name=Error

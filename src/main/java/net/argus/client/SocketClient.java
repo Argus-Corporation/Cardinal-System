@@ -1,9 +1,6 @@
 package net.argus.client;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -14,10 +11,7 @@ import net.argus.exception.SecurityException;
 import net.argus.security.Key;
 import net.argus.util.debug.Debug;
 import net.argus.util.pack.Package;
-import net.argus.util.pack.PackageBuilder;
-import net.argus.util.pack.PackageObject;
 import net.argus.util.pack.PackagePareser;
-import net.argus.util.pack.PackageType;
 
 public class SocketClient {
 	
@@ -51,7 +45,7 @@ public class SocketClient {
 	public void connect() throws UnknownHostException, IOException {
 		socket = new Socket(host, port);
 		
-		Debug.log("Connected to " + host);
+		Debug.log("Connected to " + host + ":" + port);
 		
 		connected = true;
 		
@@ -70,18 +64,6 @@ public class SocketClient {
 		send(pack);
 	}
 	
-	//public synchronized void sendArray(PackageType contentArray, String[] array) {sendArray(contentArray.getId(), array);}
-	
-	/*public synchronized void sendArray(int contentArray, String[] array) {
-		PackageBuilder bui = new PackageBuilder(PackageType.ARRAY.getId());
-		PackageObject objArray = new PackageObject("value");
-		
-		objArray.addItem("type", String.valueOf(contentArray));
-		objArray.addItemArray("array", array);
-		//System.out.println(bui.build().getFile());
-	}*/
-	
-	
 	public synchronized void send(Object obj) {
 		msgSend.println(serverUseKey&&key!=null?key.crypt(obj.toString()):obj.toString());
 		msgSend.flush();
@@ -96,7 +78,7 @@ public class SocketClient {
 		Debug.log("You are disconnected: " + msg);
 	}
 	
-	@Deprecated
+	/*@Deprecated
 	public synchronized void sendFile(File file, String[] clientReceivers) throws SecurityException, IOException {
 		PackageBuilder bui = new PackageBuilder(PackageType.FILE.getId());
 		PackageObject objFile = new PackageObject("value");
@@ -132,7 +114,7 @@ public class SocketClient {
 			}
 		}).start();
 		
-	}
+	}*/
 	
 	public Package nextPackage() throws SecurityException {
 		String n = nextString();
@@ -148,8 +130,10 @@ public class SocketClient {
 		
 		try{msg = msgRecei.readLine();}
 		catch(IOException e) {return null;}
-		
-		return serverUseKey&&key!=null?!msg.equals("")?key.decrypt(msg):msg:msg;
+		if(msg != null)
+			return serverUseKey&&key!=null?!msg.equals("")?key.decrypt(msg):msg:msg;
+		else 
+			return null;
 	}
 	
 	public String getPseudo() {return pseudo;}

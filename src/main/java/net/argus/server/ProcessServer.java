@@ -34,6 +34,7 @@ public class ProcessServer extends Thread {
 	public static final int PSEUDO = 2;
 	public static final int ARRAY = 3;
 	public static final int FILE = 4;
+	public static final int NOTIFY = 5;
 	
 	public ProcessServer(ServerSocketClient client, int userId) {
 		this.client = client;
@@ -52,6 +53,14 @@ public class ProcessServer extends Thread {
 	
 	public void sendMessage(String msg) throws SecurityException {
 		client.sendPackage(new Package(new PackageBuilder(PackageType.SYSTEM.getId()).addValue("message", msg).addValue("pseudo", "SYSTEM ALERT")));		
+	}
+	
+	public void sendMessage(PackageType pt, String msg, String pseudo, String suffix) throws SecurityException {
+		this.sendMessage(pt.getId(), msg, pseudo, suffix);
+	}
+	
+	public void sendMessage(int pt, String msg, String pseudo, String suffix) throws SecurityException {
+		client.sendPackage(new Package(new PackageBuilder(pt).addValue("message", msg).addValue("pseudo", pseudo + "-" + suffix)));
 	}
 	
 	public void sendMessage(int pt, int userId, String msg) throws SecurityException {

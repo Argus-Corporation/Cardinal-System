@@ -1,12 +1,8 @@
 package net.argus.client;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.awt.TrayIcon.MessageType;
 import java.io.IOException;
 import java.util.List;
-
-import javax.swing.JFileChooser;
 
 import net.argus.client.info.Info;
 import net.argus.client.info.Infos;
@@ -14,6 +10,7 @@ import net.argus.exception.SecurityException;
 import net.argus.file.cjson.CJSONObject;
 import net.argus.util.ErrorCode;
 import net.argus.util.ListenerManager;
+import net.argus.util.Notification;
 import net.argus.util.debug.Debug;
 import net.argus.util.pack.Package;
 import net.argus.util.pack.PackageBuilder;
@@ -33,6 +30,7 @@ public class ProcessClient extends Thread {
 	public static final int PSEUDO = 2;
 	public static final int ARRAY = 3;
 	public static final int FILE = 4;
+	public static final int NOTIFY = 5;
 	
 	public ProcessClient(SocketClient client, Client mainClient) {
 		this.client = client;
@@ -110,7 +108,11 @@ public class ProcessClient extends Thread {
 						
 					break;
 					
-				case FILE:
+				case NOTIFY:
+					Notification.showNotification("Notify", pack.getValue("message"), "ARGUS", MessageType.INFO, "");
+					break;
+					
+				/*case FILE:
 					String fileName = pack.getObject("value").getValue("fileName").toString();
 					String extention = pack.getObject("value").getValue("extention").toString();
 					byte[] data = pack.getObject("value").getByte("data");
@@ -132,7 +134,7 @@ public class ProcessClient extends Thread {
 					
 					Debug.log("File created: " + path);
 					
-					break;
+					break;*/
 			}
 			
 			for(ClientManager manager : clientManager.getListeners())	

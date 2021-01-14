@@ -23,7 +23,7 @@ import net.argus.util.pack.PackageType;
 
 public class Client {
 	
-	private static final int CLIENT_VERSION = 130121100;
+	private static final int CLIENT_VERSION = 130121101;
 	
 	private String host;
 	private int port;
@@ -43,13 +43,7 @@ public class Client {
 	}
 	
 	public Client(String host, int port) throws UnknownHostException, IOException {
-		Thread.currentThread().setName("CLIENT");
-		
-		this.host = host;
-		this.port = port;
-		
-		client = new SocketClient(host, port);
-		process = new ProcessClient(client, this);
+		this(host, port, null);
 	}
 	
 	public void start() throws UnknownHostException, IOException {

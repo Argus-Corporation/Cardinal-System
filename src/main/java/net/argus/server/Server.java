@@ -8,6 +8,8 @@ import net.argus.security.Key;
 import net.argus.server.role.Role;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
+import net.argus.util.CloseListener;
+import net.argus.util.ListenerManager;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;;
 
@@ -16,21 +18,26 @@ public class Server extends Thread {
 	private ServerSocket server;
 	private Users users;
 	
+	private ListenerManager<CloseListener> closeManager = new ListenerManager<CloseListener>();
+	
 	private boolean running;
 	
-	private static final int SERVER_VERSION = 130121100;
+	private static final int SERVER_VERSION = 130121101;
 	
 	private int port;
 	
 	public Server(int maxClient, int port, Key key) throws IOException {
+		
 		ThreadManager.addThread(this);
-		this.port = port;
 		
 		server = new ServerSocket(port);
+		this.port = server.getLocalPort();
+		
 		Debug.log("Server version: " + SERVER_VERSION);
 		Debug.log("Server port: " + port);
 		Debug.log("Server slot: " + maxClient);
 		Debug.log("Server launched");
+		
 		
 		users = new Users(maxClient, key);
 	}
@@ -44,7 +51,7 @@ public class Server extends Thread {
 	}
 	
 	public void run() {
-		setName("SERVER");
+		setName("server: " + port);
 		running = true;
 		
 		loop();
@@ -56,22 +63,32 @@ public class Server extends Thread {
 				users.addUser(this, server.accept());
 			
 		}catch(IOException e) {
-			Debug.log("Error: IOExeption");
+			Debug.log("Server close");
 		}catch(SecurityException e) {
 			Debug.log("Error: SecurityExeption");
 		}
-		Debug.log("Server Stopped");
+		exit();
 	}
 	
-	public void stop(int userId) throws IOException, SecurityException {
-		running = false;
-		users.closeAll(userId);
-		server.close();
-		exit();
+	public void stop(int userId) {
+		new Thread(new Runnable() {
+			public void run() {
+				Thread.currentThread().setName("close: " + port);
+				running = false;
+				try {
+					users.closeAll(userId);
+					server.close();
+				}catch(IOException | SecurityException e) {e.printStackTrace();}
+			}
+		}).start();
 	}
 	
 	private void exit() {
 		Debug.log("Server Stopped");
+		
+		for(CloseListener listener : closeManager)
+			listener.close();
+		
 		ThreadManager.stop(this);
 		ThreadManager.stop(currentThread());
 	}
@@ -84,6 +101,7 @@ public class Server extends Thread {
 	public Users getUsers() {return users;}
 	public ServerSocket getServerSocket() {return server;}
 	
+	public void addClostListener(CloseListener listener) {closeManager.addListener(listener);}
 		
 	public static void main(String[] args) throws IOException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());

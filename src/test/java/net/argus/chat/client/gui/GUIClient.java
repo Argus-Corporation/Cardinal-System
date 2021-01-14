@@ -36,12 +36,16 @@ public class GUIClient {
 		menuBar.getFast().setEnabled(false);
 		menuBar.getJoin().setEnabled(false);
 		menuBar.getLeave().setEnabled(true);
+		
+		menuBar.getEncrypt().setEnabled(false);
 	}
 	
 	public static void leave() {
 		menuBar.getFast().setEnabled(true);
 		menuBar.getJoin().setEnabled(true);
 		menuBar.getLeave().setEnabled(false);
+		
+		menuBar.getEncrypt().setEnabled(true);
 	}
 	
 	public static Frame getFrame() {return frame;}
