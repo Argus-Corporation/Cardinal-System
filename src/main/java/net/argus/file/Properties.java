@@ -57,7 +57,6 @@ public class Properties extends AbstractFileSave {
 		for(int i = 0; i < lines.size(); i++) super.write(lines.get(i));
 	}
 	
-	@Deprecated
 	/**
 	 * Cette methode permer de creer une nouvelle clef
 	 * @param key
@@ -66,6 +65,33 @@ public class Properties extends AbstractFileSave {
 	 */
 	public void addKey(String key, String value) throws IOException {
 		write(key, value);
+	}
+	
+	/**
+	 *  Cette methode permer de creer des nouvelle clef
+	 * @param keys
+	 * @param values
+	 * @throws IOException
+	 */
+	public void addKeys(List<String> keys, List<String> values) throws IOException {
+		int size = keys.size()<values.size()?keys.size():values.size();
+		for(int i = 0; i < size; i++)
+			addKey(keys.get(i), values.get(i));
+	}
+	
+	/**
+	 * Cette methode permer de supprimer une clef
+	 * @param key
+	 * @throws IOException
+	 */
+	public void removeKey(String key) throws IOException {
+		copyFile();
+		int line = getIdKey(key) -1;
+		
+		data.remove(line);
+		
+		clear();
+		write(data);
 	}
 	
 	/**
@@ -90,6 +116,19 @@ public class Properties extends AbstractFileSave {
 	 * @param value
 	 * @throws IOException 
 	 */
+<<<<<<< Updated upstream
+=======
+	public void setKey(String key, Object value) throws IOException {
+		setKey(key, value.toString());
+	}
+	
+	/**
+	 * Cette methode permer de remplacer une clef par une autre
+	 * @param key
+	 * @param value
+	 * @throws IOException 
+	 */
+>>>>>>> Stashed changes
 	public void setKey(String key, int value) throws IOException {
 		setKey(key, Integer.toString(value));
 	}
@@ -105,8 +144,7 @@ public class Properties extends AbstractFileSave {
 		try {
 			for(int i = 1; i < getNumberLine() + 1; i++) {
 				String lineKey;
-				
-					lineKey = getLine(i);
+				lineKey = getLine(i);
 				
 				lineKey = lineKey.substring(0, lineKey.indexOf('='));
 				

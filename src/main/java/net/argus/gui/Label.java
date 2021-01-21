@@ -41,8 +41,10 @@ public class Label extends JLabel implements Element {
 		isFores.add(isFore);
 		isFonts.add(isFont);
 		element.add(this);
-		
-		setText();
+		if(lang)
+			setText();
+		else
+			setText(name);
 	}
 	
 	public void setText() {super.setText(lang?Lang.getLang().getElementString(this.name):this.name);}

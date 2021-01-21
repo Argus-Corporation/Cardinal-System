@@ -2,6 +2,27 @@ package net.argus.util;
 
 public class CharacterManager {
 	
+<<<<<<< Updated upstream
+=======
+	public static boolean isBoolean(String str) {
+		if(str.toLowerCase().equals("true") || str.toLowerCase().equals("false"))
+			return true;
+		return false;
+	}
+	
+	public static boolean isNumber(char car) {
+		try {Integer.valueOf(String.valueOf(car));}
+		catch(NumberFormatException e) {return false;}
+		return true;
+	}
+	
+	public static boolean isNumber(String str) {
+		try {Integer.valueOf(str);}
+		catch(NumberFormatException e) {return false;}
+		return true;
+	}
+	
+>>>>>>> Stashed changes
 	public static String cut(String enter, char cut) {
 		char[] carater = enter.toCharArray();
 		for(int i = 0; i < carater.length; i++) {

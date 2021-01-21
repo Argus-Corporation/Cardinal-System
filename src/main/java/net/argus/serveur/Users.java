@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 
+import net.argus.exception.SecurityException;
 import net.argus.file.FileSave;
 import net.argus.security.Key;
 import net.argus.util.ThreadManager;
@@ -47,13 +48,25 @@ public class Users {
 		
 	}
 	
-	public void closeAll(int userId) throws IOException, SecurityException {
+	public void close(int userId) throws IOException, SecurityException {
 		for(int i = 0; i < clients.length; i++) {
+<<<<<<< Updated upstream:src/main/java/net/argus/serveur/Users.java
 			if(clients[i] != null && i != userId)
 				ThreadManager.stop(clients[i].getProcessServeur());
 			
 			clients[i].logOut("Kick all");
+=======
+			if(clients[i] != null) {
+				if(i != userId)
+					ThreadManager.stop(clients[i].getProcessServer());
+				clients[i].logOut("Kick all", ErrorCode.kick);
+			}
+>>>>>>> Stashed changes:src/main/java/net/argus/server/Users.java
 		}
+	}
+	
+	public void close() throws IOException, SecurityException {
+		close(-1);
 	}
 	
 	public static boolean isClientPseudoExist(String pseudo) {

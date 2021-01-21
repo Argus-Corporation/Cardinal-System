@@ -1,10 +1,12 @@
 package net.argus.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -61,7 +63,11 @@ public class AbstractFileSave {
 	 */
 	public String getLine(int line) throws FileNotFoundException {
 		@SuppressWarnings("resource")
+<<<<<<< Updated upstream
 		Scanner scan = new Scanner(this.file);
+=======
+		BufferedReader read = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+>>>>>>> Stashed changes
 		
 		for(int i = 1; i < line; i++) {
 			try {scan.nextLine();}
@@ -136,11 +142,10 @@ public class AbstractFileSave {
 	 * Cette methode permer de suprimer le contenu du fichier
 	 * @throws IOException 
 	 */
-	protected void clear() throws IOException {
+	public void clear() throws IOException {
 		PrintWriter writer = new PrintWriter(new FileOutputStream(file));
 		writer.print("");
 		writer.close();
-		Debug.log("File cleared");
 	}
 	
 	/**

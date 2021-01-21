@@ -65,8 +65,10 @@ public class TopPanel extends JPanel {
 		this.addMouseMotionListener(new MouseMotionListener() {
 			public void mouseMoved(MouseEvent e) {}
 			public void mouseDragged(MouseEvent e) {
-                Point currCoords = e.getLocationOnScreen();
-                if(!fullScreen) fen.setLocation(currCoords.x - compCoords.x, currCoords.y - compCoords.y);
+				if(!fullScreen) {
+					Point currCoords = e.getLocationOnScreen();
+					if(compCoords != null) fen.setLocation(currCoords.x - compCoords.x, currCoords.y - compCoords.y);
+				}
 			}
         });
 	}
