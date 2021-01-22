@@ -1,6 +1,6 @@
 package net.argus.file.cjson;
 
-public class CJSONBoolean extends CJSONObject {
+public class CJSONBoolean extends CJSONElement {
 	
 	private boolean value;
 	

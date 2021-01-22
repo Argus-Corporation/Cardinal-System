@@ -30,6 +30,8 @@ public class InitializedSystem {
 		
 		UserSystem.defineProperty("config", true);
 		
+		showInfo();
+		
 		preInit(args);
 		if(ui) preInitUi(args);
 		if(systemManager != null) systemManager.preInit(args);
@@ -80,6 +82,12 @@ public class InitializedSystem {
 	private static void postInitUi(String[] args) {
 		for(InitializedUI ui : uiManager)
 			ui.postInit(args);
+	}
+	
+	private static void showInfo() {
+		Debug.log("OS: " + System.getProperty("os.name"));
+		Debug.log("Arch: " + System.getProperty("os.arch"));
+		Debug.log("Network: " + (Network.isConnected()?"connected":"unconnected"));
 	}
 	
 	public static void addInitializedUI(InitializedUI ui) {uiManager.addListener(ui);}

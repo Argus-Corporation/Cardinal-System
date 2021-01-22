@@ -3,9 +3,7 @@ package net.argus.file;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -19,16 +17,10 @@ public class Properties extends AbstractFileSave {
 	
 	/**
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
-	 * @param path
-	 */
-	public Properties(File path) {
-		super(path);
-	}
-	
-	/**
-	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
 	 * @param fileName
 	 * @param rep
+	 * @param projectName
+	 * @param class
 	 */
 	public Properties(String fileName, String rep) {
 		this(fileName, EXTENTION, rep);
@@ -36,31 +28,14 @@ public class Properties extends AbstractFileSave {
 	
 	/**
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
-	 * @param fileName
-	 * @param path
-	 */
-	public Properties(String fileName, File path) {
-		this(fileName, EXTENTION, path);
-	}
-	
-	/**
-	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
 	 * @param fileName 
 	 * @param extention
 	 * @param rep
+	 * @param projectName
+	 * @param class
 	 */
 	protected Properties(String fileName, String extention, String rep) {
 		super(fileName, extention, rep);
-	}
-	
-	/**
-	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
-	 * @param fileName 
-	 * @param extention
-	 * @param path
-	 */
-	protected Properties(String fileName, String extention, File path) {
-		super(fileName, extention, path);
 	}
 	
 	/**
@@ -82,7 +57,6 @@ public class Properties extends AbstractFileSave {
 		for(int i = 0; i < lines.size(); i++) super.write(lines.get(i));
 	}
 	
-	@Deprecated
 	/**
 	 * Cette methode permer de creer une nouvelle clef
 	 * @param key
@@ -91,6 +65,33 @@ public class Properties extends AbstractFileSave {
 	 */
 	public void addKey(String key, String value) throws IOException {
 		write(key, value);
+	}
+	
+	/**
+	 *  Cette methode permer de creer des nouvelle clef
+	 * @param keys
+	 * @param values
+	 * @throws IOException
+	 */
+	public void addKeys(List<String> keys, List<String> values) throws IOException {
+		int size = keys.size()<values.size()?keys.size():values.size();
+		for(int i = 0; i < size; i++)
+			addKey(keys.get(i), values.get(i));
+	}
+	
+	/**
+	 * Cette methode permer de supprimer une clef
+	 * @param key
+	 * @throws IOException
+	 */
+	public void removeKey(String key) throws IOException {
+		copyFile();
+		int line = getIdKey(key) -1;
+		
+		data.remove(line);
+		
+		clear();
+		write(data);
 	}
 	
 	/**
@@ -116,13 +117,7 @@ public class Properties extends AbstractFileSave {
 	 * @throws IOException 
 	 */
 	public void setKey(String key, Object value) throws IOException {
-		copyFile();	
-		int line = getIdKey(key);
-		
-		data.set(line - 1, key + "=" + value.toString());
-		
-		clear();
-		write(data);
+		setKey(key, value.toString());
 	}
 	
 	/**
@@ -139,14 +134,14 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la ligne ou se touve le parametre
 	 * @param key
 	 * @return numberLine
+	 * @throws FileNotFoundException 
 	 */
 	public int getIdKey(String key) {
 		copyFile();
 		try {
 			for(int i = 1; i < getNumberLine() + 1; i++) {
 				String lineKey;
-				
-					lineKey = getLine(i);
+				lineKey = getLine(i);
 				
 				lineKey = lineKey.substring(0, lineKey.indexOf('='));
 				
@@ -168,8 +163,10 @@ public class Properties extends AbstractFileSave {
 		
 		try {line = getLine(getIdKey(key));}
 		catch(IOException e) {}
-		
-		return line!=null?getValue(line):null;
+		if(line != null)
+			return getValue(line);
+		else
+			return null;
 	}
 
 	/**
@@ -186,7 +183,6 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la clef boolean corespondante a la clef
 	 * @param key
 	 * @return result
-	 * @throws FileNotFoundException 
 	 */
 	public boolean getBoolean(String key) {
 		return Boolean.valueOf(getString(key));
@@ -195,7 +191,7 @@ public class Properties extends AbstractFileSave {
 	@Deprecated
 	/**
 	 * Cette methode retourne la clef Color corespondante a la clef
-	 * @param kek
+	 * @param key
 	 * @return
 	 */
 	public Color getColor(String key) {
@@ -225,23 +221,12 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la clef Dimension corespondante a la clef
 	 * @param key
 	 * @return dimention
+	 * @throws FileNotFoundException 
 	 */
 	public Dimension getDimension(String key) {
 		String[] line = getString(key).split(":");
 		
 		try {return new Dimension(Integer.valueOf(line[0]), Integer.valueOf(line[1]));
-		}catch(IndexOutOfBoundsException | NumberFormatException e) {return null;}
-	}
-	
-	/**
-	 * Cette methode retourne la clef Point corespondante a la clef
-	 * @param key
-	 * @return point
-	 */
-	public Point getPoint(String key) {
-		String[] line = getString(key).split(":");
-		
-		try {return new Point(Integer.valueOf(line[0]), Integer.valueOf(line[1]));
 		}catch(IndexOutOfBoundsException | NumberFormatException e) {return null;}
 	}
 	
@@ -263,24 +248,10 @@ public class Properties extends AbstractFileSave {
 	 * Cette méthode retourne les clef String[] corespondante a la clef
  	 * @param key
 	 * @return
+	 * @throws FileNotFoundException 
 	 */
 	public String[] getMultiString(String key) {
 		return getString(key).split(":");
-	}
-	
-	/**
-	 * Cette méthode retourne les clef int[] corespondante a la clef
- 	 * @param key
-	 * @return
-	 */
-	public int[] getMultiInteger(String key) {
-		String[] strs = getMultiString(key);
-		int[] is = new int[strs.length];
-		
-		for(int i = 0; i < is.length; i++)
-			is[i] = Integer.valueOf(strs[i]);
-		
-		return is;
 	}
 	
 	/**
@@ -311,7 +282,7 @@ public class Properties extends AbstractFileSave {
 	/**
 	 * Cette méthode retourne la valeur de la ligne
 	 * @param line
-	 * @return
+	 * @return value
 	 */
 	public String getValue(String line) {
 		return line.substring(line.indexOf('=') + 1);

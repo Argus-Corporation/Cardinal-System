@@ -25,7 +25,7 @@ public enum ErrorCode {
 	}
 	
 	public String getMessage() {
-		return Lang.getLang().getElementString(name);
+		return Lang.getElement(name);
 	}
 	
 	public int getCode() {return code;}

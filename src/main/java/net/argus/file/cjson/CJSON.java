@@ -8,15 +8,22 @@ import net.argus.system.UserSystem;
 
 public class CJSON {
 	
-	private List<CJSONObject> objs;
+	private List<CJSONItem> items;
 	
-	public CJSON(List<CJSONObject> objs) {this.objs = objs;}
+	public CJSON(List<CJSONItem> items) {this.items = items;}
 	
 	public CJSONObject getObject(String name) {return getObject(new CJSONString(name));}
+	public CJSONItem getItem(String name) {return getItem(new CJSONString(name));}
 	
 	public CJSONObject getObject(CJSONString name) {
-		for(CJSONObject obj : objs)
-			if(obj.getName().equals(name)) return obj;
+		for(CJSONItem item : items)
+			if(item.getName().equals(name)) return item.getValue();
+		return null;
+	}
+	
+	public CJSONItem getItem(CJSONString name) {
+		for(CJSONItem item : items)
+			if(item.getName().equals(name)) return item;
 		return null;
 	}
 	
@@ -24,25 +31,26 @@ public class CJSON {
 	public String toString() {
 		String s = "";
 		
-		for(CJSONItem o : objs.get(0).getItems())
+		for(CJSONItem o : items)
 			s += o.toString();
 		
 		return s;
 	}
 	
 	public static void main(String[] args) throws IOException {
-		InitializedSystem.initSystem(new String[] {"-project.name", "Cardinal-System", "-id", "0xdev"}, UserSystem.getDefaultInitializedSystemManager());
+		InitializedSystem.initSystem(new String[] {"-name", "Cardinal-System", "-id", "0xdev", "-log", "false"});
 		
 		//Key key = new Key("*ù$ef^ù*$ù$%kjnkjfezdskpvù$êfdpvù$^dfpv$ù^pfeùv^pf$^vpùfqd^v$pqfd^vperpv$qe^rpv$^qerpqv^$eqrpv^*eqorlv^$*ep*v^*$*oeqr^voeqr^voeq^vpqêpr*vqê*ov^pe*ovqerov^qr*ovqrov^qrov£%*ù^654654fsdf%¨µ£%%sff£¨µ¨%/.§/");
-		CJSONFile file = new CJSONFile("manifest", "");
-		
-		String password = CJSONPareser.parse(file).getObject("package")
-				.getValue("manifest").getValue("type").toString();
+		CJSONFile file = new CJSONFile("tree", "/");
+		CJSON cjson = CJSONPareser.parse(file);
+		System.out.println();
+		System.out.println(cjson.getObject("Config").getValue("Connection").getValue("bonjour"));
+		//		.getValue("manifest").getValue("type").toString();
 	
 		/*System.out.println(key.decrypt(password).equals("szef¨%$ùDdgdDE854ED56FDfdgfsdgfgsdGsfdgffdGDFgF855551"));
 		System.out.println(key.decrypt(password));*/
 		
-		System.out.println(password);
+		//System.out.println(password);
 		
 		//System.out.println(key.crypt("Azef¨%$ùDdgdDE854ED56FDfdgfsdgfgsdGsfdgffdGDFgF855551"));
 		

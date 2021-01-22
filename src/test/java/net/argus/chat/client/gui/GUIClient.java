@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import net.argus.chat.client.gui.config.Config;
 import net.argus.file.Properties;
 import net.argus.gui.Frame;
 import net.argus.gui.FrameListener;
@@ -15,6 +16,8 @@ public class GUIClient {
 	
 	public static ClientFrame frame;
 	
+	public static Config configFrame;
+	
 	public static MenuBarClient menuBar = new MenuBarClient();
 	public static PanelChatClient panChat = new PanelChatClient();
 	
@@ -24,6 +27,8 @@ public class GUIClient {
 		Lang.setLang(config);
 		
 		frame = new ClientFrame(config);
+		
+		configFrame = new Config();
 		
 		try {
 			frame.add(BorderLayout.NORTH, menuBar.getMenuBar());
@@ -55,6 +60,8 @@ public class GUIClient {
 	public static void addFastAction(ActionListener actionListener) {menuBar.getFast().addActionListener(actionListener);}
 	public static void addJoinAction(ActionListener actionListener) {menuBar.getJoin().addActionListener(actionListener);}
 	public static void addLeaveAction(ActionListener actionListener) {menuBar.getLeave().addActionListener(actionListener);}
+	
+	public static void addPreferenceAction(ActionListener actionListener) {menuBar.getPreference().addActionListener(actionListener);}
 	
 	public static void addSendAction(ActionListener actionListener) {panChat.getSendButton().addActionListener(actionListener);}
 	

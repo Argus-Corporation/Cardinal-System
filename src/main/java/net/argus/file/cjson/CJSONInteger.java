@@ -1,8 +1,8 @@
 package net.argus.file.cjson;
 
-import net.argus.util.CharacterManager;
+import net.argus.util.ArrayManager;
 
-public class CJSONInteger extends CJSONObject {
+public class CJSONInteger extends CJSONElement {
 	
 	private int value;
 	
@@ -12,10 +12,14 @@ public class CJSONInteger extends CJSONObject {
 	public static CJSONInteger nextInt(char[] chars) {
 		String num = "";
 		
-		for(char car : chars) {
-			if(CharacterManager.isNumber(car)) {
-				num += car;
-			}else break;
+		while(true) {
+			if(chars[0] == ',') break;
+			if(chars[0] == '}') break;
+			
+			num += chars[0];
+			chars = ArrayManager.remove(chars, 0);
+			
+			if(!ArrayManager.isExist(chars, 0)) break;
 		}
 		
 		return new CJSONInteger(Integer.valueOf(num));

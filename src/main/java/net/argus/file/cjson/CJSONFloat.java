@@ -2,7 +2,7 @@ package net.argus.file.cjson;
 
 import net.argus.util.CharacterManager;
 
-public class CJSONFloat extends CJSONObject {
+public class CJSONFloat extends CJSONElement {
 
 	private float value;
 	

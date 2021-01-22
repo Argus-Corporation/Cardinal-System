@@ -8,10 +8,14 @@ public class CharacterManager {
 		return false;
 	}
 	
-	public static boolean isNumber(char car) {
-		try {Integer.valueOf(String.valueOf(car));}
+	public static boolean isNumber(String str) {
+		try {Integer.valueOf(str);}
 		catch(NumberFormatException e) {return false;}
 		return true;
+	}
+	
+	public static boolean isNumber(char car) {
+		return isNumber(String.valueOf(car));
 	}
 	
 	public static String cut(String enter, char cut) {

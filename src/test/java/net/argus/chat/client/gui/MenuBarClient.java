@@ -15,8 +15,10 @@ import net.argus.lang.LangType;
 
 public class MenuBarClient {
 
-	private Menu connection, encrypting, lang;
-	private MenuItem fast, join, leave;
+	private Menu connection, encrypting, configuration, lang;
+	
+	private MenuItem fast, join, leave, preference;
+	
 	private MenuCheckBoxItem encrypt;
 	
 	public JMenuBar getMenuBar() {
@@ -24,6 +26,7 @@ public class MenuBarClient {
 		
 		connection = new Menu("connection");
 		encrypting = new Menu("encrypting");
+		configuration = new Menu("configuration");
 		lang = new Menu("lang");
 		
 		fast = new MenuItem("fast");
@@ -33,6 +36,9 @@ public class MenuBarClient {
 		encrypt = new MenuCheckBoxItem("encrypt");
 		encrypt.setSelected(GUIClient.config.getBoolean("encrypt"));
 		encrypt.addActionListener(getEncryptListener());
+		
+		preference = new MenuItem("preference");
+		
 		
 		GUIClient.leave();
 		
@@ -48,11 +54,16 @@ public class MenuBarClient {
 		connection.add(fast);
 		connection.add(join);
 		connection.add(leave);
+		
 		encrypting.add(encrypt);
+		
+		configuration.add(preference);
+		
 		lang.add(change);
 		
 		bar.add(connection);
 		bar.add(encrypting);
+		bar.add(configuration);
 		bar.add(lang);
 		
 		return bar;
@@ -90,6 +101,8 @@ public class MenuBarClient {
 	public MenuItem getFast() {return fast;}
 	public MenuItem getJoin() {return join;}
 	public MenuItem getLeave() {return leave;}
+	
+	public MenuItem getPreference() {return preference;}
 	
 	public MenuCheckBoxItem getEncrypt() {return encrypt;}
 

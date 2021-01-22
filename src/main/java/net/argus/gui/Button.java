@@ -46,6 +46,6 @@ public class Button extends JButton implements Element, GUI {
 	}
 	
 	@Override
-	public void setText() {this.setText(Lang.getLang().getElementString(this.name));}
+	public void setText() {this.setText(Lang.getElement(this.name));}
 
 }

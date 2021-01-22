@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.argus.util.ArrayManager;
 
-public class CJSONString extends CJSONObject {
+public class CJSONString extends CJSONElement {
 	
 	private String value;
 	
@@ -68,7 +68,6 @@ public class CJSONString extends CJSONObject {
 				
 			if(chars[0] == '"' && openStr) {
 				openStr = false;
-				
 				return new CJSONString(str);
 			}
 						

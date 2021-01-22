@@ -41,11 +41,13 @@ public class Label extends JLabel implements Element, GUI {
 		isFores.add(isFore);
 		isFonts.add(isFont);
 		element.add(this);
-		
-		setText();
+		if(lang)
+			setText();
+		else
+			setText(name);
 	}
 	
 	@Override
-	public void setText() {super.setText(lang?Lang.getLang().getElementString(this.name):this.name);}
+	public void setText() {super.setText(lang?Lang.getElement(this.name):this.name);}
 
 }

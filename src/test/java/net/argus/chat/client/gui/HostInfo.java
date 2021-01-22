@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 
 import net.argus.chat.client.MainClient;
 import net.argus.file.Properties;
@@ -20,7 +19,7 @@ import net.argus.gui.Panel;
 
 public class HostInfo {
 	
-	private static Properties ipConfig = new Properties("ip", "/");
+	private static Properties profileConfig = new Properties("profile", "/");
 	
 	private static String result;
 	
@@ -50,7 +49,7 @@ public class HostInfo {
 		JComboBox<String> list = new JComboBox<String>((String[]) hostName.toArray(new String[hostName.size()]));
 		north.add(list);
 		
-		JTextField host = new JTextField(12);
+		TextFieldIp host = new TextFieldIp(12);
 		south.add(host);
 		
 		Button ok = new Button("   OK   ", false);
@@ -87,7 +86,7 @@ public class HostInfo {
 				if(saveCheck.isSelected()) {
 					
 					dial.setVisible(false);
-					result = ipConfig.getString("ip" + hostName.indexOf(list.getSelectedItem()));
+					result = profileConfig.getString("profile" + hostName.indexOf(list.getSelectedItem()) + ".ip");
 				}else {
 					dial.setVisible(false);
 					result = host.getText();
@@ -114,13 +113,14 @@ public class HostInfo {
 	public static List<String> getHostName() {
 		List<String> name = new ArrayList<String>();
 		
-		for(int i = 0; i < ipConfig.getNumberLine() / 2; i++)
-			name.add(ipConfig.getString("ip" + i + ".name"));
+		for(int i = 0; i < (profileConfig.getNumberLine() / 2); i++)
+			name.add(profileConfig.getString("profile" + i + ".name"));
+			
 		return name;
 	}
 	
 	public static String getHost() {return result;}
 	
-	public static Properties getIpConfig() {return ipConfig;}
+	public static Properties getProfileConfig() {return profileConfig;}
 
 }

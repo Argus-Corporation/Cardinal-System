@@ -1,5 +1,7 @@
 package net.argus.file.cjson;
 
+import net.argus.util.ArrayManager;
+
 public class CJSONItem {
 	
 	private CJSONString name;
@@ -26,30 +28,52 @@ public class CJSONItem {
 	
 	public static CJSONItem nextItem(char[] chars) {
 		CJSONItem item = new CJSONItem();
+		item.setName(CJSONString.nextString(chars));
+		chars = ArrayManager.remove(chars, ArrayManager.indexOf(chars, ':')+1, chars.length);
 		
+		if(chars[0] != '[') 
+			chars = CJSONPareser.removeNextItem(chars);
+		
+		
+		item.setValue(nextElement(chars).getValue());
+
+		return item;
+	}
+	
+	public static CJSONItem nextElement(char[] chars) {
+		CJSONItem item = new CJSONItem();
 		switch(CJSONType.nextType(chars)) {
 			case OBJECT:
 				item.setValue(CJSONObject.nextObject(chars));
+			//	System.out.println(CJSONType.OBJECT + "  " + item.getName() + "  " + item.getValue());
 				break;
-
+			case ARRAY:
+				item.setValue(CJSONArray.nextArray(chars));
+			//	System.out.println(CJSONType.ARRAY + "  " + item.getName() + "  " + item.getValue());
+				break;
+				
 			case STRING:
 				item.setValue(CJSONString.nextString(chars));
+				//System.out.println(item.getValue());
+			//	System.out.println(CJSONType.STRING + "  " + item.getName() + "  " + item.getValue());
 				break;
 				
 			case INTEGER:
 				item.setValue(CJSONInteger.nextInt(chars));
-				break;
-			
-			case FLOAT:
-				item.setValue(CJSONFloat.nextFloat(chars));				
+			//	System.out.println(CJSONType.INTEGER + "  " + item.getName() + "  " + item.getValue());
 				break;
 				
+			case FLOAT:
+				item.setValue(CJSONFloat.nextFloat(chars));
+			//	System.out.println(CJSONType.FLOAT + "  " + item.getName() + "  " + item.getValue());
+				break;
+					
 			case BOOLEAN:
 				item.setValue(CJSONBoolean.nextBoolean(chars));
+			//	System.out.println(CJSONType.BOOLEAN + "  " + item.getName() + "  " + item.getValue());
 				break;
-			
 		}
-		
+	
 		return item;
 	}
 	
@@ -61,7 +85,7 @@ public class CJSONItem {
 	
 	@Override
 	public String toString() {
-		return "[name: " + name + "] [value: " + value + "]";
+		return "{[" + name + "] [" + value + "]}";
 	}
 
 }

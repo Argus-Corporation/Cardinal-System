@@ -26,7 +26,7 @@ public class MenuItem extends JMenuItem implements GUI {
 
 	@Override
 	public void setText() {
-		setText(Lang.getLang().getElementString(nameType + "." + name + ".name"));
+		setText(Lang.getElement(nameType + "." + name + ".name"));
 	}
 
 }

@@ -67,7 +67,7 @@ public class CJSONBuilder {
 	protected String nextItemArray(CJSONObject parent) {
 		String file = "";
 		
-		for(CJSONItemArray mainArray : parent.getArray()) {
+		for(CJSONArray mainArray : parent.getArray()) {
 			file += "\"" + mainArray.getName() + "\": [";
 			for(CJSONObject obj : mainArray.getValues()) {
 				if(isObject(obj)) {

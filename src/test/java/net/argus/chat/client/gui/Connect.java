@@ -29,7 +29,7 @@ public class Connect extends Thread {
 	}
 	
 	public String getDefaultHost() {
-		return HostInfo.getIpConfig().getString("ip0");
+		return HostInfo.getProfileConfig().getString("profile0.ip");
 	}
 	
 	public String getHost() {

@@ -8,13 +8,14 @@ import net.argus.util.ArrayManager;
 public class CJSONPareser {
 	
 	public static CJSON parse(char[] chars) {
-		List<CJSONObject> objs = new ArrayList<CJSONObject>();
+		List<CJSONItem> items = new ArrayList<CJSONItem>();
 		
 		while(ArrayManager.isExist(chars, 0)) {
-			objs.add(CJSONObject.nextObject(chars));
-			chars = removeFirstObject(chars);
+			items.add(CJSONItem.nextItem(chars));
+			chars = removeFirstItem(chars);
 		}
-		return new CJSON(objs);
+		
+		return new CJSON(items);
 		
 	}
 	
@@ -63,7 +64,7 @@ public class CJSONPareser {
 		return characters;
 	}
 	
-	public static char[] removeFirstObject(char[] chars) {
+	public static char[] removeFirstItem(char[] chars) {
 		for(int i = 0, count = 0; i < chars.length; i++) {
 			if(chars[i] == '{')
 				count++;
@@ -79,7 +80,7 @@ public class CJSONPareser {
 		return chars;
 	}
 	
-	public static char[] removeNextObject(char[] chars) {
+	public static char[] removeNextItem(char[] chars) {
 		for(int i = 0, count = 0; i < chars.length; i++) {
 			if(chars[i] == '{')
 				count++;

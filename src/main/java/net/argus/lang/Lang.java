@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.argus.file.FileLang;
 import net.argus.file.FileManager;
 import net.argus.file.FileSave;
 import net.argus.file.Properties;
@@ -13,28 +12,36 @@ import net.argus.util.debug.Debug;
 
 public class Lang {
 	
-	private static String langName;
-	private static FileLang lang;
+	private static LangType langType;
+	private static LangParser parser;
 	
 	private static FileSave langConfig;
 	
-	public static void setLangName(LangType lang) {
-		langName = lang.getName();
+	private static void setLang(LangType lang) {
+		Lang.parser = new LangParser(lang.getName());
+		Lang.langType = lang;
 		
-		Lang.lang = new FileLang(lang.getName(), Lang.lang);
+		lang.getDefaultLangValue().apply();
 		
-		Debug.log("Lang: " + langName);
+		Debug.log("Lang: " + langType);
 	}
 	
-	public static void setLang(Properties config) {Lang.lang = new FileLang(config); setLangName(convert(config.getString("lang")));}
+	public static void setLang(Properties config) {
+		langConfig = new FileSave("lang", "save", new File((config.getBoolean("lang.temp")?Temp.getTempDir():FileManager.getMainPath()) + "/" + config.getString("lang.repertoirfile")), new String[] {"type", "lang", "name"});
+		LangSaver.addLangs(langConfig);
+		
+		setLang(convert(config.getString("lang")));
+	}
 	
 	public static void updateLang(LangType type) {
-		setLangName(type);
+		setLang(type);
 		LangRegistry.update();
 	}
 	
-	public static String getLangName() {return langName;}
-	public static FileLang getLang() {return lang;}
+	public static String getLangName() {return langType.getName();}
+	public static LangParser getLang() {return parser;}
+	
+	public static String getElement(String name) {return parser.getString(name);}
 	
 	public static String[] getAllLangRelName() {
 		List<String> langName = new ArrayList<String>();
@@ -49,12 +56,10 @@ public class Lang {
 	public static LangType convert(String langName) {return LangType.getLangType(langName);}
 	
 	public static String normalized(String langName, Properties config) {
-		langConfig = new FileSave("lang", "save", new File((config.getBoolean("lang.temp")?Temp.getTempDir():FileManager.getMainPath()) + "/" + config.getString("lang.repertoirfile")), new String[] {"type", "lang", "name"});
-		if(isExist(langName, langConfig)) {
+		if(isExist(langName, langConfig))
 			return langName;
-		}else {
+		else
 			return langConfig.read(1);
-		}
 	}
 	
 	public static boolean isExist(String langName, FileSave langFile) {

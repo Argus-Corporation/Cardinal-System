@@ -1,7 +1,7 @@
 package net.argus.util.pack;
 
+import net.argus.file.cjson.CJSONArray;
 import net.argus.file.cjson.CJSONItem;
-import net.argus.file.cjson.CJSONItemArray;
 import net.argus.file.cjson.CJSONObject;
 
 public class PackageObject extends CJSONObject {
@@ -16,17 +16,17 @@ public class PackageObject extends CJSONObject {
 	}
 	
 	public PackageObject addItemArray(String name, CJSONObject[] array) {
-		super.addItemArray(new CJSONItemArray(name, array));
+		super.addItemArray(new CJSONArray(name, array));
 		return this;
 	}
 	
 	public PackageObject addItemArray(String name, String[] array) {
-		super.addItemArray(new CJSONItemArray(name, array));
+		super.addItemArray(new CJSONArray(name, array));
 		return this;
 	}
 	
 	public PackageObject addItemArray(String name, byte[] array) {
-		super.addItemArray(new CJSONItemArray(name, array));
+		super.addItemArray(new CJSONArray(name, array));
 		return this;
 	}
 

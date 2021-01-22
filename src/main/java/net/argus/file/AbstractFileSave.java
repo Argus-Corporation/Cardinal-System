@@ -2,11 +2,12 @@ package net.argus.file;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -98,7 +99,7 @@ public class AbstractFileSave {
 			return null;
 		
 		@SuppressWarnings("resource")
-		BufferedReader read = new BufferedReader(new FileReader(file));
+		BufferedReader read = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 		
 		for(int i = 1; i < line; i++) {
 			try{read.readLine();}
@@ -180,11 +181,10 @@ public class AbstractFileSave {
 	 * Cette methode permer de suprimer le contenu du fichier
 	 * @throws IOException 
 	 */
-	protected void clear() throws IOException {
+	public void clear() throws IOException {
 		PrintWriter writer = new PrintWriter(new FileOutputStream(file));
 		writer.print("");
 		writer.close();
-		Debug.log("File cleared");
 	}
 	
 	/**
@@ -251,8 +251,8 @@ public class AbstractFileSave {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		//AbstractFileSave fs = new AbstractFileSave(new File("D:\\Django\\Document 1\\Git\\test.lang"));
-		FileLang fileLang = new FileLang(new Properties("config", "bin"));
-		System.out.println(fileLang.getElementString("info.ban.name"));
+		//FileLang fileLang = new FileLang(new Properties("config", "bin"));
+		//System.out.println(fileLang.getElementString("info.ban.name"));
 		UserSystem.exit(0);
 	}
 	

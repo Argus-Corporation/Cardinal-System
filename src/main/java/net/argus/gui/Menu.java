@@ -25,7 +25,7 @@ public class Menu extends JMenu implements GUI {
 
 	@Override
 	public void setText() {
-		setText(Lang.getLang().getElementString(this.name));
+		setText(Lang.getElement(this.name));
 	}
 
 }

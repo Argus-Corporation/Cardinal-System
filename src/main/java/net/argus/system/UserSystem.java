@@ -23,7 +23,6 @@ public class UserSystem {
 	private static InitializedSystemManager manager = new InitializedSystemManager() {
 		public void preInit(String[] args) {
 			runTime.start();
-			ThreadManager.SYSTEM.setTemporaryName();
 			
 			Debug.addBlackList(ThreadManager.UPDATE_UI);
 		}
@@ -34,10 +33,12 @@ public class UserSystem {
 				log = new Loggeur("log");
 			
 			if(getBooleanProperty("update"))
-				update = new AutoUpdate(new CJSONFile("manifest", "/"));
+				if(Network.isConnected())
+					update = new AutoUpdate(new CJSONFile("manifest", "/"));
 				
 		}
-		public void postInit(String[] args) {ThreadManager.SYSTEM.restorOldParameter();}
+		
+		public void postInit(String[] args) {}
 	};
 	
 	public static InitializedSystemManager getDefaultInitializedSystemManager() {return manager;}
@@ -45,14 +46,19 @@ public class UserSystem {
 	public static void setDefaultInitializedSystemManager(InitializedSystemManager manager) {UserSystem.manager = manager;}
 	
 	public static void loadLibrary(String name) {
+		ThreadManager.setTemporaryName(ThreadManager.SYSTEM.getName());
+		
 		String extention = LIBRARY_WINDOWS;
 		
-		if(System.getProperty("os.name").startsWith("Win"))
-			extention = LIBRARY_WINDOWS;
-		else if(System.getProperty("os.name").startsWith("Linux"))
+		if(OS.getOS() == OS.LINUX)
 			extention = LIBRARY_LINUX;
 		
+		String libFile = name + System.getProperty("os.arch").substring(3) + "." + extention;
+		
 		System.load(System.getProperty("java.library.path") + "/natives/" + name + System.getProperty("os.arch").substring(3) + "." + extention);
+		
+		Debug.log("Library " + libFile + " loaded");
+		ThreadManager.restorOldParameter(0);
 	}
 	
 	public static String getProperty(String key) {

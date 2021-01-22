@@ -38,8 +38,7 @@ public class SocketClient {
 	}
 	
 	public SocketClient(String host, int port) throws IOException {
-		this.host = host;
-		this.port = port;
+		this(host, port, null);
 	}
 	
 	public void connect() throws UnknownHostException, IOException {

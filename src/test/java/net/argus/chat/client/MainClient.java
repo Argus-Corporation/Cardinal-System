@@ -41,6 +41,8 @@ public class MainClient {
 		GUIClient.addJoinAction(getJoinActionListener());
 		GUIClient.addLeaveAction(getLeaveActionListener());
 		
+		GUIClient.addPreferenceAction(getPreferenceActionListener());
+		
 		GUIClient.addSendAction(getSendActionListener());
 		
 		GUIClient.addFrameListener(getFrameListener());
@@ -65,9 +67,12 @@ public class MainClient {
 		return (ActionEvent e) -> client.logOut();
 	}
 	
+	public ActionListener getPreferenceActionListener() {
+		return (ActionEvent e) -> GUIClient.configFrame.show();
+	}
+	
 	public ActionListener getSendActionListener() {
 		return new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TextField field = GUIClient.panChat.getTextField();
@@ -107,9 +112,9 @@ public class MainClient {
 	
 	public void connect(String host, String pseudo, String password) throws UnknownHostException, IOException {
 		if(GUIClient.menuBar.isEncrypt())
-			client = new ExampleClient(host, 11067, pseudo, password, new Key("key"));
+			client = new ExampleClient(host, ClientConfig.getDefultPortCrypt(), pseudo, password, new Key(ClientConfig.getDefaultKey()));
 		else
-			client = new ExampleClient(host, 11066, pseudo, password);
+			client = new ExampleClient(host, ClientConfig.getDefultPort(), pseudo, password);
 		
 		client.addClientManager(new ClientManagerChat(client));
 		client.addProcessListener(new ProcessListenerChat());
