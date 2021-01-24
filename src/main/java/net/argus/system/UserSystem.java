@@ -1,6 +1,10 @@
 package net.argus.system;
 
+import java.util.Scanner;
+
 import net.argus.file.Loggeur;
+import net.argus.file.cjson.CJSONFile;
+import net.argus.system.update.AutoUpdate;
 import net.argus.util.RunTime;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
@@ -8,14 +12,15 @@ import net.argus.util.debug.Debug;
 public class UserSystem {
 	
 	public static Loggeur log;
+	public static AutoUpdate update;
+	
 	public static RunTime runTime = RunTime.getRunTime();
+	public static Scanner in = new Scanner(System.in);
+	
+	public static final String LIBRARY_WINDOWS = "dll";
+	public static final String LIBRARY_LINUX = "so";
 	
 	private static InitializedSystemManager manager = new InitializedSystemManager() {
-<<<<<<< Updated upstream
-		public void preInit(String[] args) {runTime.start(); ThreadManager.SYSTEM.setTemporaryName();}
-		public void init(String[] args) {log = new Loggeur("log");}
-		public void postInit(String[] args) {Debug.log("System initialized"); ThreadManager.SYSTEM.restorOldParameter();}
-=======
 		public void preInit(String[] args) {
 			runTime.start();
 			
@@ -34,16 +39,12 @@ public class UserSystem {
 		}
 		
 		public void postInit(String[] args) {}
->>>>>>> Stashed changes
 	};
 	
 	public static InitializedSystemManager getDefaultInitializedSystemManager() {return manager;}
 	
 	public static void setDefaultInitializedSystemManager(InitializedSystemManager manager) {UserSystem.manager = manager;}
 	
-<<<<<<< Updated upstream
-	public static void loadLibrary(String name) {System.loadLibrary("natives/" + name + System.getProperty("os.arch").substring(3));}
-=======
 	public static void loadLibrary(String name) {
 		ThreadManager.setTemporaryName(ThreadManager.SYSTEM.getName());
 		
@@ -102,7 +103,6 @@ public class UserSystem {
 		if(getProperty(key) == null) 
 			setProperty(key, value);
 	}
->>>>>>> Stashed changes
 	
 	public static void exit(int status) {
 		Debug.log("Program run in " + runTime.stop() + " milliseconde");

@@ -1,5 +1,6 @@
 package net.argus.file;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +18,6 @@ public class FileSave extends AbstractFileSave {
 	 * @param fileName
 	 * @param extention
 	 * @param repertoir
-	 * @param firstType
 	 * @param info[]
 	 */
 	public FileSave(String fileName, String extention, String rep, String[] info) {
@@ -31,11 +31,24 @@ public class FileSave extends AbstractFileSave {
 	 * Ce constructeur permer d'initialiser FileSave et de cr�er le fichier si il n'existe pas
 	 * @param fileName
 	 * @param repertoir
-	 * @param firstType
 	 * @param info[]
 	 */
 	public FileSave(String fileName, String rep, String[] info) {
 		this(fileName, "save", rep, info);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser FileSave et de cr�er le fichier si il n'existe pas
+	 * @param fileName
+	 * @param extention
+	 * @param path
+	 * @param info[]
+	 */
+	public FileSave(String fileName, String extention, File path, String[] info) {
+		super(fileName, extention, path);
+		this.firstType = info[0];
+		this.idType = info[1];
+		this.secondType = info[2];
 	}
 	
 	/**
@@ -55,7 +68,7 @@ public class FileSave extends AbstractFileSave {
 					return line.substring(firstType.length() + idType.length() + sId.length() + secondType.length() + 3);
 				}
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return null;
 	}
 	
@@ -98,14 +111,19 @@ public class FileSave extends AbstractFileSave {
 	 * @param oldValue
 	 * @throws IOException 
 	 */
-	public void deleteValue(String oldValue) throws IOException {
+	public int deleteValue(String oldValue) throws IOException {
 		copyValue();
 		int oldLine = getId(oldValue);
-		clear();
 		
-		data.remove(oldLine - 1);
-		wirter(data);
+		if(oldLine > 0) {
+			data.remove(oldLine - 1);
+			clear();
+			wirter(data);
+			
+			return 0;
+		}
 		
+		return -1;
 	}
 	
 	/**
@@ -174,9 +192,9 @@ public class FileSave extends AbstractFileSave {
 	 * Cette methode retourne le num�ro de la ligne o� se trouve "search"
 	 * @param search
 	 * @return int
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
 	 */
-	public int getId(String search) throws FileNotFoundException {		
+	public int getId(String search) throws IOException {		
 		String line = null;
 		
 		for(int i = 1; i < getNumberLine() + 1; i++) {

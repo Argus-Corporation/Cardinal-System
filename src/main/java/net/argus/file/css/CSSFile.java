@@ -2,6 +2,7 @@ package net.argus.file.css;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 import javax.swing.UIManager;
 
 import net.argus.file.AbstractFileSave;
+import net.argus.file.Filter;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.ArrayManager;
@@ -18,13 +20,25 @@ import net.argus.util.debug.Debug;
 
 public class CSSFile extends AbstractFileSave {
 	
-	private static final String EXTENTION = "css";
+	public static final String EXTENTION = "css";
+	
+	public static final Filter CSS_FILTER = new Filter(EXTENTION, "CSS File");
 	
 	private String fileComplied;
 	private String[] words;
 	
-	public CSSFile(String fileName, String rep) throws FileNotFoundException {
+	public CSSFile(String fileName, String rep) {
 		super(fileName, EXTENTION, rep);
+		fileComplied = compile(getFile());
+	}
+	
+	public CSSFile(String fileName, File path) {
+		super(fileName, EXTENTION, path);
+		fileComplied = compile(getFile());
+	}
+	
+	public CSSFile(File path) {
+		super(path);
 		fileComplied = compile(getFile());
 	}
 	
@@ -32,8 +46,8 @@ public class CSSFile extends AbstractFileSave {
 		boolean valid = false;
 		String lines = "";
 		
-		for(int i = 0; i < file.length; i++)
-			lines += file[i];
+		for(String str : file)
+			lines += str;
 		
 		char[] charLines = ArrayManager.remove(lines.toCharArray(), ' ');
 		charLines = ArrayManager.remove(charLines, '\t');
@@ -94,7 +108,7 @@ public class CSSFile extends AbstractFileSave {
 		String type = "";
 		boolean open = false;
 		
-		ThreadManager.setTemporaryName("css");
+		ThreadManager.UPDATE_UI.setTemporaryName();
 		
 		for(int i = 0; i < words.length; i++) {
 			String value = words[i];
@@ -146,7 +160,7 @@ public class CSSFile extends AbstractFileSave {
 				}catch(ArrayIndexOutOfBoundsException e) {}
 			}
 		}
-		ThreadManager.restorOldParameter(0);
+		ThreadManager.UPDATE_UI.restorOldParameter();
 		
 	}
 	

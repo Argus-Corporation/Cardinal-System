@@ -11,6 +11,9 @@ import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import net.argus.util.ChangeListener;
+import net.argus.util.ListenerManager;
+
 public class TextField extends JTextField implements Element {
 
 	/**
@@ -20,9 +23,12 @@ public class TextField extends JTextField implements Element {
 	
 	private boolean placeholder;
 	
+	private ListenerManager<ChangeListener> changeManager = new ListenerManager<ChangeListener>();
+	
 	private List<String> oldData = new ArrayList<String>();
 	private int dataIndex;
 	private boolean touch;
+	private boolean error;
 	
 	private static final String nameType = "textfield";
 	private static final boolean isBack = true;
@@ -52,6 +58,47 @@ public class TextField extends JTextField implements Element {
 		this.index = element.size() - 1;
 	}
 	
+	public void setError() {
+		error = true;
+		setBackground(UIManager.getColor("TextField.error"));
+	}
+	
+	public void unError() {
+		error = false;
+		setBackground(UIManager.getColor("TextField.background"));
+	}
+	
+	public boolean isError() {return error;}
+	
+	public void setText(String text) {
+		super.setText(text);
+		for(ChangeListener l : changeManager)
+			l.valueChanged(text);
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		if(error && !enabled && isEnabled()) {
+			int sup = 50;
+			Color bc = getBackground();
+			int r, g, b;
+			r = bc.getRed() - sup;
+			g = bc.getBlue() - sup;
+			b = bc.getGreen() - sup;
+			if(r < 0)
+				r = 0;
+			if(g < 0)
+				g = 0;
+			if(b < 0)
+				b = 0;
+			Color nbc = new Color(r, g, b);
+			setBackground(nbc);
+		}else if(error && enabled && !isEnabled()) {
+			setError();
+		}
+		super.setEnabled(enabled);
+	}
+	
 	public String getText() {return !placeholder?super.getText():null;}
 	
 	public void copyData() {oldData.add(getText());}
@@ -62,7 +109,6 @@ public class TextField extends JTextField implements Element {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_UP && oldData.size()!=0) {
 					if(!touch) dataIndex = dataIndex>0?dataIndex-1:dataIndex;
-					
 					setText(oldData.get(dataIndex));
 					touch = false;
 				}else if(e.getKeyCode() == KeyEvent.VK_DOWN && oldData.size()!=0) {
@@ -71,10 +117,9 @@ public class TextField extends JTextField implements Element {
 					setText(oldData.get(dataIndex));
 					touch = false;
 				}else {
-					dataIndex = oldData.size();
+					dataIndex = oldData.size()>0?oldData.size():0;
 					touch = true;
-				}
-				
+				}	
 			}
 			public void keyReleased(KeyEvent e) {}
 			
@@ -109,5 +154,7 @@ public class TextField extends JTextField implements Element {
 		    }
 		});
 	}
+	
+	public void addChaneListener(ChangeListener listener) {changeManager.addListener(listener);}
 
 }

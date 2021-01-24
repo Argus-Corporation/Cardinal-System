@@ -1,5 +1,6 @@
 package net.argus.file;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,19 +11,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import net.argus.exception.PositionException;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
-import net.argus.util.SClass;
 import net.argus.util.debug.Debug;
 
 public class AbstractFileSave {
 	
 	protected String path;
-	protected String mainPath;
 	protected File file;
 	
 	protected String fileName;
@@ -36,20 +34,55 @@ public class AbstractFileSave {
 		this.extention = extention;
 		this.rep = rep;
 		
-		this.path = SClass.getPath(null);
+		if(this.rep == null) this.rep = "";
+		this.rep += File.separator;
 		
-		if(rep == null) rep = "";
+		this.path = FileManager.getPath(null);
 		
-		rep += "/";
+		this.path = path.substring(0, path.length() - 1);
 		
-		this.mainPath = path;
-		new File(this.path + rep).mkdirs();
+		if(!this.rep.equals(File.separator))
+			this.path += File.separator;
 		
-		this.path += rep + fileName + "." + extention;
+		new File(this.path + this.rep).mkdirs();
+		
+		this.path += this.rep + fileName + "." + extention;
 		this.file = new File(this.path);
 		
 		try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
 		}catch(IOException e) {e.printStackTrace();}
+		
+		Debug.log("File Loaded: " + getPath());
+	}
+	
+	public AbstractFileSave(String fileName, String extention, File path) {
+		this.fileName = fileName;
+		this.extention = extention;
+		this.path = path.getPath();
+
+		path.mkdirs();
+		
+		this.path += "/" + fileName + "." + extention;
+		this.file = new File(this.path);
+		
+		try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
+		}catch(IOException e) {e.printStackTrace();}
+		
+		Debug.log("File Loaded: " + getPath());
+	}
+	
+	public AbstractFileSave(File path) {
+		this.fileName = path.toString().substring(path.toString().lastIndexOf(File.separator) + 1, path.toString().lastIndexOf('.'));
+		this.extention = path.toString().substring(path.toString().lastIndexOf('.') + 1);
+		this.path = path.getPath();
+		
+		this.path = regulary(this.path, null);
+		
+		this.file = path;
+		
+		
+		/*try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
+		}catch(IOException e) {e.printStackTrace();}*/
 		
 		Debug.log("File Loaded: " + getPath());
 	}
@@ -59,27 +92,25 @@ public class AbstractFileSave {
 	 * Cette methode permer de retourner le nombre total de ligne dans le fichier
 	 * @param line
 	 * @return
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
-	public String getLine(int line) throws FileNotFoundException {
+	public String getLine(int line) throws IOException {
+		if(line == -1)
+			return null;
+		
 		@SuppressWarnings("resource")
-<<<<<<< Updated upstream
-		Scanner scan = new Scanner(this.file);
-=======
 		BufferedReader read = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
->>>>>>> Stashed changes
 		
 		for(int i = 1; i < line; i++) {
-			try {scan.nextLine();}
+			try{read.readLine();}
 			catch(NoSuchElementException e) {}
 
 		}
 		
 		String str = null;
 		
-		try {str = scan.nextLine();}
+		try {str = read.readLine();}
 		catch(NoSuchElementException e) {}
-		
 		return str;
 	}
 
@@ -89,12 +120,12 @@ public class AbstractFileSave {
 	 */
 	public int getNumberLine() {
 		int line = 1;
-			try {
+		try {
 			if(getLine(line) == null) return 0;
 			
 			while(getLine(line) != null)
 				line++;
-		}catch(FileNotFoundException e) {}
+		}catch(IndexOutOfBoundsException | IOException e) {}
 		return line - 1;
 	}
 
@@ -117,14 +148,22 @@ public class AbstractFileSave {
 	 * Cette méthode retourne le fichier compler sous forme de tableau
 	 * @return str[]
 	 */
-	protected String[] getFile() {
+	public String[] getFile() {
 		String[] str = new String[getNumberLine()];
 		try {
 			for(int i = 0; i < str.length; i++) {
 				str[i] = getLine(i + 1);
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return str;
+	}
+	
+	public String getFileInOneLine() {
+		String lines = "";
+		for(String line : getFile())
+			lines += line;
+		
+		return lines;
 	}
 	
 	/**
@@ -150,12 +189,11 @@ public class AbstractFileSave {
 	
 	/**
 	 * Cette methode permer de copier l'integraliter du fichier dans l'ArrayList data
-	 * @throws FileNotFoundException 
 	 */
 	protected void copyFile() {
 		data.clear();
 		try {for(int i = 1; i < getNumberLine() + 1; i++) data.add(getLine(i));}
-		catch(FileNotFoundException e) {}
+		catch(IOException e) {}
 	}
 	
 	/**
@@ -173,7 +211,7 @@ public class AbstractFileSave {
 				first = first.substring(0, first.lastIndexOf("%"));
 				second = value.substring(value.lastIndexOf("%") + 1);
 				
-				value = first + afs.getMainPath() + second;
+				value = first + System.getProperty("user.dir") + second;
 			}else if(value.contains("%widthDisplay%")){
 				first = value.substring(0, value.lastIndexOf("%"));
 				first = first.substring(0, first.lastIndexOf("%"));
@@ -200,13 +238,11 @@ public class AbstractFileSave {
 	}
 	
 	public String getPath() {return path;}
-	public String getMainPath() {return mainPath;}
 	public String getFileName() {return fileName;}
 	public String getExtention() {return extention;}
 	public String getRepertory() {return rep;}
 	
 	public void setPath(String path) {this.path = path;}
-	public void setMainPath(String mainPath) {this.mainPath = mainPath;}
 	public void setFileName(String fileName) {this.fileName = fileName;}
 	public void setExtention(String extention) {this.extention = extention;}
 	public void setRepertory(String rep) {this.rep = rep;}
@@ -214,7 +250,9 @@ public class AbstractFileSave {
 	public static void main(String[] args) throws IOException, PositionException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
-		//AbstractFileSave fs = new AbstractFileSave("test", "abs", "");
+		//AbstractFileSave fs = new AbstractFileSave(new File("D:\\Django\\Document 1\\Git\\test.lang"));
+		//FileLang fileLang = new FileLang(new Properties("config", "bin"));
+		//System.out.println(fileLang.getElementString("info.ban.name"));
 		UserSystem.exit(0);
 	}
 	

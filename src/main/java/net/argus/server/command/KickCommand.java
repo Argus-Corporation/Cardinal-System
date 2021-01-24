@@ -25,7 +25,7 @@ public class KickCommand extends Command {
 		if(Regular.isExist(com[1])) {
 			switch(Regular.getRegular(com[1])) {
 				case a:
-					client.getServerParent().getUsers().close(client.getUserId());
+					client.getServerParent().getUsers().closeAll(client.getUserId());
 					return;
 					
 				case s:

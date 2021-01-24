@@ -2,12 +2,10 @@ package net.argus.system.terminal;
 
 import java.io.File;
 
-import net.argus.annotation.Test;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 
 @Deprecated
-@Test(info = "terminal")
 public class Terminal extends Thread {
 	
 	private String directory = System.getProperty("user.dir");
@@ -76,7 +74,7 @@ public class Terminal extends Thread {
 	}
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(new String[] {"-project.name", "Cardinal-System", "-id", "0xdev", "-log", "false"});
+		InitializedSystem.initSystem(new String[] {"-project.name", "Cardinal-System", "-id", "0xdev"}, UserSystem.getDefaultInitializedSystemManager());
 		new Terminal().run();
 		
 	}

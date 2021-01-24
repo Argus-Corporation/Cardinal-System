@@ -22,7 +22,7 @@ public class Server extends Thread {
 	
 	private boolean running;
 	
-	private static final int SERVER_VERSION = 130121102;
+	private static final int SERVER_VERSION = 240121110;
 	
 	private int port;
 	
@@ -70,13 +70,13 @@ public class Server extends Thread {
 		exit();
 	}
 	
-	public void stop(int nul) {
+	public void stop(int userId) {
 		new Thread(new Runnable() {
 			public void run() {
 				Thread.currentThread().setName("close: " + port);
 				running = false;
 				try {
-					users.close();
+					users.closeAll(userId);
 					server.close();
 				}catch(IOException | SecurityException e) {e.printStackTrace();}
 			}

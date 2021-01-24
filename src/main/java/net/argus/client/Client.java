@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -16,44 +17,33 @@ import javax.swing.JTextField;
 import net.argus.security.Key;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
-import net.argus.util.Package;
-import net.argus.util.PackageType;
+import net.argus.util.pack.Package;
+import net.argus.util.pack.PackageBuilder;
+import net.argus.util.pack.PackageType;
 
 public class Client {
 	
-<<<<<<< Updated upstream
-	private static int CLIENT_VERSION;
-=======
-	private static final int CLIENT_VERSION = 130121102;
->>>>>>> Stashed changes
+	private static final int CLIENT_VERSION = 240121110;
 	
 	private String host;
 	private int port;
 	
 	private SocketClient client;
 	private ProcessClient process;
-	private static boolean running;
+	private boolean running;
 	
-	public Client(String host, int port, int version, Key key) throws UnknownHostException, IOException {
+	public Client(String host, int port, Key key) throws UnknownHostException, IOException {
 		Thread.currentThread().setName("CLIENT");
-		Client.CLIENT_VERSION = version;
 		
 		this.host = host;
 		this.port = port;
 		
 		client = new SocketClient(host, port, key);
-		process = new ProcessClient(client);
+		process = new ProcessClient(client, this);
 	}
 	
-	public Client(String host, int port, int version) throws UnknownHostException, IOException {
-		Thread.currentThread().setName("CLIENT");
-		Client.CLIENT_VERSION = version;
-		
-		this.host = host;
-		this.port = port;
-		
-		client = new SocketClient(host, port);
-		process = new ProcessClient(client);
+	public Client(String host, int port) throws UnknownHostException, IOException {
+		this(host, port, null);
 	}
 	
 	public void start() throws UnknownHostException, IOException {
@@ -76,7 +66,8 @@ public class Client {
 	public Client setPassword(String password) {client.setPassword(password); return this;}
 	public Client sendPackage(Package pack) {client.sendPackage(pack); return this;}
 	
-	public boolean isConnected() {return client.isConnected();}
+	//@SuppressWarnings("deprecation")
+	//public Client sendFile(File file, String[] clientRecievers) throws SecurityException, IOException {client.sendFile(file, clientRecievers); return this;}
 	
 	public String getHost() {return host;}
 	public int getPort() {return port;}
@@ -87,7 +78,12 @@ public class Client {
 	public ProcessClient getProcessClient() {return process;}
 	public SocketClient getSocketClient() {return client;}
 	
-	public static boolean isRunning() {return running;}
+	public List<ProcessListener> getProcessListeners(){return process.getProcessListeners();}
+	public List<ClientManager> getClientManagers(){return process.getClientManagers();}
+	
+	public boolean isRunning() {return running;}
+	public boolean isConnected() {return client.isConnected();}
+	
 	public static int getVersion() {return CLIENT_VERSION;}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
@@ -120,7 +116,7 @@ public class Client {
 		};
 		
 		ClientManager manager = new ClientManager() {
-			public void receiveMessage(int msgType) {
+			public void receivePackage(Package pack, ProcessClient thisObj) {
 				//Debug.log("ID: " + msgType);
 				
 			}
@@ -131,7 +127,7 @@ public class Client {
 		//Key key = new Key("$^ù$$;mm^$^dmsf$^sdµdPµ^mm$µMPµ;p:,$^;m:$^,;:877687^$ù*%µMPµ%m");
 		
 		//Client client = new Client("176.163.39.11", 11066, 0x11066, key);
-		Client client = new Client("0.0.0.0", 11066, 0x11066);
+		Client client = new Client("0.0.0.0", 11066);
 		
 		client.addProcessListener(listener);
 		client.addClientManager(manager);
@@ -139,7 +135,7 @@ public class Client {
 		
 		send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.sendPackage(new Package(PackageType.MESSAGE, tf.getText()));
+				client.sendPackage(new Package(new PackageBuilder(PackageType.MESSAGE.getId()).addValue("message", tf.getText())));
 				tf.setText("");
 				
 			}
@@ -153,7 +149,7 @@ public class Client {
 			public void windowClosed(WindowEvent e) {}
 			public void windowActivated(WindowEvent e) {}
 			public void windowClosing(WindowEvent e) {
-				client.sendPackage(new Package(PackageType.LOG_OUT, "Frame Closing"));
+				client.sendPackage(new Package(new PackageBuilder(PackageType.LOG_OUT.getId()).addValue("message", "Frame Closing")));
 				try {client.getSocketClient().close("Frame Closing");}
 				catch(IOException e1) {e1.printStackTrace();}
 			}

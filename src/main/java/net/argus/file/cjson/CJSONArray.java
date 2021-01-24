@@ -38,8 +38,8 @@ public class CJSONArray extends CJSONObject {
 		List<CJSONObject> items = new ArrayList<CJSONObject>();
 		
 		chars = ArrayManager.remove(chars, 0);
-		chars = ArrayManager.add(chars, ']', chars.length);
-		while(chars.length != 0) {
+		
+		while(chars.length != 1) {
 			items.add(CJSONItem.nextElement(chars).getValue());
 			
 			if((items.get(items.size()-1) instanceof CJSONObject) && !(items.get(items.size()-1) instanceof CJSONElement))
@@ -49,13 +49,18 @@ public class CJSONArray extends CJSONObject {
 			
 			
 			int index = ArrayManager.indexOf(chars, ',') + 1;
-			if(index != 0)
-				chars = ArrayManager.remove(chars, index, chars.length);
-			else
-				chars = ArrayManager.remove(chars, ArrayManager.indexOf(chars, ']')+1, chars.length);
+			int indexCro = ArrayManager.indexOf(chars, ']') + 1;
+
+			if(indexCro > index)
+				if(index != 0)
+					chars = ArrayManager.remove(chars, index, chars.length);
+				else
+					chars = ArrayManager.remove(chars, ArrayManager.indexOf(chars, ']')+1, chars.length);
+			else 
+				chars = new char[1];
+			
 		}
 		array.setValues((CJSONObject[]) items.toArray(new CJSONObject[items.size()]));
-		
 		return array;
 		
 	}

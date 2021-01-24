@@ -1,6 +1,6 @@
 package net.argus.util;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import net.argus.file.Properties;
 
@@ -16,7 +16,7 @@ public class Counter {
 		return count;
 	}
 	
-	public static int countOccurrences(Properties file, char search) throws FileNotFoundException {
+	public static int countOccurrences(Properties file, char search) throws IOException {
 		int count = 0;
 		for(int i = 0; i < file.getNumberLine(); i++) {
 			count += countOccurrences(file.getValue(file.getLine(i + 1)), search);

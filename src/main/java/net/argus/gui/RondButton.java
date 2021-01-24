@@ -20,8 +20,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.argus.file.FileManager;
 import net.argus.file.Properties;
-import net.argus.util.SClass;
+import net.argus.system.UserSystem;
 
 public class RondButton extends JButton {
 	
@@ -60,53 +61,56 @@ public class RondButton extends JButton {
 		isEnable = isE;
 	}
 		
-		public RondButton(Color background) {
-			super();
-			this.background = background;
-			RondButton.iconBar = new ImageIcon(SClass.getPath("/assets/images/bar.png"));
-			RondButton.iconFleche = new ImageIcon(SClass.getPath("/assets/images/fleche.png"));
+	public RondButton(Color background) {
+		super();
+		this.background = background;
+		RondButton.iconBar = new ImageIcon(FileManager.getPathInJar("images/bar.png"));
+		RondButton.iconFleche = new ImageIcon(FileManager.getPathInJar("images/fleche.png"));
+		
+		RondButton.iconCroix = new ImageIcon(FileManager.getPathInJar("images/croix.png"));
+		this.setFocusable(false);
+		this.setContentAreaFilled(false);
+		this.setBorderPainted(false);
 			
-			RondButton.iconCroix = new ImageIcon(SClass.getPath("/assets/images/croix.png"));
-			this.setFocusable(false);
-			this.setContentAreaFilled(false);
-			this.setBorderPainted(false);
-			
+	}	
+	
+	private RondButton(Color background, Frame fen, int ids) {
+		super();
+		RondButton.fen = fen;
+		this.setSize(16, 16);
+		this.id = ids;
+		rondButton[ids] = this;
+		iconCroix = new ImageIcon(RondButton.class.getResource("/images/croix.png"));
+		iconBar = new ImageIcon(RondButton.class.getResource("/images/bar.png"));
+		iconFleche = new ImageIcon(RondButton.class.getResource("/images/fleche.png"));
+		iconFlecheInv = new ImageIcon(RondButton.class.getResource("/images/fleche2.png"));
+		this.background = background;
+		this.setFocusable(false);
+		this.setContentAreaFilled(false);
+		this.setBorderPainted(false);
+		
+		this.setEnabled(isEnable[ids]);
+		
+		if(isFirst) {
+			isFirst = false;
+			new Thread(active()).start();
 		}
 		
-		private RondButton(Color background, Frame fen, int ids) {
-			super();
-			RondButton.fen = fen;
-			this.setSize(16, 16);
-			this.id = ids;
-			rondButton[ids] = this;
-			iconCroix = new ImageIcon(RondButton.class.getResource("/assets/images/croix.png"));
-		    iconBar = new ImageIcon(RondButton.class.getResource("/assets/images/bar.png"));
-		    iconFleche = new ImageIcon(RondButton.class.getResource("/assets/images/fleche.png"));
-		    iconFlecheInv = new ImageIcon(RondButton.class.getResource("/assets/images/fleche2.png"));
-			this.background = background;
-			this.setFocusable(false);
-			this.setContentAreaFilled(false);
-			this.setBorderPainted(false);
-			
-			this.setEnabled(isEnable[ids]);
-				
-			if(isFirst) {
-				isFirst = false;
-				new Thread(active()).start();
-			}
-			
-			this.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if(fen.isActive()) {
-						switch(id) {
+		this.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(fen.isActive()) {
+					switch(id) {
 						case CROIX:
-							if(fen.fenListener != null) fen.fenListener.frameClosing();
-							else System.exit(0);
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameClosing();
+							
+							UserSystem.exit(0);
 							break;
 						case BAR:
 							fen.setState(JFrame.ICONIFIED);
 							
-							if(fen.fenListener != null) fen.fenListener.frameMinimalized();
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameMinimalized();
 							break;
 						case FLECHE:
 							Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -114,35 +118,38 @@ public class RondButton extends JButton {
 							
 							int taskBarHeight = scrnSize.height - winSize.height;
 							
+							fen.savePosition();
+							
 							fen.setSize(scrnSize.width, scrnSize.height - taskBarHeight);
 							fen.setLocationRelativeTo(null);
 							fen.setFullScreen(true);
 							
 							top.fullScreen = true;
 							id = INV_FLECHE;
-							
-							if(fen.fenListener != null) fen.fenListener.frameResizing();
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameResizing();
 							break;
 						case INV_FLECHE:
 							Dimension defaultSize = fen.getNormalSize();
 							fen.setSize(defaultSize);
 							
-							fen.setLocationRelativeTo(null);
+							fen.setLocation(fen.getSavePosition());
 							fen.setFullScreen(false);
 							top.fullScreen = false;
 							id = FLECHE;
 							
-							if(fen.fenListener != null) fen.fenListener.frameResizing();
+							for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameResizing();
 							break;
-						}
-						
 					}
-							
+					
 				}
-			});
-			
-		}
+				
+			}
+		});
 		
+	}
+	
 		public void paintComponent(Graphics g) {
 			Graphics2D g2d = (Graphics2D) g.create();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

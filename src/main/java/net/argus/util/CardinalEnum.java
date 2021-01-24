@@ -39,10 +39,5 @@ public class CardinalEnum<E> implements CardinalEnumeration<E> {
 	public boolean content(E e) {
 		return list.contains(e);
 	}
-
-	@Override
-	public int size() {
-		return list.size();
-	}
 	
 }

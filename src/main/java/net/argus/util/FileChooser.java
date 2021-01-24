@@ -1,6 +1,12 @@
 package net.argus.util;
 
+import java.awt.Component;
+import java.awt.HeadlessException;
+import java.io.File;
+
 import javax.swing.JFileChooser;
+
+import net.argus.file.Filter;
 
 public class FileChooser extends JFileChooser {
 	
@@ -9,59 +15,47 @@ public class FileChooser extends JFileChooser {
 	 */
 	private static final long serialVersionUID = -397707869621147635L;
 	
-	public static final int OPEN_DIALOG = 0;
-	public static final int SAVE_DIALOG = 1;
-	
-	private static JFileChooser jfc;
-	private static int returnValue;
-	
-	public static String getPathFile(String path) {
-		common(FILES_ONLY, path);
-		int returnValue = jfc.showOpenDialog(null);
-		return commonReturn(returnValue);
-	}
-	public static String getPathFile(int mode, String path) {
-		common(FILES_ONLY, path);
-		commonSwitch(mode);
-		return commonReturn(returnValue);
+	public FileChooser(String path) {
+		super(path);
 	}
 	
-	
-	public static String getPathFolder(String path) {
-		common(DIRECTORIES_ONLY, path);
-		int returnValue = jfc.showOpenDialog(null);
-		return commonReturn(returnValue);
+	public FileChooser(Filter filter) {
+		this();
+		addFilter(filter);
 	}
-	public static String getPathFolder(int mode, String path) {
-		common(DIRECTORIES_ONLY, path);
-		commonSwitch(mode);
-		return commonReturn(returnValue);
+	public FileChooser(String path, Filter filter) {
+		this(path);
+		addFilter(filter);
 	}
 	
-	private static void common(int mode, String path) {
-		jfc = new JFileChooser(path);
-		jfc.setFileSelectionMode(mode);
+	public FileChooser() {
+		this(System.getProperty("user.home"));
 	}
-	private static void commonSwitch(int mode) {
-		switch(mode) {
-		case OPEN_DIALOG:
-			returnValue = jfc.showOpenDialog(null);
-			break;
-			
-		case SAVE_DIALOG:
-			returnValue = jfc.showSaveDialog(null);
-			break;
-
-		default:
-			returnValue = jfc.showOpenDialog(null);
-			break;
-		}
+	
+	public void addFilter(Filter filter) {
+		this.setFileFilter(filter);
 	}
-	private static String commonReturn(int returnValue) {
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			return jfc.getSelectedFile().getAbsolutePath();
-		}
-		return null;
+	
+	
+	public File showOpenFile(Component parent) throws HeadlessException {
+		int value = super.showOpenDialog(parent);
+		return value!=APPROVE_OPTION?null:getSelectedFile();
+	}
+	
+	public String showOpen(Component parent) throws HeadlessException {
+		File open = showOpenFile(parent);
+		return open!=null?open.getPath():null;
+	}
+	
+	public File showSaveFile(Component parent) throws HeadlessException {
+		int value = super.showSaveDialog(parent);
+	
+		return value!=APPROVE_OPTION?null:getSelectedFile();
+	}
+	
+	public String showSave(Component parent) throws HeadlessException{
+		File save = showSaveFile(parent);
+		return save!=null?save.getPath():null;
 	}
 	
 }

@@ -13,15 +13,19 @@ import java.awt.Robot;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
+import net.argus.util.Display;
 
-public class Splash extends Frame {
+@Deprecated
+public class Splash extends JFrame {
 	
 	/**
 	 * 
@@ -29,38 +33,45 @@ public class Splash extends Frame {
 	private static final long serialVersionUID = -2295168357935250694L;
 	
 	private SplashContent contentpane;
-	private Robot robot;
-	private ImageIcon icon;
 	public String statusText;
+	private Robot robot;
 	
-	public Splash(String title, String iconPath, Frame fen, int time, Properties config) {
-		super(title, iconPath, config);
+	private int time;
+	
+	private boolean valid;
+	
+	public Splash(String title, ImageIcon splashImage, int time) {
+		super();
+		valid = false;
+		this.time = time;
+		
+		this.setUndecorated(true);
 		this.setDefaultCloseOperation(Frame.DISPOSE_ON_CLOSE);
+		
 		try{robot = new Robot();}catch(Exception e){e.printStackTrace();}
+		
 		contentpane = new SplashContent();
-		this.icon = new ImageIcon(iconPath);
+		
+		Label img = new Label(splashImage);
+		
 		this.setContentPane(contentpane);
-		this.getContentPane().add(new JLabel(icon));
+		this.getContentPane().add(img);
 		this.pack();
 		this.setLocationRelativeTo(null);
 		createCapture();
-		this.setVisible(true);
 		
-		new PanelRepaint(fen, this).initImage(config);
-		
-		try{Thread.sleep(time);}catch(Exception e){e.printStackTrace();}
-		this.setVisible(false);	
-		try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
 	}
 	
+	@Deprecated
 	public Splash(String title, String iconPath, Frame fen, int time, boolean nul, Properties config) {
-		super(title, iconPath, config); 
+		super(title); 
 		this.setDefaultCloseOperation(Frame.DISPOSE_ON_CLOSE);
 		try{robot = new Robot();}catch(Exception e){e.printStackTrace();}
 		this.setSize(820,  570);
+		@SuppressWarnings("unused")
 		Properties spashConfig = new Properties("splash", "bin");
-		contentpane = new SplashContent(this, iconPath, this, spashConfig);
-		this.icon = new ImageIcon(iconPath);
+		//contentpane = new SplashContent(this, iconPath, this, spashConfig);
+		
 		this.setContentPane(contentpane);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -72,19 +83,35 @@ public class Splash extends Frame {
 		try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
 	}
 	
-	private void createCapture() {
+	public void createCapture() {
 		try{
 			Point point = new Point(0, 0);
 			SwingUtilities.convertPointToScreen(point, contentpane);
-			setVisible(false);
+			
 			Image image = robot.createScreenCapture(new Rectangle(point, contentpane.getSize()));
-			setVisible(true);
+			
 			MediaTracker mt = new MediaTracker(this);
 			mt.addImage(image,0);
 			mt.waitForAll();
 			contentpane.setImage(image);
 		}catch(Exception e){e.printStackTrace();}
 	}
+	
+	public void play() {
+		new Thread(new Runnable() {
+			public void run() {
+			
+				setVisible(true);
+				
+				try{Thread.sleep(time);}catch(Exception e){e.printStackTrace();}
+				setVisible(false);	
+				try{Thread.sleep(10);}catch(Exception e){e.printStackTrace();}
+				valid = true;
+			}
+		}).start();
+	}
+	
+	public boolean isValid() {return valid;}
 
 	
 	private class SplashContent extends JPanel implements Runnable {
@@ -103,7 +130,7 @@ public class Splash extends Frame {
 			setOpaque(false);
 		}
 		
-		@SuppressWarnings("deprecation")
+		@SuppressWarnings({"unused"})
 		public SplashContent(Frame fen, String iconPath, Splash parent, Properties splashConfig) {
 			super();
 			this.parent = parent;
@@ -158,7 +185,7 @@ public class Splash extends Frame {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			if(image != null) g.drawImage(image, 0, 0, this);
-				
+			
 			/*Graphics2D g2d = (Graphics2D) g.create();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			int h = Display.getHeightDisplay(config) - 100;
@@ -176,8 +203,8 @@ public class Splash extends Frame {
 		public void run() {
 			while(!parent.isVisible()) {System.out.print("");}
 			while(parent.isVisible()) {
-				try {Thread.sleep(100);}catch(InterruptedException e) {e.printStackTrace();}
 				status.setText("Loading " + statusText);
+				
 			}
 			
 		}
@@ -187,16 +214,24 @@ public class Splash extends Frame {
 	public static void main(String[] args) {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
-		String iconPath = "C:\\Users\\Jean\\Documents\\Django\\java\\Project\\Save\\res\\logo.png";
-		boolean[] isE = new boolean[3];
-		isE[0] = true;
-		isE[1] = true;
-		isE[2] = true;
+		Splash splash = new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 1000);
+		splash.play();
+		
+		String iconPath = FileManager.getPath("res/favIcon32x32.png");
+		boolean[] isE = new boolean[] {true, true, true};
+		
 		Frame fen = new Frame("School", iconPath, isE, config);
-		Panel pan = new Panel(config, "C:\\Users\\Jean\\Documents\\Django\\java\\Project\\Save/res/background.jpg", fen);
-		new Splash("school", iconPath, fen, 30000, false, config);
+		
+		Panel pan = new Panel(config, FileManager.getPath("res/favIcon16x16.png"), fen);
+		new PanelRepaint(fen, splash).initImage();
+		
+		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		fen.add(pan);
-		fen.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
+		
+		while(!splash.isValid()) {
+			fen.setVisible(false);
+		}
+			
 		fen.setVisible(true);
 	}
 }

@@ -30,6 +30,6 @@ public abstract class ConfigManager {
 	
 	public abstract Panel getConfigPanel();
 	
-	public abstract void apply();
+	public abstract int apply();
 	
 }

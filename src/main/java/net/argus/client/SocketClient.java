@@ -9,10 +9,9 @@ import java.net.UnknownHostException;
 
 import net.argus.exception.SecurityException;
 import net.argus.security.Key;
-import net.argus.util.ArrayManager;
-import net.argus.util.Package;
-import net.argus.util.PackageType;
 import net.argus.util.debug.Debug;
+import net.argus.util.pack.Package;
+import net.argus.util.pack.PackagePareser;
 
 public class SocketClient {
 	
@@ -28,7 +27,7 @@ public class SocketClient {
 	private boolean serverUseKey = false;
 	private boolean connected;
 	
-	private String pseudo;
+	private String pseudo = "Client";
 	private String password;
 	
 	public SocketClient(String host, int port, Key key) throws IOException {
@@ -39,13 +38,13 @@ public class SocketClient {
 	}
 	
 	public SocketClient(String host, int port) throws IOException {
-		this.host = host;
-		this.port = port;
+		this(host, port, null);
 	}
 	
 	public void connect() throws UnknownHostException, IOException {
 		socket = new Socket(host, port);
-		Debug.log("Connected to " + host);
+		
+		Debug.log("Connected to " + host + ":" + port);
 		
 		connected = true;
 		
@@ -61,12 +60,11 @@ public class SocketClient {
 	}
 	
 	public void sendPackage(Package pack) {
-		if(ArrayManager.isExist(pack.getMessage().toCharArray(), 0) && pack.getMessage().toCharArray()[0] == '/') pack.setPackageType(PackageType.COMMANDE);
-		
-		msgSend.println(serverUseKey&&key!=null?key.crypt(Integer.toString(pack.getPackageType().getId())):pack.getPackageType().getId());
-		msgSend.flush();
-		
-		msgSend.println(serverUseKey&&key!=null?!pack.getMessage().equals("")?key.crypt(pack.getMessage()):pack.getMessage():pack.getMessage());
+		send(pack);
+	}
+	
+	public synchronized void send(Object obj) {
+		msgSend.println(serverUseKey&&key!=null?key.crypt(obj.toString()):obj.toString());
 		msgSend.flush();
 	}
 	
@@ -79,37 +77,62 @@ public class SocketClient {
 		Debug.log("You are disconnected: " + msg);
 	}
 	
-	private PackageType receiveIdPackage() throws SecurityException {
-		try{return PackageType.getPackageType(Integer.valueOf(receiveMessage()));}
-		catch(NumberFormatException e) {return PackageType.LOG_OUT;}
+	/*@Deprecated
+	public synchronized void sendFile(File file, String[] clientReceivers) throws SecurityException, IOException {
+		PackageBuilder bui = new PackageBuilder(PackageType.FILE.getId());
+		PackageObject objFile = new PackageObject("value");
+		
+		String path = file.getPath();
+		String fileName = path.substring(path.lastIndexOf('\\') + 1, path.lastIndexOf('.'));
+		String extention = path.substring(path.lastIndexOf('.') + 1);
+		
+		byte[] data = new byte[(int) file.length()];
+		
+		DataInputStream in = new DataInputStream(new FileInputStream(file));
+		
+		in.readFully(data);
+		in.close();
+		
+		objFile.addItem("fileName", fileName);
+		objFile.addItem("extention", extention);
+		objFile.addItemArray("data", data);
+		
+		bui.addItemArray("clientReceivers", clientReceivers);
+		
+		bui.addValue(objFile);
+		//length  77
+		
+		
+		//System.out.println(bui.build().getFile() + "  tezs");
+		//System.out.println(objFile.getArrayValue("data").length + "  tezs");
+		
+		new Thread(new Runnable() {
+			public void run() {
+				sendPackage(new Package(bui));
+
+			}
+		}).start();
+		
+	}*/
+	
+	public Package nextPackage() throws SecurityException {
+		String n = nextString();
+
+		if(n != null)
+			return PackagePareser.parse(n);
+		
+		return Package.getLeavePackage();
 	}
 	
-	public Package receivePackage() throws SecurityException{
-		Package pack = new Package();
-		
-		pack.setPackageType(receiveIdPackage());
-		pack.setMessage(receiveMessage());
-		
-		return pack;
-	}
-	
-	private String receiveMessage() throws SecurityException {
+	private String nextString() throws SecurityException {
 		String msg = null;
 		
 		try{msg = msgRecei.readLine();}
 		catch(IOException e) {return null;}
-		
-		return serverUseKey&&key!=null?!msg.equals("")?key.decrypt(msg):msg:msg;
-	}
-	
-	public String[] receiveArray() throws SecurityException {
-		int length = Integer.valueOf(receiveMessage());
-		String[] array = new String[length];
-		
-		for(int i = 0; i < length; i++)
-			array[i] = receiveMessage();
-		
-		return array;
+		if(msg != null)
+			return serverUseKey&&key!=null?!msg.equals("")?key.decrypt(msg):msg:msg;
+		else 
+			return null;
 	}
 	
 	public String getPseudo() {return pseudo;}
@@ -120,7 +143,10 @@ public class SocketClient {
 	public boolean isConnected() {return connected;}
 	
 	public SocketClient setKey(Key key) {this.key = key; return this;}
-	public SocketClient setPseudo(String pseudo) {this.pseudo = pseudo; return this;}
+	public SocketClient setPseudo(String pseudo) {
+		if(pseudo != null && !pseudo.equals("")) this.pseudo = pseudo;
+		return this;
+	}
 	public SocketClient setPassword(String password) {this.password = password; return this;}
 
 }

@@ -11,23 +11,28 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
 import net.argus.chat.client.gui.HostInfo;
+import net.argus.chat.client.gui.TextFieldIp;
+import net.argus.chat.client.gui.TextFieldName;
 import net.argus.chat.client.gui.config.ConfigManager;
 import net.argus.file.Properties;
 import net.argus.gui.Button;
 import net.argus.gui.ComboBox;
 import net.argus.gui.Panel;
-import net.argus.gui.TextField;
 
 public class ProfileConfig extends ConfigManager {
 	
 	private DefaultComboBoxModel<Profile> listModel;
 	private ComboBox<Profile> list;
 	
-	private TextField name;
-	private TextField ip;
+	private TextFieldName name;
+	private TextFieldIp ip;
+	
+	private Button remove, create, apply;
+	
+	public static final int ID = 2;
 
 	public ProfileConfig() {
-		super(2);
+		super(ID);
 		listModel = new DefaultComboBoxModel<Profile>();
 	}
 
@@ -63,10 +68,11 @@ public class ProfileConfig extends ConfigManager {
 	public Panel getCenterPanel() {
 		Panel pan = new Panel();
 		
-		name = new TextField(10);
-		ip = new TextField(10);
+		name = new TextFieldName(10);
+		ip = new TextFieldIp(10);
 		
 		name.addKeyListener(getNameKeyListener());
+		ip.addKeyListener(getIpKeyListener());
 		pan.add(name);
 		pan.add(ip);
 		
@@ -76,9 +82,9 @@ public class ProfileConfig extends ConfigManager {
 	public Panel getButtonPanel() {
 		Panel pan = new Panel();
 		
-		Button remove = new Button("remove");
-		Button create = new Button("create");
-		Button apply = new Button("apply");
+		remove = new Button("remove");
+		create = new Button("create");
+		apply = new Button("apply");
 		
 		remove.addActionListener(getRemoveActionListener());
 		create.addActionListener(getCreateActionListener());
@@ -111,8 +117,10 @@ public class ProfileConfig extends ConfigManager {
 		return e -> {
 			int index = list.getSelectedIndex();
 			
-			listModel.removeElementAt(index);
-			updateFile();
+			if(index > -1) {
+				listModel.removeElementAt(index);
+				updateFile();
+			}
 		};
 	}
 	
@@ -123,12 +131,18 @@ public class ProfileConfig extends ConfigManager {
 		};
 	}
 	
-	private ActionListener getApplyActionListener() {return e -> apply();}
+	private ActionListener getApplyActionListener() {
+		return e -> {
+			int result = apply();
+			if(result == -1) {
+				
+			}
+		};
+	}
 	
 	private ActionListener getListActionListener() {
 		return e -> {
 			int index = list.getSelectedIndex();
-			
 			Profile nameText = (Profile) list.getSelectedItem();
 			
 			name.setText(nameText!=null?nameText.toString():"");
@@ -141,9 +155,27 @@ public class ProfileConfig extends ConfigManager {
 			public void keyTyped(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {keyPressed(e);}
 			public void keyPressed(KeyEvent e) {
-				Profile nameText = (Profile) list.getSelectedItem();
+				Profile nameText = null;
+				do {
+					nameText = (Profile) list.getSelectedItem();
+					
+					if(nameText == null)
+						getCreateActionListener().actionPerformed(null);
+				}while(nameText == null);
+				
 				nameText.setName(name.getText());
 				list.updateUI();
+				apply.setEnabled(true);
+			}
+		};
+	}
+	
+	private KeyListener getIpKeyListener() {
+		return new KeyListener() {
+			public void keyTyped(KeyEvent e) {}
+			public void keyReleased(KeyEvent e) {}
+			public void keyPressed(KeyEvent e) {
+				apply.setEnabled(true);
 			}
 		};
 	}
@@ -183,13 +215,20 @@ public class ProfileConfig extends ConfigManager {
 	}
 
 	@Override
-	public void apply() {
-		int index = list.getSelectedIndex();
+	public int apply() {
+		if(!ip.isError() && !name.isError()) {
+			int index = list.getSelectedIndex();
+			
+			if(index > -1 && index < (HostInfo.getProfileConfig().getNumberLine() / 2))
+				change(index);
+			else if(index > -1)
+				add(index);
+			
+			apply.setEnabled(false);
+		}else
+			return -1;
 		
-		if(index > -1 && index < (HostInfo.getProfileConfig().getNumberLine() / 2))
-			change(index);
-		else if(index > -1)
-			add(index);
+		return 0;
 	}
 	
 }

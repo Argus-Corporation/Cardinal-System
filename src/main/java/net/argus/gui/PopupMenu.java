@@ -8,7 +8,7 @@ import javax.swing.JPopupMenu;
 
 import net.argus.annotation.Test;
 
-@Test(info = "null")
+@Test(info = "")
 @Deprecated
 public class PopupMenu extends JPopupMenu {
 

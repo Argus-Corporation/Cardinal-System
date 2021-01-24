@@ -1,23 +1,14 @@
 package net.argus.system;
 
-<<<<<<< Updated upstream
-public class InitializedSystem {
-	
-	private static boolean init;
-	
-	public static void initSystem(String[]args, InitializedSystemManager manager) {
-		manager.preInit(args);
-=======
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import net.argus.util.ListenerManager;
-import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
 
 public class InitializedSystem {
 	
-	private static boolean init;
+	public static boolean init;
 	
 	private static ListenerManager<InitializedUI> uiManager = new ListenerManager<InitializedUI>();
 	
@@ -37,41 +28,29 @@ public class InitializedSystem {
 		InitializedSystemManager systemManager = UserSystem.getDefaultInitializedSystemManager();
 		addInitializedUI(new InitializedUI());
 		
-		ThreadManager.SYSTEM.setTemporaryName();
+		UserSystem.defineProperty("config", true);
 		
-		UserSystem.defineProperty("info", true);
+		showInfo();
 		
 		preInit(args);
 		if(ui) preInitUi(args);
 		if(systemManager != null) systemManager.preInit(args);
 		if(manager != null) manager.preInit(args);
->>>>>>> Stashed changes
 		
-		System.setProperty("project.name", Argument.getArgument(args, "project.name"));
-		System.setProperty("id", Argument.getArgument(args, "id"));
-		System.setProperty("arch", System.getProperty("os.arch").substring(3));
-		manager.init(args);
+		init(args);
+		if(ui) initUi(args);
+		if(systemManager != null) systemManager.init(args);
+		if(manager != null) manager.init(args);
 		
-<<<<<<< Updated upstream
-		init = true;
-		manager.postInit(args);
-	}
-	
-=======
 		postInit(args);
 		if(ui) postInitUi(args);
 		if(systemManager != null) systemManager.postInit(args);
 		if(manager != null) manager.postInit(args);
-		
-		ThreadManager.SYSTEM.restorOldParameter();
 	}
 	
 	private static void preInit(String[] args) {
 		for(int i = 0; i < args.length; i += 2) 
 			System.setProperty(args[i].substring(1), Argument.getArgument(args, args[i].substring(1)));
-		
-		if(UserSystem.getBooleanProperty("info"))
-			showInfo();
 	}
 	
 	private static void init(String[] args) {
@@ -85,9 +64,7 @@ public class InitializedSystem {
 	
 	private static void postInit(String[] args) {
 		init = true;
-		if(UserSystem.getBooleanProperty("update"))
-			if(UserSystem.update != null)
-				UserSystem.update.check();
+		if(UserSystem.getBooleanProperty("update")) UserSystem.update.check();
 		
 		Debug.log("System initialized");
 	}
@@ -108,16 +85,13 @@ public class InitializedSystem {
 	}
 	
 	private static void showInfo() {
-		Debug.log("OS: " + UserSystem.getProperty("os.name"));
-		Debug.log("Arch: " + UserSystem.getProperty("os.arch"));
+		Debug.log("OS: " + System.getProperty("os.name"));
+		Debug.log("Arch: " + System.getProperty("os.arch"));
 		Debug.log("Network: " + (Network.isConnected()?"connected":"unconnected"));
-		
 	}
 	
 	public static void addInitializedUI(InitializedUI ui) {uiManager.addListener(ui);}
 	
->>>>>>> Stashed changes
 	public static boolean isSystemInitialized() {return init;}
-
 	
 }

@@ -41,11 +41,10 @@ public class CJSON {
 		InitializedSystem.initSystem(new String[] {"-name", "Cardinal-System", "-id", "0xdev", "-log", "false"});
 		
 		//Key key = new Key("*ù$ef^ù*$ù$%kjnkjfezdskpvù$êfdpvù$^dfpv$ù^pfeùv^pf$^vpùfqd^v$pqfd^vperpv$qe^rpv$^qerpqv^$eqrpv^*eqorlv^$*ep*v^*$*oeqr^voeqr^voeq^vpqêpr*vqê*ov^pe*ovqerov^qr*ovqrov^qrov£%*ù^654654fsdf%¨µ£%%sff£¨µ¨%/.§/");
-		//CJSONFile file = new CJSONFile("tree", "/");
-		//CJSON cjson = CJSONPareser.parse(file);
-		//System.out.println();
-		//System.out.println(cjson.getItem("tree").getValue().getValue("root").getValue("papa"));
-		//String password = CJSONPareser.parse(file).getObject("package")
+		CJSONFile file = new CJSONFile("tree", "/");
+		CJSON cjson = CJSONPareser.parse(file);
+		System.out.println();
+		System.out.println(cjson.getObject("Config").getValue("Connection").getValue("bonjour"));
 		//		.getValue("manifest").getValue("type").toString();
 	
 		/*System.out.println(key.decrypt(password).equals("szef¨%$ùDdgdDE854ED56FDfdgfsdgfgsdGsfdgffdGDFgF855551"));

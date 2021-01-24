@@ -9,7 +9,5 @@ public interface CardinalEnumeration<E> extends Enumeration<E> {
 	public boolean content(E e);
 	
 	public void add(E e);
-	
-	public int size();
 
 }

@@ -16,13 +16,13 @@ public class MainServer {
 	public static int PORT = 11066; 
 	public static int MAX = 100;
 	
-	private static String PASSWORD = "rt";
+	private static String PASSWORD = "password";
 	
 	public MainServer() throws IOException {
 		init();
 		
 		serv = new Server(MAX, PORT);
-		servCrypt = new Server(MAX, PORT + 1, new Key("$^ù**^$ùm$ùmefsd^mù6548#5{DSG3d47g4354j4ù4$*84mi1olukjhgf85j#[|'(--è_k45"));
+		servCrypt = new Server(MAX, PORT + 1, new Key("key"));
 		
 		serv.addClostListener(getServerCloseListener());
 		servCrypt.addClostListener(getServerCryptCloseListener());
@@ -46,11 +46,19 @@ public class MainServer {
 	}
 	
 	private CloseListener getServerCloseListener() {
-		return () -> servCrypt.stop(0);
+		return new CloseListener() {
+			public void close() {
+				servCrypt.stop(0);
+			}
+		};
 	}
 	
 	private CloseListener getServerCryptCloseListener() {
-		return () -> serv.stop(0);
+		return new CloseListener() {
+			public void close() {
+				serv.stop(0);
+			}
+		};
 	}
 	
 	public static void main(String[] args) throws IOException, InterruptedException {

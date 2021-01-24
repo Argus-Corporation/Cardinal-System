@@ -2,7 +2,10 @@ package net.argus.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.LayoutManager;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
@@ -11,14 +14,14 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import net.argus.Lang;
+import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSEngine;
 import net.argus.gui.animation.FrameAnimation;
 import net.argus.system.InitializedSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Direction;
-import net.argus.util.SClass;
+import net.argus.util.ListenerManager;
 
 public class Frame extends JFrame {
 
@@ -26,12 +29,14 @@ public class Frame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -6058458405056389502L;
-
+	
 	protected Properties config;
 	
 	protected TopPanel topPan;
+	protected Panel mainPan = new Panel();
 	
-	protected ImageIcon icon;
+	protected ImageIcon iconFrame;
+	protected ImageIcon iconOs;
 	
 	protected boolean undecorated;
 	protected boolean fullScreen;
@@ -41,19 +46,22 @@ public class Frame extends JFrame {
 	
 	protected Dimension normalSize;
 	
-	protected FrameListener fenListener;
+	protected Point position;
+	
+	protected ListenerManager<FrameListener> frameManager = new ListenerManager<FrameListener>();
 
 	public Frame(String title, String pathIcon, boolean[] but, Properties config) {
-		
-		Lang.setLang(config);
 		this.config = config;
 		this.undecorated = config.getBoolean("frame.undecorated");
 		
-		icon = new ImageIcon(pathIcon);
+		mainPan = new Panel();
 		
-		this.setIconImage(icon.getImage());
+		iconFrame = new ImageIcon(pathIcon);
+		iconOs = new ImageIcon(pathIcon);
 		
-		icon = Icon.getIcon(pathIcon);
+		this.setIconImage(iconOs.getImage());
+		
+		iconFrame = Icon.getIcon(pathIcon);
 		
 		this.setSize(config.getDimension("frame.size"));
 		this.normalSize = this.getSize();
@@ -64,8 +72,9 @@ public class Frame extends JFrame {
 		this.setAlwaysOnTop(config.getBoolean("frame.alwaysontop"));
 		
 		if(undecorated) {
-			topPan = new TopPanel(this, icon, but, config);
-			this.add(BorderLayout.NORTH, topPan);
+			topPan = new TopPanel(this, iconFrame, but, config);
+			super.add(BorderLayout.NORTH, topPan);
+			super.add(BorderLayout.CENTER, mainPan);
 			
 			getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
 		}
@@ -102,6 +111,11 @@ public class Frame extends JFrame {
 		this.repaint();
 	}
 	
+	public void setIcon(String iconPath) {
+		iconFrame = Icon.getIcon(iconPath);
+		topPan.setIcon(iconFrame);
+	}
+	
 	public void setTitleUndeco(String title) {topPan.setTitle(title);}
 	
 	public boolean isFullScreen() {return fullScreen;}
@@ -109,17 +123,38 @@ public class Frame extends JFrame {
 	
 	public TopPanel getTopPanel() {return this.topPan;}
 	public Dimension getNormalSize() {return normalSize;}
+	public Point getSavePosition() {return position;}
 	
 	public void setNoramlSize(Dimension normalSize) {this.normalSize = normalSize;}
-	public void addFrameListener(FrameListener fenListener) {this.fenListener = fenListener;}
+	public void addFrameListener(FrameListener fenListener) {this.frameManager.addListener(fenListener);}
+	
+	public void savePosition() {this.position = this.getLocation();}
 	
 	public Dimension getFrameSize() {return new Dimension(getSize().width, getSize().height - getTopPanel().getPreferredSize().height);}
+	
+	@Override
+	public Component add(Component comp) {
+		return mainPan.add(comp);
+	}
+	
+	@Override
+	public Component add(String name, Component comp) {
+		return mainPan.add(name, comp);
+	}
+	
+	public void setMainLayout(LayoutManager manager) {
+		mainPan.setLayout(manager);
+	}
+	
+	public LayoutManager getMainLayout() {
+		return mainPan.getLayout();
+	}
 	
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		Properties config = new Properties("config", "bin");
-		String sIcon = SClass.getPath("/res/logo.png");
+		String sIcon = FileManager.getPath("res/logo.png");
 		boolean[] isE = new boolean[] {true, true, true};
 		Frame fen = new Frame("armin", sIcon, isE, config);
 		//new Splash("dfsd", sIcon, fen, 1000, config);
@@ -145,7 +180,7 @@ public class Frame extends JFrame {
 			}
 		});
 	
-		CSSEngine.engine("test", "bin");
+		CSSEngine.run("test", "bin");
 		
 		Label lab = new Label("bonjour", true);
 		fen.add(lab);

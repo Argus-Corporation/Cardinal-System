@@ -2,27 +2,24 @@ package net.argus.system;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Random;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+
+import net.argus.file.FileManager;
 
 public class Launcher {
 	
-	public Launcher() throws Exception {
+	public Launcher(String[] args) throws Exception {
 		File file = getCodeSourceLocation();
 		Manifest manifest = new Manifest(file);
 		
-		ArrayList<String> arguments = new ArrayList<String>();
+		List<String> arguments = new ArrayList<String>();
 		
-		String nativePath = getNativePath();
+		String nativePath = Temp.getTempDir();
 	    String mainClass = manifest.getValue("Launcher-Main-Class");
 	    String vmArgs = manifest.getValue("Launcher-VM-Args");
 	    String[] userArgs = manifest.getValue("Launcher-Args").split(" ");
@@ -44,9 +41,15 @@ public class Launcher {
 	    	arguments.add("-Djava.library.path=" + nativePath);
 	    	arguments.add(mainClass);
 	    	
+	    	arguments.add("-temp");
+	    	arguments.add(nativePath);
+	    	
 	    	for(String uArg : userArgs)
 	    		arguments.add(uArg);
-	      
+	    	
+	    	for(String arg : args)
+	    		arguments.add(arg);
+	    	
 	    	ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 	    	processBuilder.redirectErrorStream(true);
 	    	
@@ -54,7 +57,9 @@ public class Launcher {
 	    	writeConsoleOutput(process);
 	    	
 	    	process.waitFor();
-	    }finally {deleteNativePath(nativePath);}
+	    }finally {
+	    	FileManager.delete(nativePath);
+	    }
 	    
 	}
 	  
@@ -69,89 +74,23 @@ public class Launcher {
 	}
 	  
 	public void extractNatives(File file, String nativePath) throws Exception {
-		JarFile jarFile = new JarFile(file, false);
-		Enumeration<JarEntry> entities = jarFile.entries();
+		CopyTemp cop = new CopyTemp();
 		
-		while(entities.hasMoreElements()) {
-	    	JarEntry entry = entities.nextElement();
-	    	String nativeFile = entry.getName();
-	    	
-	    	if(isNativeFile(entry.getName())) {
-	    		new File(String.valueOf(nativePath) + File.separator + nativeFile.substring(0, nativeFile.lastIndexOf('/'))).mkdirs();
-
-		    	InputStream in = jarFile.getInputStream(jarFile.getEntry(entry.getName()));
-		    	OutputStream out = new FileOutputStream(String.valueOf(nativePath) + File.separator + nativeFile);
-		    	
-		    	byte[] buffer = new byte[65536];
-		    	int bufferSize;
-		    	
-		    	while((bufferSize = in.read(buffer, 0, buffer.length)) != -1)
-		    		out.write(buffer, 0, bufferSize);
-		    	
-		    	in.close();
-		    	out.close();
-	    	}
-		} 
-		jarFile.close();
-	}
-	  
-	public boolean isNativeFile(String entryName) {
-		String osName = System.getProperty("os.name");
-		String name = entryName.toLowerCase();
-		if(osName.startsWith("Win"))
-			if(name.endsWith(".dll"))
-				return true; 
-		else if(osName.startsWith("Linux"))
-			if(name.endsWith(".so"))
-			return true; 
-		else if((osName.startsWith("Mac") || osName.startsWith("Darwin")) && (
-				name.endsWith(".jnilib") || name.endsWith(".dylib")))
-			return true;
+		List<String> ext = new ArrayList<String>();
+		ext.add("*.dll");
+		ext.add("*.so");
 		
-		return false;
-	}
-	  
-	public String getNativePath() {
-		String nativeDir = System.getProperty("deployment.user.cachedir");
-		
-		if(nativeDir == null || System.getProperty("os.name").startsWith("Win"))
-			nativeDir = System.getProperty("java.io.tmpdir");
-		nativeDir = String.valueOf(nativeDir) + File.separator + "natives" + (new Random()).nextInt();
-		
-		File dir = new File(nativeDir);
-		
-		if(!dir.exists())
-			dir.mkdirs(); 
-		
-		return nativeDir;
-	}
-	  
-	public void deleteNativePath(String directoryName) {
-		File directory = new File(directoryName);
-		File[] files = directory.listFiles();
-		
-		File[] arrayOfFile1;
-		byte b;
-		int i;
-		
-		for(i = (arrayOfFile1 = files).length, b = 0; b < i; ) {
-			File file = arrayOfFile1[b];
-			file.delete();
-			b++;
-		}
-		
-		directory.delete();
+		cop.copy(ext);
 	}
 	
 	public File getCodeSourceLocation() {
-		try {
-			return new File(Launcher.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+		try {return new File(Launcher.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 		}catch(URISyntaxException e) {
 			e.printStackTrace();
 			return null;
 		} 
 	}
 	  
-	public static void main(String[] args) throws Exception {new Launcher();}
+	public static void main(String[] args) throws Exception {new Launcher(args);}
 
 }

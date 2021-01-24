@@ -3,15 +3,7 @@ package net.argus.util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArrayManager {
-	
-	public Object convert(Object[] array) {
-		String str = "";
-		for(int i = 0; i < array.length; i++)
-			str += array[i];
-			
-		return str;
-	}
+public class ArrayManager<T> {
 	
 	public static char[] add(char[] array, char add, int pos) {
 		char[] newArray = new char[array.length + 1];
@@ -34,6 +26,19 @@ public class ArrayManager {
 		return newArray;
 	}
 	
+	public static Object[] add(Object[] objs, Object add, int pos) {
+		Object[] newArray = new Object[objs.length + 1];
+		int i = 0;
+		for(; i < pos; i++)
+			newArray[i] = objs[i];
+		
+		newArray[i++] = add;
+		for(; i < newArray.length; i++)
+			newArray[i] = objs[i-1];
+		
+		return newArray;
+	}
+	
 	public static char[] remove(char[] array, int sub) {
 		char[] newArray = new char[array.length - 1];
 		
@@ -42,6 +47,15 @@ public class ArrayManager {
 		
 		for(int i = sub; i < newArray.length; i++)
 			newArray[i] = array[i + 1];
+		
+		return newArray;
+	}
+	
+	public static char[] remove(char[] array, int min, int max) {
+		char[] newArray = new char[max - min];
+		
+		for(int i = min, j = 0; j < newArray.length; i++, j++)
+			newArray[j] = array[i];
 		
 		return newArray;
 	}
@@ -63,6 +77,17 @@ public class ArrayManager {
 		}
 		
 		return newArray;
+	}
+	
+	public static String remplace(String str, char[] old, char newCar) {
+		char[] chars = str.toCharArray();
+		
+		for(int i = 0; i < chars.length; i++)
+			for(int j = 0; j < old.length; j++)
+				if(chars[i] == old[j])
+					chars[i] = newCar;
+		
+		return new String(chars);
 	}
 	
 	public static String[] cut(String enter, char cut) throws ArrayStoreException {
@@ -90,10 +115,31 @@ public class ArrayManager {
 		return true;
 	}
 	
+	public static boolean isExist(int[] array, int pos) {
+		try {array[pos] = array[pos];}
+		catch(ArrayIndexOutOfBoundsException e) {return false;}
+		return true;
+	}
+	
 	public static boolean isExist(char[] array, int pos) {
 		try {array[pos] = array[pos];}
 		catch(ArrayIndexOutOfBoundsException e) {return false;}
 		return true;
+	}
+	
+	public List<T> convert(T[] array) {
+		List<T> list = new ArrayList<T>();
+		for(T t : array)
+			list.add(t);
+		return list;
+	}
+	
+	public void add(List<T> list, T[] array) {
+		for(T t : array) list.add(t);
+	}
+	
+	public void add(List<T> list, List<T> array) {
+		for(T t : array) list.add(t);
 	}
 	
 	public static String[] convert(List<String> list) {
@@ -104,7 +150,7 @@ public class ArrayManager {
 		return array;
 	}
 	
-	public static String convert(String[] array) {
+	public static String convert(String[] array, int nul) {
 		String result = "";
 		
 		for(String str : array)
@@ -114,13 +160,26 @@ public class ArrayManager {
 		return result;
 	}
 	
+	public static boolean content(Object[] array, Object cont) {
+		for(Object obj : array)
+			if(obj.equals(cont)) return true;
+		
+		return false;
+	}
+	
+	public static int indexOf(char[] array, char index) {
+		for(int i = 0; i < array.length; i++)
+			if(array[i] == index)
+				return i;
+		return -1;
+	}
+	
 	public static void main(String[] args) {
-		List<String> list = new ArrayList<String>();
+		//List<String> list = new ArrayList<String>();
+		//list.add("gsdg");
+		String[] test = new String[] {"lol"};
 		
-		list.add("fds");
-		list.add("sqfqs");
-		
-		System.out.println(convert(list)[0]);
+		System.out.println(add(test, "azertyuiop", 1)[1]);
 	}
 
 }

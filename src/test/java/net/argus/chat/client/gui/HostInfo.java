@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 
 import net.argus.chat.client.MainClient;
 import net.argus.file.Properties;
@@ -50,7 +49,7 @@ public class HostInfo {
 		JComboBox<String> list = new JComboBox<String>((String[]) hostName.toArray(new String[hostName.size()]));
 		north.add(list);
 		
-		JTextField host = new JTextField(12);
+		TextFieldIp host = new TextFieldIp(12);
 		south.add(host);
 		
 		Button ok = new Button("   OK   ", false);

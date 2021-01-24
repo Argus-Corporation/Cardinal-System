@@ -3,9 +3,10 @@ package net.argus.gui;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import net.argus.Lang;
+import net.argus.lang.Lang;
+import net.argus.lang.LangRegistry;
 
-public class Button extends JButton implements Element {
+public class Button extends JButton implements Element, GUI {
 	
 	/**
 	 * 
@@ -19,9 +20,19 @@ public class Button extends JButton implements Element {
 	private static final boolean isFont = true;
 	
 	public Button(String name) {
+		this(name, true);
+	}
+	
+	public Button(String name, boolean lang) {
 		super();
-		this.name = nameType + "." + name + ".name";
-		this.setText();
+		LangRegistry.addElementLanguage(this);
+		if(lang) {
+			this.name = nameType + "." + name + ".name";
+			this.setText();
+		}else {
+			this.name = name;
+			this.setText(name);
+		}
 	}
 	
 	public Button(ImageIcon icon) {
@@ -34,6 +45,7 @@ public class Button extends JButton implements Element {
 		this.setFocusPainted(false);
 	}
 	
-	public void setText() {this.setText(Lang.getLang().getElementString(this.name));}
+	@Override
+	public void setText() {this.setText(Lang.getElement(this.name));}
 
 }

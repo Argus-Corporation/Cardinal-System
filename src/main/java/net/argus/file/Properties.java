@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -19,8 +20,6 @@ public class Properties extends AbstractFileSave {
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
 	 * @param fileName
 	 * @param rep
-	 * @param projectName
-	 * @param class
 	 */
 	public Properties(String fileName, String rep) {
 		this(fileName, EXTENTION, rep);
@@ -31,11 +30,18 @@ public class Properties extends AbstractFileSave {
 	 * @param fileName 
 	 * @param extention
 	 * @param rep
-	 * @param projectName
-	 * @param class
 	 */
 	protected Properties(String fileName, String extention, String rep) {
 		super(fileName, extention, rep);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
+	 * @param fileName
+	 * @param file
+	 */
+	public Properties(String fileName, File file) {
+		super(fileName, EXTENTION, file);
 	}
 	
 	/**
@@ -104,7 +110,10 @@ public class Properties extends AbstractFileSave {
 		copyFile();	
 		int line = getIdKey(key);
 		
-		data.set(line - 1, key + "=" + value);
+		if(line != -1)
+			data.set(line - 1, key + "=" + value);
+		else
+			data.add(key + "=" + value);
 		
 		clear();
 		write(data);
@@ -116,8 +125,6 @@ public class Properties extends AbstractFileSave {
 	 * @param value
 	 * @throws IOException 
 	 */
-<<<<<<< Updated upstream
-=======
 	public void setKey(String key, Object value) throws IOException {
 		setKey(key, value.toString());
 	}
@@ -128,7 +135,6 @@ public class Properties extends AbstractFileSave {
 	 * @param value
 	 * @throws IOException 
 	 */
->>>>>>> Stashed changes
 	public void setKey(String key, int value) throws IOException {
 		setKey(key, Integer.toString(value));
 	}
@@ -151,24 +157,25 @@ public class Properties extends AbstractFileSave {
 				if(lineKey.equals(key))
 					return i;
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		
-		return 0;
+		return -1;
 	}
 	
 	/**
 	 * Cette methode retourne la clef String corespondante a la clef
 	 * @param key
 	 * @return result
-	 * @throws FileNotFoundException 
 	 */
 	public String getString(String key) {
 		String line = null;
 		
 		try {line = getLine(getIdKey(key));}
-		catch(FileNotFoundException e) {}
-		
-		return getValue(line);
+		catch(IOException e) {}
+		if(line != null)
+			return getValue(line);
+		else
+			return null;
 	}
 
 	/**
@@ -178,14 +185,13 @@ public class Properties extends AbstractFileSave {
 	 */
 	public int getInt(String key) {
 		try {return Integer.valueOf(getString(key));}
-		catch(NumberFormatException e) {return 0;}
+		catch(NumberFormatException e) {return -1;}
 	}
 	
 	/**
 	 * Cette methode retourne la clef boolean corespondante a la clef
 	 * @param key
 	 * @return result
-	 * @throws FileNotFoundException 
 	 */
 	public boolean getBoolean(String key) {
 		return Boolean.valueOf(getString(key));
@@ -261,7 +267,6 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne vrai si la clef exist
 	 * @param key
 	 * @return exist
-	 * @throws FileNotFoundException 
 	 */
 	public boolean containsKey(String key) {
 		try {
@@ -270,7 +275,7 @@ public class Properties extends AbstractFileSave {
 					return true;
 				}
 			}
-		}catch(FileNotFoundException e) {}
+		}catch(IOException e) {}
 		return false;
 	}
 	
@@ -286,7 +291,7 @@ public class Properties extends AbstractFileSave {
 	/**
 	 * Cette méthode retourne la valeur de la ligne
 	 * @param line
-	 * @return
+	 * @return value
 	 */
 	public String getValue(String line) {
 		return line.substring(line.indexOf('=') + 1);

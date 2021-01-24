@@ -3,18 +3,17 @@ package net.argus.system;
 import java.io.File;
 import java.io.IOException;
 import java.util.jar.Attributes;
-import java.util.jar.JarFile;
+
+import net.argus.file.JarFile;
 
 public class Manifest {
 	
 	private JarFile jar;
-	private java.util.jar.Manifest manifestFile;
 	private Attributes attribute;
 	
 	public Manifest(File file) throws IOException {
-		jar = new JarFile(file);
-		manifestFile = jar.getManifest();
-		attribute = manifestFile.getMainAttributes();
+		jar = new JarFile(file.getPath());
+		attribute = jar.getMainAttributes();
 	}
 	
 	public String getValue(String name) {

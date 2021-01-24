@@ -1,6 +1,8 @@
 package net.argus.system;
 
-public interface InitializedSystemManager {
+import net.argus.util.Listener;
+
+public interface InitializedSystemManager extends Listener {
 	
 	public void preInit(String[] args);
 	
