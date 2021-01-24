@@ -3,6 +3,7 @@ button.send.name=Send
 button.remove.name=Remove
 button.create.name=Create
 button.apply.name=Apply
+button.default.name=Default
 
 menu.connection.name=Connection
 menu.encrypting.name=Encrypting
@@ -27,3 +28,5 @@ info.full.name=This server is full
 info.version.name=Incompatible version
 
 config.errorinfo.name=Invalud value. If you continue the last modifications will not apply.
+
+option.porterror.name=You have not configured a port. Do you want to configure it?

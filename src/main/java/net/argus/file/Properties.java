@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -19,8 +20,6 @@ public class Properties extends AbstractFileSave {
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
 	 * @param fileName
 	 * @param rep
-	 * @param projectName
-	 * @param class
 	 */
 	public Properties(String fileName, String rep) {
 		this(fileName, EXTENTION, rep);
@@ -31,11 +30,18 @@ public class Properties extends AbstractFileSave {
 	 * @param fileName 
 	 * @param extention
 	 * @param rep
-	 * @param projectName
-	 * @param class
 	 */
 	protected Properties(String fileName, String extention, String rep) {
 		super(fileName, extention, rep);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
+	 * @param fileName
+	 * @param file
+	 */
+	public Properties(String fileName, File file) {
+		super(fileName, EXTENTION, file);
 	}
 	
 	/**
@@ -104,7 +110,10 @@ public class Properties extends AbstractFileSave {
 		copyFile();	
 		int line = getIdKey(key);
 		
-		data.set(line - 1, key + "=" + value);
+		if(line != -1)
+			data.set(line - 1, key + "=" + value);
+		else
+			data.add(key + "=" + value);
 		
 		clear();
 		write(data);
@@ -176,7 +185,7 @@ public class Properties extends AbstractFileSave {
 	 */
 	public int getInt(String key) {
 		try {return Integer.valueOf(getString(key));}
-		catch(NumberFormatException e) {return 0;}
+		catch(NumberFormatException e) {return -1;}
 	}
 	
 	/**

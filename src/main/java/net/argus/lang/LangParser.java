@@ -1,28 +1,30 @@
 package net.argus.lang;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LangParser {
 	
-	private String[] file;
-	
-	public LangParser(String langName) {
-		//System.out.println(langName);
-		file = LangSaver.getLangSaver(langName).getFile();
+	public static void parser(String langName, String[] file) {
+		List<LangValue> values = new ArrayList<LangValue>();
+		for(String line : file) 
+			values.add(nextLine(line));
+		
+		LangManager.addLang(langName, values);
 	}
 	
-	public String getString(String elementName) {
-		for(int i = 0; i < file.length; i++) {
-			String key = getKey(getLine(i));
-			if(key != null && key.equals(elementName))
-				elementName = getValue(getLine(i));
+	public static LangValue nextLine(String line) {
+		LangValue value = new LangValue();
+		String key = getKey(line);
+		if(key != null) {
+			value.setKey(key);
+			value.setValue(getValue(line));
 		}
-		return elementName;
+		
+		return value;
 	}
 	
-	public String getLine(int line) {
-		return file[line];
-	}
-	
-	protected String getKey(String line) {
+	protected static String getKey(String line) {
 		try {
 			return line.substring(0, line.indexOf('='));
 		}catch(StringIndexOutOfBoundsException e) {
@@ -30,7 +32,7 @@ public class LangParser {
 		}
 	}
 	
-	protected String getValue(String line) {
+	protected static String getValue(String line) {
 		return line.substring(line.indexOf('=') + 1);
 	}
 	

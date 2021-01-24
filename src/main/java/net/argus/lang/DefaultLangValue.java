@@ -10,12 +10,16 @@ public class DefaultLangValue {
 	public static final DefaultLangValue fr_FR = new DefaultLangValue()
 			.add("OptionPane.cancelButtonText", "Annuler")
 			.add("OptionPane.noButtonText", "Non")
-			.add("OptionPane.yesButtonText", "Oui");
+			.add("OptionPane.yesButtonText", "Oui")
+			
+			.add("Frame.titleErrorText", "Erreur");
 	
 	public static final DefaultLangValue en_US = new DefaultLangValue()
 			.add("OptionPane.cancelButtonText", "Cancel")
 			.add("OptionPane.noButtonText", "No")
-			.add("OptionPane.yesButtonText", "Yes");
+			.add("OptionPane.yesButtonText", "Yes")
+			
+			.add("Frame.titleErrorText", "Error");
 	
 	private List<String> elementName = new ArrayList<String>(); 
 	private List<String> elementValue = new ArrayList<String>(); 

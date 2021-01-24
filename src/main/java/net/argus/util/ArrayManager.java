@@ -26,6 +26,19 @@ public class ArrayManager<T> {
 		return newArray;
 	}
 	
+	public static Object[] add(Object[] objs, Object add, int pos) {
+		Object[] newArray = new Object[objs.length + 1];
+		int i = 0;
+		for(; i < pos; i++)
+			newArray[i] = objs[i];
+		
+		newArray[i++] = add;
+		for(; i < newArray.length; i++)
+			newArray[i] = objs[i-1];
+		
+		return newArray;
+	}
+	
 	public static char[] remove(char[] array, int sub) {
 		char[] newArray = new char[array.length - 1];
 		
@@ -162,12 +175,11 @@ public class ArrayManager<T> {
 	}
 	
 	public static void main(String[] args) {
-		List<String> list = new ArrayList<String>();
-		list.add("gsdg");
-		String[] test = new String[] {"lol", "gg", "bye"};
+		//List<String> list = new ArrayList<String>();
+		//list.add("gsdg");
+		String[] test = new String[] {"lol"};
 		
-		new ArrayManager<String>().add(list, test);
-		System.out.println(list);
+		System.out.println(add(test, "azertyuiop", 1)[1]);
 	}
 
 }

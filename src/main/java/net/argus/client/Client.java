@@ -23,7 +23,7 @@ import net.argus.util.pack.PackageType;
 
 public class Client {
 	
-	private static final int CLIENT_VERSION = 130121101;
+	private static final int CLIENT_VERSION = 240121110;
 	
 	private String host;
 	private int port;

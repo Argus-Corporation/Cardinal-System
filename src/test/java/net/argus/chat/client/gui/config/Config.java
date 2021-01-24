@@ -1,6 +1,5 @@
 package net.argus.chat.client.gui.config;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -10,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.UIManager;
 
 import net.argus.chat.client.MainClient;
 import net.argus.chat.client.gui.GUIClient;
@@ -22,7 +20,6 @@ import net.argus.gui.tree.CardinalTree;
 import net.argus.gui.tree.Tree;
 import net.argus.gui.tree.TreeListener;
 import net.argus.lang.Lang;
-import net.argus.util.Math;
 import net.argus.util.ThreadManager;
 
 public class Config {
@@ -38,13 +35,8 @@ public class Config {
 	private ConfigManager confManager;
 
 	public Config() {
-		Color oldBack = UIManager.getColor("Panel.background");
-		UIManager.put("Panel.background", new Color(238, 238, 238));
-		
 		configTree = getDefaultTree();
 		initComponent();
-		
-		UIManager.put("Panel.background", oldBack);
 	}
 
 	private void initComponent() {
@@ -64,13 +56,16 @@ public class Config {
 		fen.add(split);
 	}
 	
+	public void setSelectedTree(int id) {
+		configTree.setSelection(id);
+	}
+	
 	private TreeListener getTreeListener() {
 		return new TreeListener() {
 			public void selectedItemValue(int id) {
 				getFrameListener().windowClosing(null);
 				
-				int firstNum = Math.toIntArray(id)[0];
-				confManager = ConfigManager.getConfigManager(firstNum);
+				confManager = ConfigManager.getConfigManager(id);
 				
 				optionPanel = confManager.getConfigPanel();
 				scrollPanTree.setPreferredSize(scrollPanTree.getSize());
@@ -93,20 +88,24 @@ public class Config {
 					int result = confManager.apply();
 					
 					if(result == -1) {
-						new ThreadManager("Error Config").start(getErrorRun());
-						ThreadManager.stop(Thread.currentThread());
+						new ThreadManager("Error Config").start(getErrorRun(e));
+						if(e != null)
+							ThreadManager.stop(Thread.currentThread());
 					}
 				}
 			}
 			public void windowClosed(WindowEvent e) {}
 			public void windowActivated(WindowEvent e) {}
 			
-			private Runnable getErrorRun() {
+			private Runnable getErrorRun(WindowEvent e) {
 				return () -> {
 					int result = OptionPane.showConfirmDialog(fen, Lang.getElement("config.errorinfo.name"), "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 					if(result == JOptionPane.YES_OPTION) {
-						fen.setVisible(false);
-					}
+						if(e != null)
+							fen.setVisible(false);
+					}else
+						if(e == null)
+							configTree.setSelectionOldItem();
 				};
 			}
 		};

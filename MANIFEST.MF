@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Launcher-VM-Args: 
-Launcher-Args: -project.name copy -id 0xjar
-Launcher-Main-Class: net.argus.system.CopyTemp
-Main-Class: net.argus.system.Launcher

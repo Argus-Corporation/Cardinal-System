@@ -112,9 +112,9 @@ public class MainClient {
 	
 	public void connect(String host, String pseudo, String password) throws UnknownHostException, IOException {
 		if(GUIClient.menuBar.isEncrypt())
-			client = new ExampleClient(host, ClientConfig.getDefultPortCrypt(), pseudo, password, new Key(ClientConfig.getDefaultKey()));
+			client = new ExampleClient(host, ClientConfig.getPortCrypt(), pseudo, password, new Key(ClientConfig.getDefaultKey()));
 		else
-			client = new ExampleClient(host, ClientConfig.getDefultPort(), pseudo, password);
+			client = new ExampleClient(host, ClientConfig.getPort(), pseudo, password);
 		
 		client.addClientManager(new ClientManagerChat(client));
 		client.addProcessListener(new ProcessListenerChat());

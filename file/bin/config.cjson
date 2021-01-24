@@ -1,6 +1,6 @@
 "Preference": {
 	"Connection": {
-		"port": 10,
-		"profile": 20
+		"port": 1,
+		"profile": 2
 	}
 }

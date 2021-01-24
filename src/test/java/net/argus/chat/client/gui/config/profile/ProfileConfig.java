@@ -12,25 +12,27 @@ import javax.swing.DefaultComboBoxModel;
 
 import net.argus.chat.client.gui.HostInfo;
 import net.argus.chat.client.gui.TextFieldIp;
+import net.argus.chat.client.gui.TextFieldName;
 import net.argus.chat.client.gui.config.ConfigManager;
 import net.argus.file.Properties;
 import net.argus.gui.Button;
 import net.argus.gui.ComboBox;
 import net.argus.gui.Panel;
-import net.argus.gui.TextField;
 
 public class ProfileConfig extends ConfigManager {
 	
 	private DefaultComboBoxModel<Profile> listModel;
 	private ComboBox<Profile> list;
 	
-	private TextField name;
+	private TextFieldName name;
 	private TextFieldIp ip;
 	
 	private Button remove, create, apply;
+	
+	public static final int ID = 2;
 
 	public ProfileConfig() {
-		super(2);
+		super(ID);
 		listModel = new DefaultComboBoxModel<Profile>();
 	}
 
@@ -66,7 +68,7 @@ public class ProfileConfig extends ConfigManager {
 	public Panel getCenterPanel() {
 		Panel pan = new Panel();
 		
-		name = new TextField(10);
+		name = new TextFieldName(10);
 		ip = new TextFieldIp(10);
 		
 		name.addKeyListener(getNameKeyListener());
@@ -115,8 +117,10 @@ public class ProfileConfig extends ConfigManager {
 		return e -> {
 			int index = list.getSelectedIndex();
 			
-			listModel.removeElementAt(index);
-			updateFile();
+			if(index > -1) {
+				listModel.removeElementAt(index);
+				updateFile();
+			}
 		};
 	}
 	
@@ -151,7 +155,14 @@ public class ProfileConfig extends ConfigManager {
 			public void keyTyped(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {keyPressed(e);}
 			public void keyPressed(KeyEvent e) {
-				Profile nameText = (Profile) list.getSelectedItem();
+				Profile nameText = null;
+				do {
+					nameText = (Profile) list.getSelectedItem();
+					
+					if(nameText == null)
+						getCreateActionListener().actionPerformed(null);
+				}while(nameText == null);
+				
 				nameText.setName(name.getText());
 				list.updateUI();
 				apply.setEnabled(true);
@@ -205,7 +216,7 @@ public class ProfileConfig extends ConfigManager {
 
 	@Override
 	public int apply() {
-		if(!ip.isError()) {
+		if(!ip.isError() && !name.isError()) {
 			int index = list.getSelectedIndex();
 			
 			if(index > -1 && index < (HostInfo.getProfileConfig().getNumberLine() / 2))

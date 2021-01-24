@@ -3,6 +3,7 @@ button.send.name=Envoyer
 button.remove.name=Supprimer
 button.create.name=Créer
 button.apply.name=Appliquer
+button.default.name=Par défaut
 
 menu.connection.name=Connexion
 menu.encrypting.name=Chiffrement
@@ -27,3 +28,5 @@ info.full.name=Ce serveur est plein
 info.version.name=Version incompatible
 
 config.errorinfo.name=Valeur invalide. Si vous continuez les dernières modifications ne seront pas appliquées.
+
+option.porterror.name=Vous n'avez pas configuré de port. Voulez-vous le configurer?
