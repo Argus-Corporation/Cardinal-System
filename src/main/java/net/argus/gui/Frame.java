@@ -18,7 +18,7 @@ import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSEngine;
 import net.argus.gui.animation.FrameAnimation;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Direction;
 import net.argus.util.ListenerManager;
@@ -151,7 +151,7 @@ public class Frame extends JFrame {
 	}
 	
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		Properties config = new Properties("config", "bin");
 		String sIcon = FileManager.getPath("res/logo.png");

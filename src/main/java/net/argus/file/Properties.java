@@ -3,13 +3,14 @@ package net.argus.file;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 
 public class Properties extends AbstractFileSave {
@@ -41,7 +42,17 @@ public class Properties extends AbstractFileSave {
 	 * @param file
 	 */
 	public Properties(String fileName, File file) {
-		super(fileName, EXTENTION, file);
+		this(fileName, EXTENTION, file);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
+	 * @param fileName
+	 * @param extention
+	 * @param file
+	 */
+	public Properties(String fileName, String extention, File file) {
+		super(fileName, extention, file);
 	}
 	
 	/**
@@ -230,13 +241,22 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la clef Dimension corespondante a la clef
 	 * @param key
 	 * @return dimention
-	 * @throws FileNotFoundException 
 	 */
 	public Dimension getDimension(String key) {
-		String[] line = getString(key).split(":");
+		String[] line = getMultiString(key);
 		
 		try {return new Dimension(Integer.valueOf(line[0]), Integer.valueOf(line[1]));
 		}catch(IndexOutOfBoundsException | NumberFormatException e) {return null;}
+	}
+	
+	/**
+	 * Cette methode retourne la clef Point corespondante a la clef
+	 * @param key
+	 * @return
+	 */
+	public Point getPoint(String key) {
+		Dimension dim = getDimension(key);
+		return new Point(dim.width, dim.height);
 	}
 	
 	/**
@@ -261,6 +281,21 @@ public class Properties extends AbstractFileSave {
 	 */
 	public String[] getMultiString(String key) {
 		return getString(key).split(":");
+	}
+	
+	/**
+	 * Cette méthode retourne les clef int[] corespondante a la clef
+	 * @param key
+	 * @return
+	 */
+	public int[] getMultiInteger(String key) {
+		String[] multiString = getMultiString(key);
+		int[] result = new int[multiString.length];
+		
+		for(int i = 0; i < multiString.length; i++)
+			result[i] = Integer.valueOf(multiString[i]);
+		
+		return result;
 	}
 	
 	/**
@@ -298,7 +333,7 @@ public class Properties extends AbstractFileSave {
 	}
 
 	public static void main(String[] args) throws IOException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		Properties config = new Properties("config", "bin");
 		System.out.println(config.getMultiString("test")[9]);

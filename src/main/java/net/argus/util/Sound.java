@@ -26,7 +26,7 @@ public class Sound {
 	private static String path;
 	  
 	public Sound(String fileName, String rep, String extention, Properties config) {
-		path = AbstractFileSave.regulary(getClass().getResource("/assets/images/google.png").toString(), null);
+		path = AbstractFileSave.regulary(getClass().getResource("/assets/images/google.png").toString());
 		path = path.substring(path.indexOf("/") + 1, path.lastIndexOf(config.getString("project.name")));
 		path = path + rep + "/" + fileName+ "." + extention;
 		try {

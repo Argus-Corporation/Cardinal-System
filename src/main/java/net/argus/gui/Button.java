@@ -14,7 +14,6 @@ public class Button extends JButton implements Element, GUI {
 	private static final long serialVersionUID = -3879913755145121820L;
 	
 	private String name;
-	private static final String nameType = "button";
 	private static final boolean isBack = true;
 	private static final boolean isFore = true;
 	private static final boolean isFont = true;
@@ -26,18 +25,18 @@ public class Button extends JButton implements Element, GUI {
 	public Button(String name, boolean lang) {
 		super();
 		LangRegistry.addElementLanguage(this);
-		if(lang) {
-			this.name = nameType + "." + name + ".name";
+		FontRegistry.addElement(this);
+		
+		this.name = name;
+		if(lang)
 			this.setText();
-		}else {
-			this.name = name;
+		else
 			this.setText(name);
-		}
 	}
 	
 	public Button(ImageIcon icon) {
 		super(icon);
-		nameTypes.add(nameType);
+		nameTypes.add(BUTTON);
 		isBacks.add(isBack);
 		isFores.add(isFore);
 		isFonts.add(isFont);
@@ -46,6 +45,11 @@ public class Button extends JButton implements Element, GUI {
 	}
 	
 	@Override
-	public void setText() {this.setText(Lang.getElement(this.name));}
+	public void setText() {this.setText(Lang.get(BUTTON + "." + name + ".name"));}
+
+	@Override
+	public String getElementName() {
+		return "Button";
+	}
 
 }

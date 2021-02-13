@@ -2,8 +2,6 @@ package net.argus.file;
 
 import java.io.File;
 
-import net.argus.system.InitializedSystem;
-import net.argus.system.UserSystem;
 import net.argus.util.Identifiant;
 
 public class FileManager {
@@ -29,7 +27,7 @@ public class FileManager {
 		String path = "";
 		if(res == null) res = "";
 		
-		path = AbstractFileSave.regulary(new FileManager().getClass().getResource("/" + res).getPath(), null);
+		path = AbstractFileSave.regulary(new FileManager().getClass().getResource("/" + res).getPath());
 	
 		return path;
 	}
@@ -55,12 +53,6 @@ public class FileManager {
 			}
 		}else
 			f.delete();
-	}
-	
-	public static void main(String[] args) {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
-		
-		System.out.println(getPath("images/bar.png"));
 	}
 
 }

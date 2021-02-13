@@ -1,6 +1,6 @@
 package net.argus.security;
 
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.util.ArrayManager;
 import net.argus.util.Math;
 import net.argus.util.ThreadManager;
@@ -61,30 +61,14 @@ public class Key {
 	}
 
 	public static void main(String[] args) throws SecurityException {
-		InitializedSystem.initSystem(args);
+		InitializationSystem.initSystem(args);
 		Debug.addBlackList(ThreadManager.PROGRESSE);
+		//Key k = new Key("azertyuiopmlkjhgfd123456789");
 		
-		Key k = new Key("*^Ã¹$^fÂ®â˜»â–²%2d$dsÃ¹^f*$dsdsfsdf4s5d2d45fds52f4dsf5426465c42sdf546Ã¹*^$65^fÃ¹$^d*s*");
-		//Key k2 = new Key("*^Ã¹$^fd$dsÃ¹^f*$dsdsfsdf4s5d2b45fds52f4dsf5426465c42sdf546Ã¹*^$65^fÃ¹$^d*s*");
+		//String str = "1.4919529937178958E35\b1.686853199345494E35\b9.949954433122245E34\b1.2186155662546475E35\b1.1258718920312916E35\b1.6571009159915556E34\b8.994676700686313E34\b1.4893885172162805E35\b1.3269808857693695E35\b2.1107040756473672E35\b6.664979948906109E35\b8.489261495933616E34\b";
 		
-		/*String test = k2.crypt("La nature est tout ce qu'on voit,\r\n" + 
-				"Tout ce quâ€™on veut, tout ce qu'on aime.\r\n" + 
-				"Tout ce quâ€™on sait, tout ce quâ€™on croit,\r\n" + 
-				"Tout ce que lâ€™on sent en soi-mÃªme.\r\n" + 
-				"\r\n" + 
-				"Elle est belle pour qui la voit,\r\n" + 
-				"Elle est bonne Ã  celui qui lâ€™aime,\r\n" + 
-				"Elle est juste quand on y croit\r\n" + 
-				"Et quâ€™on la respecte en soi-mÃªme.\r\n" + 
-				"\r\n" + 
-				"Regarde le ciel, il te voit,\r\n" + 
-				"Embrasse la terre, elle tâ€™aime.\r\n" + 
-				"La vÃ©ritÃ© câ€™est ce quâ€™on croit\r\n" + 
-				"En la nature câ€™est toi-mÃªme.");*/
-		//System.out.println("\n" + test + "\n");
-		String test = k.crypt("Fr�d�rique");
-		System.out.println(test);
-		System.out.println(k.decrypt(test));
+		
+		//System.out.println(k.crypt("hello world!"));
 	}
 
 }

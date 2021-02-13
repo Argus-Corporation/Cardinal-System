@@ -65,7 +65,7 @@ public class GamePanel extends JPanel {
 	//System.out.println(Matrix.length());
 		Matrix.clear();
 		//time.start();
-		Matrix.transfert();
+	//	Matrix.transfert();
 	//	System.out.println(time.stop());
 		/*for(int i = 0; i < Matrix.getNewPixels().size(); i++) {
 			GamePixel pix = Matrix.getNewPixels().get(i);

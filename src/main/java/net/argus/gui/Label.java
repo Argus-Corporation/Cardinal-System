@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import net.argus.lang.Lang;
+import net.argus.lang.LangRegistry;
 
 public class Label extends JLabel implements Element, GUI {
 
@@ -14,17 +15,17 @@ public class Label extends JLabel implements Element, GUI {
 
 	private String name;
 	
-	private static final String nameType = "text";
 	private static final String elementType = "label";
 	private static final boolean isBack = false;
 	private static final boolean isFore = true;
 	private static final boolean isFont = true;
 	
-	private boolean lang;
+	public Label(String name) {
+		this(name, true);
+	}
 	
 	public Label(String name, boolean lang) {
 		super();
-		this.name = nameType + "." + name + ".name";
 		common(name, lang);
 	}
 	
@@ -34,20 +35,28 @@ public class Label extends JLabel implements Element, GUI {
 	}
 	
 	private void common(String name, boolean lang) {
-		this.lang = lang;
+		FontRegistry.addElement(this);
+		
 		
 		nameTypes.add(elementType);
 		isBacks.add(isBack);
 		isFores.add(isFore);
 		isFonts.add(isFont);
 		element.add(this);
-		if(lang)
+		if(lang) {
+			LangRegistry.addElementLanguage(this);
+			this.name = name;
 			setText();
-		else
+		}else
 			setText(name);
 	}
 	
 	@Override
-	public void setText() {super.setText(lang?Lang.getElement(this.name):this.name);}
+	public void setText() {super.setText(Lang.get(LABEL + "." + name + ".name"));}
+
+	@Override
+	public String getElementName() {
+		return "Label";
+	}
 
 }

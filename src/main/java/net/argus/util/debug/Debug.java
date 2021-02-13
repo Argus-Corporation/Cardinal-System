@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import net.argus.file.Loggeur;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.ThreadManager;
 
@@ -38,7 +38,7 @@ public class Debug {
 	private static void print(Object text) throws IOException {
 		String prefix =  "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "[thread/" + Thread.currentThread().getName().toUpperCase() + "]: ";
 		
-		if(InitializedSystem.isSystemInitialized() && UserSystem.getBooleanProperty("log"))
+		if(InitializationSystem.isSystemInitialized() && UserSystem.getBooleanProperty("log"))
 			if(logger != null)
 				logger.addLog(prefix + text);
 			else if(UserSystem.log != null)

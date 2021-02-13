@@ -26,7 +26,6 @@ public class Case {
 			//System.out.println(read(x + offX, y + offY));
 			i += cr.read(x + offX, y + offY);
 		}
-		
 		return new Binary(i).toInt();
 	}
 	

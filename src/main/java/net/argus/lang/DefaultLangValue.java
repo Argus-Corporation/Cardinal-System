@@ -12,14 +12,27 @@ public class DefaultLangValue {
 			.add("OptionPane.noButtonText", "Non")
 			.add("OptionPane.yesButtonText", "Oui")
 			
-			.add("Frame.titleErrorText", "Erreur");
+			.add("Frame.titleErrorText", "Erreur")
+			
+			.add("Text.status", "Statut");
 	
 	public static final DefaultLangValue en_US = new DefaultLangValue()
 			.add("OptionPane.cancelButtonText", "Cancel")
 			.add("OptionPane.noButtonText", "No")
 			.add("OptionPane.yesButtonText", "Yes")
 			
-			.add("Frame.titleErrorText", "Error");
+			.add("Frame.titleErrorText", "Error")
+			
+			.add("Text.status", "Statuts");
+	
+	public static final DefaultLangValue ja_JP = new DefaultLangValue()
+			.add("OptionPane.cancelButtonText", "キャンセル")
+			.add("OptionPane.noButtonText", "番号")
+			.add("OptionPane.yesButtonText", "はい")
+			
+			.add("Frame.titleErrorText", "エラー")
+			
+			.add("Text.status", "状態");
 	
 	private List<String> elementName = new ArrayList<String>(); 
 	private List<String> elementValue = new ArrayList<String>(); 

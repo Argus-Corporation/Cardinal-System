@@ -5,9 +5,9 @@ import java.util.List;
 
 import net.argus.number.Binary;
 import net.argus.number.Hexadecimal;
-import net.argus.number.Quaternaire;
 import net.argus.number.Hexadecimal.CharHex;
-import net.argus.system.InitializedSystem;
+import net.argus.number.Quaternaire;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.debug.Debug;
 
@@ -134,7 +134,7 @@ public class Math {
 	static {UserSystem.loadLibrary("math");}
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		System.out.println(new Hexadecimal("5457465517e5665a465274b654fffffff654265465d458414c54").toLong());
 		UserSystem.exit(0);

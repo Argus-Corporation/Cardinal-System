@@ -12,7 +12,7 @@ import net.argus.file.FileManager;
 import net.argus.file.Properties;
 import net.argus.graphic.Fonction;
 import net.argus.graphic.Vector2;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 
@@ -79,7 +79,7 @@ public class GraphicsPanel extends Panel {
 	
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws InterruptedException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
 		
 		Splash sp = new Splash("test", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 2000);

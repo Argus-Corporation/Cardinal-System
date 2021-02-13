@@ -7,8 +7,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
-import net.argus.system.InitializedSystem;
-import net.argus.system.UserSystem;
+import net.argus.system.InitializationSystem;
 @Deprecated
 public class BubblePanel {
 	
@@ -101,7 +100,7 @@ public class BubblePanel {
 	}
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, false);
 		
 		JFrame fen = new JFrame("Title");
 		fen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

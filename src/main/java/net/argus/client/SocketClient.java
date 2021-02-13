@@ -3,21 +3,28 @@ package net.argus.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import net.argus.event.socket.EventSocket;
+import net.argus.event.socket.SocketEvent;
+import net.argus.event.socket.SocketListener;
 import net.argus.exception.SecurityException;
 import net.argus.security.Key;
+import net.argus.util.ErrorCode;
 import net.argus.util.debug.Debug;
 import net.argus.util.pack.Package;
 import net.argus.util.pack.PackagePareser;
 
 public class SocketClient {
 	
+	private EventSocket event;
+	
 	private Socket socket;
-	private BufferedReader msgRecei;
-	private PrintWriter msgSend;
+	private BufferedReader in;
+	private PrintStream out;
 	
 	private String host;
 	private int port;
@@ -30,11 +37,13 @@ public class SocketClient {
 	private String pseudo = "Client";
 	private String password;
 	
-	public SocketClient(String host, int port, Key key) throws IOException {
+	public SocketClient(String host, int port, Key key) {
 		this.host = host;
 		this.port = port;
 		
 		this.key = key;
+		
+		event = new EventSocket();
 	}
 	
 	public SocketClient(String host, int port) throws IOException {
@@ -42,21 +51,52 @@ public class SocketClient {
 	}
 	
 	public void connect() throws UnknownHostException, IOException {
-		socket = new Socket(host, port);
+		try {socket = new Socket(host, port);}
+		catch(IOException e) {
+			event.startEvent(EventSocket.ERROR_CONNECTION, new SocketEvent(e, host, port));
+			
+			if(e instanceof UnknownHostException) throw new UnknownHostException();
+			else throw new IOException();
+		}
 		
-		Debug.log("Connected to " + host + ":" + port);
+		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		out = new PrintStream(socket.getOutputStream());
 		
 		connected = true;
 		
-		msgRecei = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		msgSend = new PrintWriter(socket.getOutputStream());
+		try {init();}
+		catch(SecurityException e) {e.printStackTrace();}
+		
+		validConnection();
+		Debug.log("Connected to " + host + ":" + port);
+	}
+	
+	public void validConnection() {
+		while(true) {
+			try {
+				Package pack = nextPackage();
+				if(pack.getType() == ProcessClient.CONNECTION || pack.getType() == ProcessClient.UNCONNECTION) {
+					ErrorCode code;
+					//String message = pack.getValue("message");
+					
+					if(pack.getType() != ProcessClient.CONNECTION) {
+						code = ErrorCode.valueOf(Integer.valueOf(pack.getValue("code")));
+						event.startEvent(EventSocket.ERROR_CONNECTION, new SocketEvent(code.getName(), host, port));
+						return;
+					}
+					
+					event.startEvent(EventSocket.CONNECT, new SocketEvent(socket, host, port));
+					return;
+				}
+			}catch(SecurityException e) {}
+		}
 	}
 	
 	public void init() throws IOException, SecurityException {
-		msgSend.println(key!=null);
-		msgSend.flush();
+		out.println(key!=null);
+		out.flush();
 		
-		serverUseKey = Boolean.valueOf(msgRecei.readLine());
+		serverUseKey = Boolean.valueOf(in.readLine());
 	}
 	
 	public void sendPackage(Package pack) {
@@ -64,56 +104,20 @@ public class SocketClient {
 	}
 	
 	public synchronized void send(Object obj) {
-		msgSend.println(serverUseKey&&key!=null?key.crypt(obj.toString()):obj.toString());
-		msgSend.flush();
+		out.println(serverUseKey&&key!=null?key.crypt(obj.toString()):obj.toString());
+		out.flush();
 	}
 	
 	public void close(String msg) throws IOException {
-		msgSend.close();
-		msgRecei.close();
+		out.close();
+		in.close();
 		socket.close();
 		connected = false;
 		
+		event.startEvent(EventSocket.DISCONNECT, new SocketEvent(msg, host, port));
+		
 		Debug.log("You are disconnected: " + msg);
 	}
-	
-	/*@Deprecated
-	public synchronized void sendFile(File file, String[] clientReceivers) throws SecurityException, IOException {
-		PackageBuilder bui = new PackageBuilder(PackageType.FILE.getId());
-		PackageObject objFile = new PackageObject("value");
-		
-		String path = file.getPath();
-		String fileName = path.substring(path.lastIndexOf('\\') + 1, path.lastIndexOf('.'));
-		String extention = path.substring(path.lastIndexOf('.') + 1);
-		
-		byte[] data = new byte[(int) file.length()];
-		
-		DataInputStream in = new DataInputStream(new FileInputStream(file));
-		
-		in.readFully(data);
-		in.close();
-		
-		objFile.addItem("fileName", fileName);
-		objFile.addItem("extention", extention);
-		objFile.addItemArray("data", data);
-		
-		bui.addItemArray("clientReceivers", clientReceivers);
-		
-		bui.addValue(objFile);
-		//length  77
-		
-		
-		//System.out.println(bui.build().getFile() + "  tezs");
-		//System.out.println(objFile.getArrayValue("data").length + "  tezs");
-		
-		new Thread(new Runnable() {
-			public void run() {
-				sendPackage(new Package(bui));
-
-			}
-		}).start();
-		
-	}*/
 	
 	public Package nextPackage() throws SecurityException {
 		String n = nextString();
@@ -127,13 +131,15 @@ public class SocketClient {
 	private String nextString() throws SecurityException {
 		String msg = null;
 		
-		try{msg = msgRecei.readLine();}
+		try{msg = in.readLine();}
 		catch(IOException e) {return null;}
 		if(msg != null)
 			return serverUseKey&&key!=null?!msg.equals("")?key.decrypt(msg):msg:msg;
 		else 
 			return null;
 	}
+	
+	public void addSocketListener(SocketListener listener) {event.addListener(listener);}
 	
 	public String getPseudo() {return pseudo;}
 	public String getPassword() {return password;}
@@ -142,11 +148,17 @@ public class SocketClient {
 	public boolean isServerUseKey() {return serverUseKey;}
 	public boolean isConnected() {return connected;}
 	
+	public SocketClient setOutputStream(OutputStream out) {
+		this.out = new PrintStream(out);
+		return this;
+	}
+	
 	public SocketClient setKey(Key key) {this.key = key; return this;}
 	public SocketClient setPseudo(String pseudo) {
 		if(pseudo != null && !pseudo.equals("")) this.pseudo = pseudo;
 		return this;
 	}
+	
 	public SocketClient setPassword(String password) {this.password = password; return this;}
 
 }

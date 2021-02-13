@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import net.argus.exception.SecurityException;
 import net.argus.security.Key;
 import net.argus.server.role.Role;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.CloseListener;
 import net.argus.util.ListenerManager;
@@ -93,7 +93,7 @@ public class Server extends Thread {
 		ThreadManager.stop(currentThread());
 	}
 	
-	public int getVersion() {return SERVER_VERSION;}
+	public static int getVersion() {return SERVER_VERSION;}
 	
 	public boolean isRunning() {return running;}
 	
@@ -104,7 +104,7 @@ public class Server extends Thread {
 	public void addClostListener(CloseListener listener) {closeManager.addListener(listener);}
 		
 	public static void main(String[] args) throws IOException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 	//	Key key = new Key("$^ù$$;mm^$^dmsf$^sdµdPµ^mm$µMPµ;p:,$^;m:$^,;:877687^$ù*%µMPµ%m");
 		
 		Server server = new Server(10, 11066);

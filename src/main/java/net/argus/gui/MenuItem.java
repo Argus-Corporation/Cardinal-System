@@ -12,8 +12,6 @@ public class MenuItem extends JMenuItem implements GUI {
 	 */
 	private static final long serialVersionUID = -1224411470404693508L;
 	
-	public static final String nameType = "menuitem";
-	
 	private String name;
 
 	public MenuItem(String name) {
@@ -21,12 +19,19 @@ public class MenuItem extends JMenuItem implements GUI {
 		this.name = name;
 		
 		LangRegistry.addElementLanguage(this);
+		FontRegistry.addElement(this);
+		
 		setText();
 	}
 
 	@Override
 	public void setText() {
-		setText(Lang.getElement(nameType + "." + name + ".name"));
+		setText(Lang.get(MENUITEM + "." + name + ".name"));
+	}
+
+	@Override
+	public String getElementName() {
+		return "MenuItem";
 	}
 
 }

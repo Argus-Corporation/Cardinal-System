@@ -52,9 +52,7 @@ public abstract class Command {
 		}
 	}
 	
-	protected void run(String[] com, ServerSocketClient client) throws IOException, SecurityException{
-		Debug.log("Error: execute command not found");
-	}
+	protected abstract void run(String[] com, ServerSocketClient client) throws IOException, SecurityException;
 	
 	public static Command getCommand(String commandName) {
 		if(commandName.charAt(0) == '/')

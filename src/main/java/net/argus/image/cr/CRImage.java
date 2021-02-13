@@ -128,8 +128,7 @@ public class CRImage {
 		coef = getCoef(0, 0);
 		
 		initCase();
-		
-	//	subMask(getMask());
+		subMask(getMask());
 		
 		String text = "";
 		List<String> word = new ArrayList<String>();
@@ -143,8 +142,8 @@ public class CRImage {
 				j = 0;
 			}
 			text += readString(cass[i+1]);
+			//System.out.println(text);
 		}
-		
 		return parser(word);
 		
 	}
@@ -161,13 +160,10 @@ public class CRImage {
 		int color = getColor(x * coef, y * coef, img);
 		
 		int ret = -1;
-		
 		if(color > (WHITE - tolerance) && color < (WHITE + tolerance) || color == WHITE)
-			ret = 1;
-		else if(color > (BLACK - tolerance) && color < (BLACK + tolerance) || color == BLACK)
 			ret = 0;
-		
-		System.out.println(ret);
+		else if(color > (BLACK - tolerance) && color < (BLACK + tolerance) || color == BLACK)
+			ret = 1;
 		
 		return ret;
 	}
@@ -190,7 +186,7 @@ public class CRImage {
 		}
 		
 		
-	//	addMask();
+		addMask();
 		addBase();
 		
 		ImageIO.write(img, "png", file);

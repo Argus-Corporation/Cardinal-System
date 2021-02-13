@@ -19,7 +19,7 @@ public class BanCommand extends Command {
 		ServerSocketClient target = Users.getServerSocketClient(com[1]);
 
 		if(target != null) {
-			Users.getBanIpFile().wirter(target.getIp().substring(1));
+			Users.getBanIpFile().wirter(target.getIpClient());
 			String args = "";
 			if(ArrayManager.isExist(com, 2)) {
 				for(int i = 2; i < com.length; i++)

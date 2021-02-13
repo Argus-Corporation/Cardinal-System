@@ -2,7 +2,8 @@ package net.argus.lang;
 
 public enum LangType {
 	
-	en_US("en_US", "english", DefaultLangValue.en_US, 0), fr_FR("fr_FR", "fran�ais", DefaultLangValue.fr_FR, 1);
+	en_US("en_US", "english", DefaultLangValue.en_US, 0), fr_FR("fr_FR", "français", DefaultLangValue.fr_FR, 1),
+	ja_JP("ja_JP", "日本人", DefaultLangValue.ja_JP, 2);
 	
 	private String name;
 	private String relName;

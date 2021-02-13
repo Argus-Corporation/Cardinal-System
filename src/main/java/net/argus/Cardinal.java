@@ -2,7 +2,7 @@ package net.argus;
 
 public final class Cardinal {
 	
-	public static final String VERSION = "1.2";
+	public static final String VERSION = "pre 1.3";
 	public static final String NAME = "Cardinal-System";
 	
 	public static final String WEB = "https://argus.alwaysdata.net/";
@@ -14,6 +14,4 @@ public final class Cardinal {
 	 */
 	public static final long id = 8965655415512574257l;
 	
-	static {}
-
 }

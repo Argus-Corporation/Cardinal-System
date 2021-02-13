@@ -2,7 +2,7 @@ package net.argus.util.pack;
 
 import net.argus.file.cjson.CJSONFile;
 import net.argus.file.cjson.CJSONObject;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.ErrorCode;
 
@@ -57,7 +57,7 @@ public class Package {
 	}
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		/*PackageBuilder bui = new PackageBuilder(0);
 		bui.addManifestValue("id", "0");
 		bui.addManifestValue("version", "11066");

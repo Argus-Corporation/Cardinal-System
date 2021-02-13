@@ -1,6 +1,7 @@
 package net.argus.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -14,7 +15,7 @@ import javax.swing.UIManager;
 import net.argus.util.ChangeListener;
 import net.argus.util.ListenerManager;
 
-public class TextField extends JTextField implements Element {
+public class TextField extends JTextField implements Element, GUI {
 
 	/**
 	 * 
@@ -50,6 +51,8 @@ public class TextField extends JTextField implements Element {
 	}
 	
 	private void common() {
+		FontRegistry.addElement(this);
+		
 		nameTypes.add(nameType);
 		isBacks.add(isBack);
 		isFores.add(isFore);
@@ -93,9 +96,9 @@ public class TextField extends JTextField implements Element {
 				b = 0;
 			Color nbc = new Color(r, g, b);
 			setBackground(nbc);
-		}else if(error && enabled && !isEnabled()) {
+		}else if(error && enabled && !isEnabled())
 			setError();
-		}
+			
 		super.setEnabled(enabled);
 	}
 	
@@ -119,7 +122,11 @@ public class TextField extends JTextField implements Element {
 				}else {
 					dataIndex = oldData.size()>0?oldData.size():0;
 					touch = true;
-				}	
+				}
+				
+				if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_A)
+					selectAll();
+					
 			}
 			public void keyReleased(KeyEvent e) {}
 			
@@ -156,5 +163,18 @@ public class TextField extends JTextField implements Element {
 	}
 	
 	public void addChaneListener(ChangeListener listener) {changeManager.addListener(listener);}
+
+	@Override
+	public void setText() {}
+
+	@Override
+	public String getElementName() {
+		return "TextField";
+	}
+	
+	@Override
+	public void setFont(Font f) {
+		super.setFont(f);
+	}
 
 }

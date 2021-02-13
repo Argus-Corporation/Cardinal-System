@@ -3,7 +3,7 @@ package net.argus.file.cjson;
 import java.io.IOException;
 import java.util.List;
 
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 
 public class CJSON {
@@ -38,7 +38,7 @@ public class CJSON {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		InitializedSystem.initSystem(new String[] {"-name", "Cardinal-System", "-id", "0xdev", "-log", "false"});
+		InitializationSystem.initSystem(new String[] {"-name", "Cardinal-System", "-id", "0xdev", "-log", "false"});
 		
 		//Key key = new Key("*ù$ef^ù*$ù$%kjnkjfezdskpvù$êfdpvù$^dfpv$ù^pfeùv^pf$^vpùfqd^v$pqfd^vperpv$qe^rpv$^qerpqv^$eqrpv^*eqorlv^$*ep*v^*$*oeqr^voeqr^voeq^vpqêpr*vqê*ov^pe*ovqerov^qr*ovqrov^qrov£%*ù^654654fsdf%¨µ£%%sff£¨µ¨%/.§/");
 		CJSONFile file = new CJSONFile("tree", "/");

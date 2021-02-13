@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 
 import net.argus.file.FileManager;
 import net.argus.file.Properties;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 
@@ -212,7 +212,7 @@ public class Splash extends JFrame {
 	
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
 		Splash splash = new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 1000);
 		splash.play();

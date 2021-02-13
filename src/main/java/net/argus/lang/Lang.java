@@ -7,6 +7,8 @@ import java.util.List;
 import net.argus.file.FileManager;
 import net.argus.file.FileSave;
 import net.argus.file.Properties;
+import net.argus.file.css.CSSFile;
+import net.argus.gui.FontRegistry;
 import net.argus.system.Temp;
 import net.argus.util.debug.Debug;
 
@@ -19,6 +21,8 @@ public class Lang {
 	private static void setLang(LangType lang) {
 		Lang.langType = lang;
 		lang.getDefaultLangValue().apply();
+		
+		updateCSS();
 		
 		Debug.log("Lang: " + langType);
 	}
@@ -33,12 +37,14 @@ public class Lang {
 	public static void updateLang(LangType type) {
 		setLang(type);
 		LangRegistry.update();
+		FontRegistry.update();
 	}
 	
-	public static String getLangName() {return langType.getName();}
-	public static LangType getLangType() {return langType;}
-
-	public static String getElement(String key) {return LangManager.getElement(key);}
+	private static void updateCSS() {
+		CSSFile cssFile = LangManager.getCSSFile();
+		if(cssFile != null)
+			cssFile.execut();
+	}
 	
 	public static String[] getAllLangRelName() {
 		List<String> langName = new ArrayList<String>();
@@ -65,5 +71,10 @@ public class Lang {
 				return true;
 		return false;
 	}
+	
+	public static String get(String key) {return LangManager.getElement(key);}
+	
+	public static String getLangName() {return langType.getName();}
+	public static LangType getLangType() {return langType;}
 	
 }
