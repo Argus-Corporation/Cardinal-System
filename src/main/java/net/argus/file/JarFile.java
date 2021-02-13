@@ -32,6 +32,10 @@ public class JarFile {
 		this.path = path;
 	}
 	
+	public JarFile(File path) {
+		this.path = path.getPath();
+	}
+	
 	public void addFile(String fileName) {
 		this.fileName.add(ArrayManager.remplace(fileName, new char[] {'/', '\\'}, File.separatorChar));
 	}

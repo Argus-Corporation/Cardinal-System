@@ -1,7 +1,5 @@
 package net.argus.util;
 
-import net.argus.lang.Lang;
-
 public enum ErrorCode {
 	
 	leave("leave", -1, 1), error("error", 0, 0), kick("kick", 12, 1), ban("ban", 5, 0), crypt("crypt", 1, 1), full("full", 7, 1),
@@ -11,7 +9,8 @@ public enum ErrorCode {
 	int code, typeMessage;
 	
 	private ErrorCode(String name, int code, int typeMessage) {
-		this.name = "info." + name + ".name";
+		//this.name = "info." + name + ".name";
+		this.name = name;
 		this.code = code;
 		this.typeMessage = typeMessage;
 	}
@@ -24,8 +23,8 @@ public enum ErrorCode {
 		return error;
 	}
 	
-	public String getMessage() {
-		return Lang.getElement(name);
+	public String getName() {
+		return name;
 	}
 	
 	public int getCode() {return code;}
@@ -33,7 +32,7 @@ public enum ErrorCode {
 	
 	@Override
 	public String toString() {
-		return getMessage() + ": " + code;
+		return getName() + ": " + code;
 	}
 
 }

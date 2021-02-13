@@ -9,6 +9,8 @@ import net.argus.util.debug.Debug;
 
 public class ThreadManager {
 	
+	public static List<Thread> threads = new ArrayList<Thread>();
+	
 	public static final ThreadManager THREAD_MANAGER = new ThreadManager("thread manager");
 	
 	public static final ThreadManager UPDATE_UI = new ThreadManager("update-ui");
@@ -17,13 +19,13 @@ public class ThreadManager {
 	public static final ThreadManager SPLASH = new ThreadManager("splash");
 	public static final ThreadManager SYSTEM = new ThreadManager("system");
 	
-	public static List<Thread> threads = new ArrayList<Thread>();
 	
 	private static String oldNameStatic;
 	
 	private String name;
 	private String oldName;
 	
+	private Thread thread;
 	
 	public ThreadManager(String name) {
 		this.name = name;
@@ -35,6 +37,9 @@ public class ThreadManager {
 	
 	public void start(Thread thread) {
 		setTemporaryName(THREAD_MANAGER.getName());
+		
+		this.thread = thread;
+		
 		thread.setName(name);
 		thread.start();
 		
@@ -54,8 +59,7 @@ public class ThreadManager {
 	public static void addThread(Thread thread) {threads.add(thread);}
 	public static void addThread(ThreadManager thread) {addThread(new Thread(thread.name));}
 	
-	@SuppressWarnings("static-access")
-	public static void sleep(long millis) {try {Thread.currentThread().sleep(millis);}catch(InterruptedException e) {e.printStackTrace();}}
+	public static void sleep(long millis) {try {Thread.sleep(millis);}catch(InterruptedException e) {e.printStackTrace();}}
 	
 	public static Thread getThread(String name) {
 		for(int i = 0; i < threads.size(); i++) {
@@ -75,6 +79,8 @@ public class ThreadManager {
 		}
 		return null;
 	}
+	
+	public Thread getThread() {return thread;}
 	
 	public String getName() {return name;}
 	

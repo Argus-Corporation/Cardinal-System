@@ -64,10 +64,10 @@ public class RondButton extends JButton {
 	public RondButton(Color background) {
 		super();
 		this.background = background;
-		RondButton.iconBar = new ImageIcon(FileManager.getPathInJar("images/bar.png"));
-		RondButton.iconFleche = new ImageIcon(FileManager.getPathInJar("images/fleche.png"));
+		RondButton.iconBar = new ImageIcon(FileManager.getPathInJar("res/images/bar.png"));
+		RondButton.iconFleche = new ImageIcon(FileManager.getPathInJar("res/images/fleche.png"));
 		
-		RondButton.iconCroix = new ImageIcon(FileManager.getPathInJar("images/croix.png"));
+		RondButton.iconCroix = new ImageIcon(FileManager.getPathInJar("res/images/croix.png"));
 		this.setFocusable(false);
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
@@ -80,10 +80,10 @@ public class RondButton extends JButton {
 		this.setSize(16, 16);
 		this.id = ids;
 		rondButton[ids] = this;
-		iconCroix = new ImageIcon(RondButton.class.getResource("/images/croix.png"));
-		iconBar = new ImageIcon(RondButton.class.getResource("/images/bar.png"));
-		iconFleche = new ImageIcon(RondButton.class.getResource("/images/fleche.png"));
-		iconFlecheInv = new ImageIcon(RondButton.class.getResource("/images/fleche2.png"));
+		iconCroix = new ImageIcon(FileManager.getPathInJar("res/images/croix.png"));
+		iconBar = new ImageIcon(FileManager.getPathInJar("res/images/bar.png"));
+		iconFleche = new ImageIcon(FileManager.getPathInJar("res/images/fleche.png"));
+		iconFlecheInv = new ImageIcon(FileManager.getPathInJar("res/images/fleche2.png"));
 		this.background = background;
 		this.setFocusable(false);
 		this.setContentAreaFilled(false);

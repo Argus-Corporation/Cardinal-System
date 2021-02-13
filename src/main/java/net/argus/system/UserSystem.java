@@ -5,6 +5,7 @@ import java.util.Scanner;
 import net.argus.file.Loggeur;
 import net.argus.file.cjson.CJSONFile;
 import net.argus.system.update.AutoUpdate;
+import net.argus.util.ListenerManager;
 import net.argus.util.RunTime;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
@@ -17,9 +18,8 @@ public class UserSystem {
 	public static RunTime runTime = RunTime.getRunTime();
 	public static Scanner in = new Scanner(System.in);
 	
-	public static final String LIBRARY_WINDOWS = "dll";
-	public static final String LIBRARY_LINUX = "so";
 	
+	/**--INITIALIZATION--**/
 	private static InitializedSystemManager manager = new InitializedSystemManager() {
 		public void preInit(String[] args) {
 			runTime.start();
@@ -42,8 +42,25 @@ public class UserSystem {
 	};
 	
 	public static InitializedSystemManager getDefaultInitializedSystemManager() {return manager;}
-	
 	public static void setDefaultInitializedSystemManager(InitializedSystemManager manager) {UserSystem.manager = manager;}
+	
+	
+	/**--SYSTEM LISTENER--**/
+	private static ListenerManager<SystemListener> systemManager = new ListenerManager<SystemListener>();
+	
+	public static void addSystemListener(SystemListener listener) {
+		systemManager.addListener(listener);
+	}
+	
+	public static void systemEventInit(SystemEvent e) {
+		for(SystemListener lis : systemManager)
+			lis.systemInit(e);
+	}
+	
+	
+	/**--LIBRARY--**/
+	public static final String LIBRARY_WINDOWS = "dll";
+	public static final String LIBRARY_LINUX = "so";
 	
 	public static void loadLibrary(String name) {
 		ThreadManager.setTemporaryName(ThreadManager.SYSTEM.getName());
@@ -61,6 +78,8 @@ public class UserSystem {
 		ThreadManager.restorOldParameter(0);
 	}
 	
+	
+	/**--PROPERTY--**/
 	public static String getProperty(String key) {
 		return System.getProperty(key);
 	}

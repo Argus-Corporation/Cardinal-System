@@ -24,11 +24,15 @@ public class ProcessClient extends Thread {
 	private Client mainClient;
 	private SocketClient client;
 	
+	public static final int UNCONNECTION = -6;
+	public static final int CONNECTION = -5;
+	
 	public static final int LOG_OUT = -2;
 	public static final int MESSAGE = 0;
 	public static final int SYSTEM = 1;
 	public static final int PSEUDO = 2;
 	public static final int ARRAY = 3;
+	@Deprecated
 	public static final int FILE = 4;
 	public static final int NOTIFY = 5;
 	
@@ -112,29 +116,6 @@ public class ProcessClient extends Thread {
 					Notification.showNotification("Notify", pack.getValue("message"), "ARGUS", MessageType.INFO, "");
 					break;
 					
-				/*case FILE:
-					String fileName = pack.getObject("value").getValue("fileName").toString();
-					String extention = pack.getObject("value").getValue("extention").toString();
-					byte[] data = pack.getObject("value").getByte("data");
-					
-					String path = "";
-					
-					JFileChooser choos = new JFileChooser(System.getProperty("user.home"));
-					choos.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-					
-					int returnValue = -1;
-					while(returnValue != JFileChooser.APPROVE_OPTION)
-						returnValue = choos.showOpenDialog(null);
-					
-					path = choos.getSelectedFile().getPath();
-					
-					DataOutputStream out = new DataOutputStream(new FileOutputStream(new File(path + "\\" + fileName + "." + extention)));
-					out.write(data);
-					out.close();
-					
-					Debug.log("File created: " + path);
-					
-					break;*/
 			}
 			
 			for(ClientManager manager : clientManager.getListeners())	
@@ -143,10 +124,7 @@ public class ProcessClient extends Thread {
 		
 	}
 	
-	public void setThreadName(String name) {
-		setName("CLIENT: " + name.toUpperCase());
-
-	}
+	public void setThreadName(String name) {setName("CLIENT: " + name.toUpperCase());}
 	
 	public SocketClient getClient() {return client;}
 	
@@ -158,14 +136,11 @@ public class ProcessClient extends Thread {
 	
 	public void run() {
 		setThreadName(client.getPseudo());
-		try {
-			client.init();
+		
+		client.sendPackage(new Package(new PackageBuilder(PackageType.PSEUDO).addValue("pseudo", client.getPseudo())));
+		client.sendPackage(new Package(new PackageBuilder(PackageType.SYSTEM).addValue("version", Integer.toString(Client.getVersion()))));
+		client.sendPackage(new Package(new PackageBuilder(PackageType.PASSWORD).addValue("password", client.getPassword()!=null?client.getPassword():"")));
 			
-			client.sendPackage(new Package(new PackageBuilder(PackageType.PSEUDO).addValue("pseudo", client.getPseudo())));
-			client.sendPackage(new Package(new PackageBuilder(PackageType.SYSTEM).addValue("version", Integer.toString(Client.getVersion()))));
-			client.sendPackage(new Package(new PackageBuilder(PackageType.PASSWORD).addValue("password", client.getPassword()!=null?client.getPassword():"")));
-			
-		}catch(IOException | SecurityException e) {e.printStackTrace();}
 		
 		while(mainClient.isRunning()) {
 			try {receive();}

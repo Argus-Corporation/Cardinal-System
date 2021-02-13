@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import net.argus.exception.PositionException;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 import net.argus.util.debug.Debug;
@@ -61,7 +61,6 @@ public class AbstractFileSave {
 		this.path = path.getPath();
 
 		path.mkdirs();
-		
 		this.path += "/" + fileName + "." + extention;
 		this.file = new File(this.path);
 		
@@ -76,10 +75,9 @@ public class AbstractFileSave {
 		this.extention = path.toString().substring(path.toString().lastIndexOf('.') + 1);
 		this.path = path.getPath();
 		
-		this.path = regulary(this.path, null);
+		this.path = regulary(this.path);
 		
 		this.file = path;
-		
 		
 		/*try {if(!this.file.exists()) {this.file.createNewFile(); Debug.log("File Created: " + getPath());}
 		}catch(IOException e) {e.printStackTrace();}*/
@@ -108,10 +106,10 @@ public class AbstractFileSave {
 		}
 		
 		String str = null;
-		
 		try {str = read.readLine();}
 		catch(NoSuchElementException e) {}
-		return str;
+		//System.out.println(file);
+		return regulary(str);
 	}
 
 	/**
@@ -202,7 +200,10 @@ public class AbstractFileSave {
 	 * @param afs
 	 * @return value
 	 */
-	public static String regulary(String value, AbstractFileSave afs) {
+	public static String regulary(String value) {
+		if(value == null)
+			return value;
+		
 		String first = null;
 		String second = null;
 		for(boolean valid = false; !valid;) {
@@ -211,7 +212,7 @@ public class AbstractFileSave {
 				first = first.substring(0, first.lastIndexOf("%"));
 				second = value.substring(value.lastIndexOf("%") + 1);
 				
-				value = first + System.getProperty("user.dir") + second;
+				value = first + FileManager.getMainPath() + "/" + second;
 			}else if(value.contains("%widthDisplay%")){
 				first = value.substring(0, value.lastIndexOf("%"));
 				first = first.substring(0, first.lastIndexOf("%"));
@@ -233,7 +234,6 @@ public class AbstractFileSave {
 				valid = true;
 			}
 		}
-		
 		return value;
 	}
 	
@@ -248,7 +248,7 @@ public class AbstractFileSave {
 	public void setRepertory(String rep) {this.rep = rep;}
 	
 	public static void main(String[] args) throws IOException, PositionException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		//AbstractFileSave fs = new AbstractFileSave(new File("D:\\Django\\Document 1\\Git\\test.lang"));
 		//FileLang fileLang = new FileLang(new Properties("config", "bin"));

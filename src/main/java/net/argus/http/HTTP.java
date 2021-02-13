@@ -3,7 +3,7 @@ package net.argus.http;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 
 public class HTTP {
@@ -31,7 +31,7 @@ public class HTTP {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		new HTTP().start();
 	}
 

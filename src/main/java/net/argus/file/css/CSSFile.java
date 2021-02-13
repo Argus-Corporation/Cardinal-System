@@ -3,7 +3,6 @@ package net.argus.file.css;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +10,6 @@ import javax.swing.UIManager;
 
 import net.argus.file.AbstractFileSave;
 import net.argus.file.Filter;
-import net.argus.system.InitializedSystem;
-import net.argus.system.UserSystem;
 import net.argus.util.ArrayManager;
 import net.argus.util.FontStyle;
 import net.argus.util.ThreadManager;
@@ -165,14 +162,5 @@ public class CSSFile extends AbstractFileSave {
 	}
 	
 	public String getFileCompiled() {return fileComplied;}
-	
-	public static void main(String[] args) throws FileNotFoundException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
-		
-		CSSFile css = new CSSFile("test", "bin");
-		
-		css.execut();
-		System.out.println(UIManager.get("Button.font"));
-	}
 	
 }

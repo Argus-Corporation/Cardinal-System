@@ -7,63 +7,89 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import net.argus.file.FileManager;
 
 public class Launcher {
 	
-	public Launcher(String[] args) throws Exception {
-		File file = getCodeSourceLocation();
-		Manifest manifest = new Manifest(file);
+	private File thisJar;
+	private Manifest manifest;
+	
+	private String[] uArgs;
+	private String[] vmArgs;
+	private String mainClass;
+	
+	private String nativePath;
+	
+	private List<String> classpaths = new ArrayList<String>();
+	
+	public Launcher(boolean launchThisJar) throws Exception {
+		thisJar = getCodeSourceLocation();
+		manifest = new Manifest(thisJar);
 		
-		List<String> arguments = new ArrayList<String>();
 		
-		String nativePath = Temp.getTempDir();
-	    String mainClass = manifest.getValue("Launcher-Main-Class");
+		nativePath = Temp.getTempDir();
+	    mainClass = manifest.getValue("Launcher-Main-Class");
 	    String vmArgs = manifest.getValue("Launcher-VM-Args");
-	    String[] userArgs = manifest.getValue("Launcher-Args").split(" ");
-	    StringTokenizer vmArgsToken = new StringTokenizer(vmArgs, " ");
-	    int count = vmArgsToken.countTokens();
+	    String uArgs = manifest.getValue("Launcher-Args");
+	    
+	    if(vmArgs != null)this.vmArgs = vmArgs.split(" ");
+	    if(uArgs != null)this.uArgs = uArgs.split(" ");
+	    
+	    if(launchThisJar) addClassPath(thisJar.getAbsoluteFile().toString());
+	}
+	
+	public void launch(List<String> args) throws Exception {
+		launch((String[]) args.toArray(new String[args.size()]));
+	}
+	
+	public void launch(String[] args) throws Exception {
+		List<String> arguments = new ArrayList<String>();
 	    
 	    try {
-	    	extractNatives(file, nativePath);
+	    	extractNatives();
 	    	
 	    	arguments.add("java");
 	    	
-	    	for(int i = 0; i < count; i++) {
-	    		String str = vmArgsToken.nextToken();
-	    		arguments.add(str); 
-	    	}
+	    	if(vmArgs != null)
+	    		for(String vmArg : vmArgs) 
+	    			arguments.add(vmArg); 
 	    	
 	    	arguments.add("-cp");
-	    	arguments.add(file.getAbsoluteFile().toString());
+	    	arguments.add(getClassPath());
+	    	
 	    	arguments.add("-Djava.library.path=" + nativePath);
 	    	arguments.add(mainClass);
 	    	
 	    	arguments.add("-temp");
 	    	arguments.add(nativePath);
 	    	
-	    	for(String uArg : userArgs)
-	    		arguments.add(uArg);
+	    	if(uArgs != null)
+	    		for(String uArg : uArgs)
+	    			arguments.add(uArg);
 	    	
-	    	for(String arg : args)
-	    		arguments.add(arg);
+	    	if(args != null)
+	    		for(String arg : args)
+	    			arguments.add(arg);
 	    	
-	    	ProcessBuilder processBuilder = new ProcessBuilder(arguments);
-	    	processBuilder.redirectErrorStream(true);
-	    	
-	    	Process process = processBuilder.start();
-	    	writeConsoleOutput(process);
-	    	
-	    	process.waitFor();
+		    	start(arguments);
 	    }finally {
 	    	FileManager.delete(nativePath);
 	    }
 	    
 	}
+	
+	public static void start(List<String> arguments) throws Exception {
+		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
+    	processBuilder.redirectErrorStream(true);
+    	
+    	Process process = processBuilder.start();
+    	writeConsoleOutput(process);
+    	
+    	process.waitFor();
+	}
 	  
-	public void writeConsoleOutput(Process process) throws Exception {
+	public static void writeConsoleOutput(Process process) throws Exception {
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
@@ -73,7 +99,7 @@ public class Launcher {
 			System.out.println(line);
 	}
 	  
-	public void extractNatives(File file, String nativePath) throws Exception {
+	public static void extractNatives() throws Exception {
 		CopyTemp cop = new CopyTemp();
 		
 		List<String> ext = new ArrayList<String>();
@@ -83,14 +109,24 @@ public class Launcher {
 		cop.copy(ext);
 	}
 	
-	public File getCodeSourceLocation() {
+	public static File getCodeSourceLocation() {
 		try {return new File(Launcher.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 		}catch(URISyntaxException e) {
 			e.printStackTrace();
 			return null;
 		} 
 	}
+	
+	public void addClassPath(String str) {classpaths.add(str + ";");}
+	
+	public String getClassPath() {
+		String classPath = "";
+    	for(String cp : classpaths)
+    		classPath += cp;
+    	return classPath;
+	}
+	public String[] getArgs() {return uArgs;}
 	  
-	public static void main(String[] args) throws Exception {new Launcher(args);}
+	public static void main(String[] args) throws Exception {new Launcher(true).launch(args);}
 
 }

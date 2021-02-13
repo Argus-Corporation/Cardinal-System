@@ -14,7 +14,7 @@ import net.argus.file.cjson.CJSONPareser;
 import net.argus.gui.OptionPane;
 import net.argus.io.Download;
 import net.argus.system.Copy;
-import net.argus.system.InitializedSplash;
+import net.argus.system.InitializationSplash;
 import net.argus.system.SystemProcess;
 import net.argus.system.Temp;
 import net.argus.system.UserSystem;
@@ -45,14 +45,14 @@ public class AutoUpdate {
 		if(newVersion) {
 			Debug.log("New version available");
 			
-			if(InitializedSplash.getSplash() != null) InitializedSplash.getSplash().hideSplash();
+			if(InitializationSplash.getSplash() != null) InitializationSplash.getSplash().hideSplash();
 			int result = OptionPane.showConfirmDialog(null, "Une nouvelle version est disponible souhaitez vous la telecharger", "Update", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 			
 			if(result == JOptionPane.YES_OPTION)
 				UserSystem.update.downloadNewVersion();
 			
 			else
-				if(InitializedSplash.getSplash() != null) InitializedSplash.getSplash().setVisible(true);
+				if(InitializationSplash.getSplash() != null) InitializationSplash.getSplash().setVisible(true);
 				
 		}
 	}

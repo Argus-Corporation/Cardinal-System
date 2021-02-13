@@ -34,7 +34,7 @@ public class Info {
 	}
 	
 	public static void show(ErrorCode code) {
-		JOptionPane.showMessageDialog(null, code.getMessage() + ": " + code.getCode(), "Alert Server", code.getMessageType());
+		JOptionPane.showMessageDialog(null, code.getName() + ": " + code.getCode(), "Alert Server", code.getMessageType());
 	}
 	
 	public static Info getInfo(ErrorCode code) {

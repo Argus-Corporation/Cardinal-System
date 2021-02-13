@@ -8,7 +8,8 @@ import java.awt.TrayIcon.MessageType;
 import javax.swing.ImageIcon;
 
 import net.argus.file.FileManager;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
+import net.argus.system.OS;
 import net.argus.system.UserSystem;
 
 public class Notification {
@@ -26,15 +27,16 @@ public class Notification {
 	 * @param iconPath
 	 */
 	public static void showNotification(String mes, String name, String projectName, MessageType type, String iconPath) {
-		try {
-		    if(isFirst) {
-		    	tray = SystemTray.getSystemTray();
-		    	trayIcon = new TrayIcon(new ImageIcon(iconPath).getImage(), projectName);
-		    	tray.add(trayIcon);
-		    	isFirst = false;
-		    } 
-		    trayIcon.displayMessage(mes, name, type);
-		}catch(Exception e) {e.printStackTrace();}
+		if(OS.getOS() != OS.LINUX)
+			try {
+			    if(isFirst) {
+			    	tray = SystemTray.getSystemTray();
+			    	trayIcon = new TrayIcon(new ImageIcon(iconPath).getImage(), projectName);
+			    	tray.add(trayIcon);
+			    	isFirst = false;
+			    } 
+			    trayIcon.displayMessage(mes, name, type);
+			}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	/**
@@ -58,7 +60,7 @@ public class Notification {
 	}
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 
 		Notification.showNotification("test", " ", "Argus", MessageType.ERROR, FileManager.getPath("res/favIcon16x16.png"));
 		

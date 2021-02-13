@@ -26,6 +26,9 @@ public class ProcessServer extends Thread {
 	
 	private static ServerManager manager;
 	
+	public static final int UNCONNECTION = -6;
+	public static final int CONNECTION = -5;
+	
 	public static final int PASSWORD = -3;
 	public static final int LOG_OUT = -2;
 	public static final int COMMANDE = -1;
@@ -115,7 +118,7 @@ public class ProcessServer extends Thread {
 				}
 				
 				Debug.log("Client version: " + ver);
-				if(ver != client.getServerParent().getVersion()) {
+				if(ver != Server.getVersion()) {
 					client.logOut("Incompatile version", ErrorCode.version);
 					ThreadManager.stop(this);
 				}
@@ -155,29 +158,6 @@ public class ProcessServer extends Thread {
 				client.setRole(Role.getRole(password) == null ? Roles.DEFAULT : Role.getRole(password));
 				break;
 				
-			/*case FILE:
-				PackageBuilder bui = new PackageBuilder(FILE);
-				PackageObject obj = new PackageObject("value");
-				
-				obj.addItem("fileName", pack.getObject("value").getValue("fileName").toString());
-				obj.addItem("extention", pack.getObject("value").getValue("extention").toString());
-				obj.addItemArray("data", pack.getObject("value").getArrayValue("data"));
-				
-				bui.addValue("value", obj);
-				
-				//for(CJSONObject pse : pack.getArray("clientReceivers"))
-					//Users.getServeurSocketClient(pse.toString()).sendPackage(new Package(bui));
-				
-				new Thread(new Runnable() {
-					public void run() {
-						try {
-							Users.getServerSocketClient("lol").sendPackage(new Package(bui));
-						}catch(SecurityException e) {e.printStackTrace();}
-						
-					}
-				}).start();
-				
-				break;*/
 		}
 		
 		if(manager != null) manager.receivePackage(pack, this);
@@ -203,7 +183,7 @@ public class ProcessServer extends Thread {
 	
 	@Override
 	public void run() {
-		ThreadManager.addThread(this);	
+		ThreadManager.addThread(this);
 		running = true;
 		
 		try {

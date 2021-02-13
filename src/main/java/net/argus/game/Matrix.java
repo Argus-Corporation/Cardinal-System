@@ -8,7 +8,7 @@ import java.util.List;
 public class Matrix {
 	
 	private static GamePixel[][] pixels;
-	private static List<GamePixel> newPixels;
+	private static List<GamePixel> newPixels = new ArrayList<GamePixel>();
 	
 	private static int width, height;
 	

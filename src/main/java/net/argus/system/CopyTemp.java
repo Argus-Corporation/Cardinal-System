@@ -79,7 +79,7 @@ public class CopyTemp {
 	}
 	
 	public static void main(String[] args) throws IOException, URISyntaxException {
-		InitializedSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		List<String> fileName = new ArrayList<String>();
 		fileName.add("*.class");
 		new CopyTemp().copy(fileName);

@@ -2,7 +2,7 @@ package net.argus.system.terminal;
 
 import java.io.File;
 
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 
 @Deprecated
@@ -74,7 +74,7 @@ public class Terminal extends Thread {
 	}
 	
 	public static void main(String[] args) {
-		InitializedSystem.initSystem(new String[] {"-project.name", "Cardinal-System", "-id", "0xdev"}, UserSystem.getDefaultInitializedSystemManager());
+		InitializationSystem.initSystem(new String[] {"-project.name", "Cardinal-System", "-id", "0xdev"}, UserSystem.getDefaultInitializedSystemManager());
 		new Terminal().run();
 		
 	}

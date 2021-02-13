@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import net.argus.event.socket.EventSocket;
+import net.argus.event.socket.SocketEvent;
+import net.argus.event.socket.SocketListener;
 import net.argus.exception.SecurityException;
 import net.argus.security.Key;
 import net.argus.server.role.Role;
@@ -19,6 +22,8 @@ import net.argus.util.pack.PackagePareser;
 import net.argus.util.pack.PackageType;
 
 public class ServerSocketClient {
+	
+	private EventSocket event;
 	
 	private Socket socket;
 	private Server server;
@@ -44,33 +49,39 @@ public class ServerSocketClient {
 		this.userId = userId;
 		this.key = key;
 		
+		event = new EventSocket();
+		
 		process = new ProcessServer(this, userId);
 		msgRecei = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		msgSend = new PrintWriter(socket.getOutputStream());
-		
+
 		init();
 		
 		boolean valid = true;
 		
+		String msg = "You are connected";
+		ErrorCode code = null;
+		
 		if(Users.isBanned(socket)) {
 			valid = false;
-			logOut("You are banned", ErrorCode.ban);
-			throw new IllegalAccessException();
+			code = ErrorCode.ban;
 		}
 		
 		if(clientUseKey != (key!=null)) {
 			valid = false;
-			logOut("Encryption error", ErrorCode.crypt);
-			throw new IllegalAccessException();
-		}
-
-		if((Users.getClientConnected() + 1) > Users.getMaxClient()) {
-			valid = false;
-			logOut("This server is full", ErrorCode.full);
-			throw new IllegalAccessException();
+			code = ErrorCode.crypt;
 		}
 		
-		if(valid) process.start();
+		if((Users.getClientConnected() + 1) > Users.getMaxClient()) {
+			valid = false;
+			code = ErrorCode.full;
+				
+		}
+		
+		sendConnectionPackage(valid, msg, code);
+		if(valid)
+			process.start();
+		
 	}
 	
 	public ServerSocketClient(Server server, Socket socket, int userId) throws SecurityException, IOException, IllegalAccessException {
@@ -78,9 +89,27 @@ public class ServerSocketClient {
 	}
 	
 	public synchronized void init() {
-		isClientUseKey();
+		clientUseKey = isClientUseKey();
 		msgSend.println(key!=null);
 		msgSend.flush();	
+	}
+	
+	public synchronized void sendConnectionPackage(boolean connection, String message, ErrorCode code) throws SecurityException, IOException {
+		PackageType type = connection?PackageType.CONNECTION:PackageType.UNCONNECTION;
+		
+		PackageBuilder bui = new PackageBuilder(type);
+		bui.addValue("message", message);
+		if(code != null)
+			bui.addValue("code", String.valueOf(code.getCode()));
+
+		sendPackage(new Package(bui));
+		
+		if(type == PackageType.UNCONNECTION) {
+			event.startEvent(EventSocket.ERROR_CONNECTION, new SocketEvent(code, getIpClient(), socket.getPort()));
+			logOut(code);
+		}else 
+			event.startEvent(EventSocket.CONNECT, new SocketEvent(socket, getIpClient(), socket.getPort()));
+		
 	}
 	
 	public synchronized void sendPackage(Package pack) throws SecurityException {
@@ -100,17 +129,6 @@ public class ServerSocketClient {
 
 		sendPackage(new Package(bui));
 	}
-	
-	/*public synchronized void sendFile(Package packageFile) throws SecurityException {
-		PackageBuilder bui = new PackageBuilder(PackageType.FILE.getId());
-		PackageObject objFile = new PackageObject("value");
-		
-		objFile.addItem("file", file);
-		
-		bui.addValue(objFile);
-		
-		sendPackage(new Package(bui));
-	}*/
 	
 	public synchronized void send(Object str) {
 		msgSend.println(clientUseKey&&key!=null?key.crypt(str.toString()):str.toString());
@@ -144,6 +162,9 @@ public class ServerSocketClient {
 		msgSend.close();
 		msgRecei.close();
 		socket.close();
+		
+		event.startEvent(EventSocket.DISCONNECT, new SocketEvent(msg, getIpClient(), socket.getPort()));
+		
 		Debug.log("Kicked argument: " + msg);
 		Debug.log(getPseudo() + " is kicked");
 		
@@ -161,11 +182,12 @@ public class ServerSocketClient {
 		logOut("", code);
 	}
 	
-	public synchronized void isClientUseKey() {
-		try {clientUseKey = Boolean.valueOf(msgRecei.readLine());}
-		catch(IOException e) {Debug.log("Error");}
+	public synchronized boolean isClientUseKey() throws NullPointerException {
+		try {return Boolean.valueOf(msgRecei.readLine());}
+		catch(IOException e) {throw new NullPointerException();}
 	}
 	
+	public void addSocketListener(SocketListener listener) {event.addListener(listener);}
 	
 	public String getPseudo() {return pseudo;}
 	
@@ -174,7 +196,7 @@ public class ServerSocketClient {
 	public synchronized ProcessServer getProcessServer() {return process;}
 	public synchronized Role getRole() {return role;}
 	
-	public synchronized String getIp() {return socket.getInetAddress().toString();}
+	public synchronized String getIpClient() {return socket.getInetAddress().getHostAddress();}
 	
 	public synchronized boolean isUseKey() {return key!=null?true:false;}
 	

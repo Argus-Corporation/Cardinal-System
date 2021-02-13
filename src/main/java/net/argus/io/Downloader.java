@@ -9,7 +9,7 @@ import net.argus.file.cjson.CJSONFile;
 import net.argus.file.cjson.CJSONObject;
 import net.argus.file.cjson.CJSONPareser;
 import net.argus.gui.DialogProgress;
-import net.argus.system.InitializedSystem;
+import net.argus.system.InitializationSystem;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
 
@@ -46,7 +46,7 @@ public class Downloader {
 	public int getNumberFile() {return mainObj.getArrayValue("file").length;}
 	
 	public static void main(String[] args) throws MalformedURLException {
-		InitializedSystem.initSystem(args);
+		InitializationSystem.initSystem(args);
 		Debug.addBlackList(ThreadManager.THREAD_MANAGER);
 		
 		Downloader dow = new Downloader(CJSONPareser.parse(new CJSONFile(new File("D:\\Django\\Document 1\\Git\\Installing\\resource\\manifest.cjson"))));
