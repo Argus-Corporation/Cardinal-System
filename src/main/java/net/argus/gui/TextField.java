@@ -162,7 +162,11 @@ public class TextField extends JTextField implements Element, GUI {
 		});
 	}
 	
+<<<<<<< HEAD
 	public void addChaneListener(ChangeListener listener) {changeManager.addListener(listener);}
+=======
+	public void addChangeListener(ChangeListener listener) {changeManager.addListener(listener);}
+>>>>>>> dev
 
 	@Override
 	public void setText() {}

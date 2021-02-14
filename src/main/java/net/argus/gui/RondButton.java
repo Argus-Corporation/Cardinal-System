@@ -13,6 +13,13 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
+<<<<<<< HEAD
+=======
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> dev
 
 import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
@@ -20,8 +27,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+<<<<<<< HEAD
 import net.argus.file.FileManager;
 import net.argus.file.Properties;
+=======
+import net.argus.file.Properties;
+import net.argus.system.CopyTemp;
+import net.argus.system.Temp;
+>>>>>>> dev
 import net.argus.system.UserSystem;
 
 public class RondButton extends JButton {
@@ -56,6 +69,28 @@ public class RondButton extends JButton {
 	public static final int FLECHE = 2;
 	public static final int INV_FLECHE = 3;
 	
+<<<<<<< HEAD
+=======
+	{
+		List<String> pathImg = new ArrayList<String>();
+		pathImg.add("res/images/bar.png");
+		pathImg.add("res/images/fleche.png");
+		pathImg.add("res/images/fleche2.png");
+		pathImg.add("res/images/croix.png");
+		
+		try {
+			CopyTemp copy = new CopyTemp();
+			copy.copy(pathImg);
+		}catch(IOException | URISyntaxException e) {e.printStackTrace();}
+		
+		RondButton.iconBar = new ImageIcon(Temp.getTempDir() + "/res/images/bar.png");
+		RondButton.iconFleche = new ImageIcon(Temp.getTempDir() + "/res/images/fleche.png");
+		RondButton.iconFlecheInv = new ImageIcon(Temp.getTempDir() + "/res/images/fleche2.png");
+		
+		RondButton.iconCroix = new ImageIcon(Temp.getTempDir() + "/res/images/croix.png");
+	}
+	
+>>>>>>> dev
 	public RondButton(boolean[] isE, TopPanel top) {
 		RondButton.top = top;
 		isEnable = isE;
@@ -64,10 +99,13 @@ public class RondButton extends JButton {
 	public RondButton(Color background) {
 		super();
 		this.background = background;
+<<<<<<< HEAD
 		RondButton.iconBar = new ImageIcon(FileManager.getPathInJar("res/images/bar.png"));
 		RondButton.iconFleche = new ImageIcon(FileManager.getPathInJar("res/images/fleche.png"));
 		
 		RondButton.iconCroix = new ImageIcon(FileManager.getPathInJar("res/images/croix.png"));
+=======
+>>>>>>> dev
 		this.setFocusable(false);
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
@@ -80,10 +118,14 @@ public class RondButton extends JButton {
 		this.setSize(16, 16);
 		this.id = ids;
 		rondButton[ids] = this;
+<<<<<<< HEAD
 		iconCroix = new ImageIcon(FileManager.getPathInJar("res/images/croix.png"));
 		iconBar = new ImageIcon(FileManager.getPathInJar("res/images/bar.png"));
 		iconFleche = new ImageIcon(FileManager.getPathInJar("res/images/fleche.png"));
 		iconFlecheInv = new ImageIcon(FileManager.getPathInJar("res/images/fleche2.png"));
+=======
+		
+>>>>>>> dev
 		this.background = background;
 		this.setFocusable(false);
 		this.setContentAreaFilled(false);

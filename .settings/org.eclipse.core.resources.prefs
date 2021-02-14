@@ -1,2 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/main/java/net/argus/file/AbstractFileSave.java=UTF-8
+<<<<<<< HEAD
+=======
+encoding//src/main/java/net/argus/lang/DefaultLangValue.java=UTF-8
+encoding//src/main/java/net/argus/lang/LangType.java=UTF-8
+encoding//src/test/java/net/argus/example/Test.java=UTF-8
+>>>>>>> dev

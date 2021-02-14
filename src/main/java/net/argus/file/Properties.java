@@ -161,11 +161,17 @@ public class Properties extends AbstractFileSave {
 		try {
 			for(int i = 1; i < getNumberLine() + 1; i++) {
 				String lineKey;
+<<<<<<< HEAD
 				lineKey = getLine(i);
 				
 				lineKey = lineKey.substring(0, lineKey.indexOf('='));
 				
 				if(lineKey.equals(key))
+=======
+				lineKey = getKey(getLine(i));
+				
+				if(lineKey != null && lineKey.equals(key))
+>>>>>>> dev
 					return i;
 			}
 		}catch(IOException e) {}
@@ -305,8 +311,14 @@ public class Properties extends AbstractFileSave {
 	 */
 	public boolean containsKey(String key) {
 		try {
+<<<<<<< HEAD
 			for(int i = 1; i < getNumberLine(); i++) {
 				if(getKey(getLine(i)).equals(key)) {
+=======
+			String lineKey = null;
+			for(int i = 1; i < getNumberLine(); i++) {
+				if((lineKey = getKey(getLine(i))) != null && lineKey.equals(key)) {
+>>>>>>> dev
 					return true;
 				}
 			}
@@ -320,7 +332,15 @@ public class Properties extends AbstractFileSave {
 	 * @return
 	 */
 	protected String getKey(String line) {
+<<<<<<< HEAD
 		return line.substring(0, line.indexOf('='));
+=======
+		int index = line.indexOf('=');
+		if(index > -1)
+			return line.substring(0, index);
+		else
+			return null;
+>>>>>>> dev
 	}
 	
 	/**
@@ -333,6 +353,7 @@ public class Properties extends AbstractFileSave {
 	}
 
 	public static void main(String[] args) throws IOException {
+<<<<<<< HEAD
 		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		
 		Properties config = new Properties("config", "bin");
@@ -341,3 +362,12 @@ public class Properties extends AbstractFileSave {
 	
 }
 
+=======
+		InitializationSystem.initSystem(new String[] {"-name", "Cardinal-System", "-id", "0xdev", "-log", "false"}, UserSystem.getDefaultInitializedSystemManager());
+		
+		Properties config = new Properties("config", "bin");
+		System.out.println(config.getBoolean("lang.temp"));
+	}
+	
+}
+>>>>>>> dev

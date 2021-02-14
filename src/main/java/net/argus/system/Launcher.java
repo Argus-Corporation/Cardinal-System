@@ -72,7 +72,11 @@ public class Launcher {
 	    		for(String arg : args)
 	    			arguments.add(arg);
 	    	
+<<<<<<< HEAD
 		    	start(arguments);
+=======
+	    	start(arguments);
+>>>>>>> dev
 	    }finally {
 	    	FileManager.delete(nativePath);
 	    }
@@ -117,7 +121,13 @@ public class Launcher {
 		} 
 	}
 	
+<<<<<<< HEAD
 	public void addClassPath(String str) {classpaths.add(str + ";");}
+=======
+	public static String getSeperator() {return OS.getOS()==OS.WINDOWS?";":":";}
+	
+	public void addClassPath(String str) {classpaths.add(str + getSeperator());}
+>>>>>>> dev
 	
 	public String getClassPath() {
 		String classPath = "";
@@ -125,6 +135,10 @@ public class Launcher {
     		classPath += cp;
     	return classPath;
 	}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> dev
 	public String[] getArgs() {return uArgs;}
 	  
 	public static void main(String[] args) throws Exception {new Launcher(true).launch(args);}
