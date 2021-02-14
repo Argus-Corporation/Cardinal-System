@@ -10,12 +10,13 @@ public class Key {
 
 	private double password;
 
-	private final char[] caracter = new char[] {'®', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+	private static final char[] caracter = new char[] {'®', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
 			'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '?', ',', ';', '.', ':', '/', '!', '§', 'ù',
 			'%', '*', 'µ', '¨', '$', '£', '¤', '<', '>', '#', '&', 'é', '(', '[', '-', '|', 'è', '_', '\\',
 			'ç', '^', 'à', '@', ')', '°', ']', '=', '+', '}', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
 			'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5',
 			'6', '7', '8', '9', '²', '\n', '\r', '\b', '\t', '\'', '’', 'ê', '®', 'Ì', 'ì', '{', '"', ' '};
+	
 	public String key;
 	public Key(String key) {
 		this.key = key;
@@ -63,10 +64,9 @@ public class Key {
 	public static void main(String[] args) throws SecurityException {
 		InitializationSystem.initSystem(args);
 		Debug.addBlackList(ThreadManager.PROGRESSE);
-		//Key k = new Key("azertyuiopmlkjhgfd123456789");
+		Key k = new Key("$^Ã¹**^$Ã¹m$Ã¹mefsd^mÃ¹6548#5{DSG3d47g4354j4Ã¹4$*84mi1olukjhgf85j#[|'(--Ã¨_k45");
 		
-		//String str = "1.4919529937178958E35\b1.686853199345494E35\b9.949954433122245E34\b1.2186155662546475E35\b1.1258718920312916E35\b1.6571009159915556E34\b8.994676700686313E34\b1.4893885172162805E35\b1.3269808857693695E35\b2.1107040756473672E35\b6.664979948906109E35\b8.489261495933616E34\b";
-		
+		System.out.println(k.decrypt(k.crypt("hello xx")));
 		
 		//System.out.println(k.crypt("hello world!"));
 	}

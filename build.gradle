@@ -16,3 +16,6 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
+
+apply plugin: 'java'
+compileJava {options.encoding = "UTF-8"}   
