@@ -22,11 +22,7 @@ public class Server extends Thread {
 	
 	private boolean running;
 	
-<<<<<<< HEAD
-	private static final int SERVER_VERSION = 240121110;
-=======
 	private static final int SERVER_VERSION = 140221120;
->>>>>>> dev
 	
 	private int port;
 	
