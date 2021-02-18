@@ -1,9 +1,7 @@
 package net.argus.util.pack;
 
-import net.argus.file.cjson.CJSONFile;
 import net.argus.file.cjson.CJSONObject;
 import net.argus.system.InitializationSystem;
-import net.argus.system.UserSystem;
 import net.argus.util.ErrorCode;
 
 public class Package {
@@ -16,21 +14,21 @@ public class Package {
 		this.builder = builder;
 		this.builder.build();
 		
-		this.type = Integer.valueOf(String.valueOf(this.builder.getManifest().getValue("type")));
+		this.type = Integer.valueOf(String.valueOf(this.builder.getManifestValue("type")));
 	}
 	
 	public int getType() {return type;}
 	
 	public String getValue(String name) {
-		return builder.getPackage().getValue(name).toString();
+		return builder.getValue(name).toString();
 	}
 	
 	public CJSONObject[] getArray(String name) {
-		return builder.getPackage().getArrayValue(name);
+		return builder.getArray(name);
 	}
 	
 	public CJSONObject getObject(String name) {
-		return builder.getPackage().getValue(name);
+		return builder.getValue(name);
 	}
 	
 	public static Package getErrorPackage() {
@@ -57,19 +55,11 @@ public class Package {
 	}
 	
 	public static void main(String[] args) {
-		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
-		/*PackageBuilder bui = new PackageBuilder(0);
-		bui.addManifestValue("id", "0");
-		bui.addManifestValue("version", "11066");
-		
-		bui.addValue("file", "1000010001010101010100101010110101001001010101101000010110001001010");
-		bui.addItemArray(new CJSONItemArray("test", new String[] {"test", "lol", "byebye"}));
+		InitializationSystem.initSystem(args);
+		PackageBuilder bui = new PackageBuilder(5845);
 		
 		Package pack = new Package(bui);
-		System.out.println(pack);*/
-		//System.out.println("\"package\": {\"manifest\": {\"type\": 2}, \"pseudo\": \"Olario\"}");
-		CJSONFile file = new CJSONFile("manifest", "");
-		System.out.println(PackagePareser.parse(file.getFile()[0]).getValue("pseudo") + "  result");
+		System.out.println(pack);
 	}
 
 }

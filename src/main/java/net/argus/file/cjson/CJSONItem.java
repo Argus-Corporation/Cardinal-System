@@ -83,9 +83,17 @@ public class CJSONItem {
 	public void setValue(CJSONObject value) {this.value = value;}
 	public void setName(CJSONString name) {this.name = name;}
 	
+	public void addItem(String name, String value) {addItem(new CJSONItem(name, value));}
+	public void addItem(String name, CJSONObject value) {addItem(new CJSONItem(name, value));}
+	public void addItem(CJSONItem item) {getValue().addItem(item);}
+	
+	public void addArray(String name, String[] value) {addArray(new CJSONArray(name, value));}
+	public void addArray(String name, CJSONObject[] value) {addArray(new CJSONArray(name, value));}
+	public void addArray(CJSONArray array) {getValue().addArray(array);}
+	
 	@Override
 	public String toString() {
-		return "{[" + name + "] [" + value + "]}";
+		return "\"" + name + "\": " + value;
 	}
 
 }

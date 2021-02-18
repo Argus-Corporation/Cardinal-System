@@ -113,7 +113,6 @@ public class CardinalTree implements TreeNode {
 	public Object[] getPath(String name, List<CardinalTree> children) {
 		for(CardinalTree tr : children!=null?children:this.children)
 			if(tr.tree.getValue() instanceof CJSONElement) {
-				System.out.println(tr.tree.toString());
 				if(tr.tree.getName().toString().equals(name))
 					return new Object[] {tr};
 			}else

@@ -77,7 +77,6 @@ public class SocketClient {
 				Package pack = nextPackage();
 				if(pack.getType() == ProcessClient.CONNECTION || pack.getType() == ProcessClient.UNCONNECTION) {
 					ErrorCode code;
-					//String message = pack.getValue("message");
 					
 					if(pack.getType() != ProcessClient.CONNECTION) {
 						code = ErrorCode.valueOf(Integer.valueOf(pack.getValue("code")));

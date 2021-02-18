@@ -7,21 +7,12 @@ import net.argus.util.ArrayManager;
 
 public class CJSONObject {
 	
-	private CJSONString name;
 	private List<CJSONItem> items = new ArrayList<CJSONItem>();
 	private List<CJSONArray> arrays = new ArrayList<CJSONArray>();
 	
 	public CJSONObject(List<CJSONItem> items, List<CJSONArray> arrays) {
 		this.items = items;
 		this.arrays = arrays;
-	}
-	
-	public CJSONObject(CJSONString name) {
-		this.name = name;
-	}
-	
-	public CJSONObject(String name) {
-		this(new CJSONString(name));
 	}
 	
 	public CJSONObject() {}
@@ -62,9 +53,18 @@ public class CJSONObject {
 		return obj;
 	}
 	
-	public CJSONString getName() {return name;}
 	public List<CJSONItem> getItems() {return items;}
 	public CJSONItem getItem(int index) {return items.get(index);}
+	
+	public CJSONItem getItem(String name) {return getItem(new CJSONString(name));}
+	
+	public CJSONItem getItem(CJSONString name) {
+		for(CJSONItem item : items) {
+			if(item.getName().equals(name))
+				return item;
+		}
+		return null;
+	}
 	
 	public List<CJSONArray> getArray() {return arrays;}
 	public CJSONArray getArray(int index) {return arrays.get(index);}
@@ -72,18 +72,12 @@ public class CJSONObject {
 	public CJSONObject getValue(String name) {return getValue(new CJSONString(name));}
 	
 	public CJSONObject getValue(CJSONString name) {
-		for(CJSONItem obj : items) {
-			if(obj.getName().equals(name))
-				return obj.getValue();
-		}
-		return null;
+		return getItem(name).getValue();
 	}
 	
 	public CJSONObject getValue(int index) {return items.get(index).getValue();}
 	
 	public CJSONObject[] getArrayValue(String arrayName) {return getArrayValue(new CJSONString(arrayName));}
-	
-	public byte[] getByte(String arrayName) {return getByte(new CJSONString(arrayName));}
 	
 	public CJSONObject[] getArrayValue(CJSONString name) {
 		for(CJSONArray obj : arrays) {
@@ -93,6 +87,8 @@ public class CJSONObject {
 		return null;
 	}
 	
+	public byte[] getByte(String arrayName) {return getByte(new CJSONString(arrayName));}
+	
 	public byte[] getByte(CJSONString name) {
 		for(CJSONArray obj : arrays) {
 			if(obj.getName().equals(name))
@@ -101,13 +97,33 @@ public class CJSONObject {
 		return null;
 	}
 	
+	@Override
+	public String toString() {
+		String str = "{";
+		for(CJSONItem item : items)
+			str += item.toString() + ", ";
+		
+		for(CJSONArray array : arrays)
+			str += array.toString() + ", ";
+		
+		if(ArrayManager.isExist(str.toCharArray(), str.length()-2))
+			str = str.substring(0, str.length() - 2);
+	
+			
+		str += "}";
+		
+		return str;
+	}
+	
 	public int size() {return items.size();}
+	public int arraySize() {return arrays.size();}
 	
 	public void setItems(List<CJSONItem> items) {this.items = items;}
 	public void setArray(List<CJSONArray> arrays) {this.arrays = arrays;}
-	public void setName(CJSONString name) {this.name = name;}
 
 	public void addItem(CJSONItem item) {items.add(item);}
-	public void addItemArray(CJSONArray array) {arrays.add(array);}
+	public void addArray(CJSONArray array) {arrays.add(array);}
+	public void addValue(String name, CJSONObject obj) {addItem(new CJSONItem(name, obj));}
+	public void addValue(String name, String obj) {addItem(new CJSONItem(name, obj));}
 	
 }

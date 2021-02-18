@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.argus.util.ArrayManager;
 
+@Deprecated
 public class CJSONItemArray {
 	
 	private CJSONString name;

@@ -12,6 +12,7 @@ public class CJSON {
 	
 	public CJSON(List<CJSONItem> items) {this.items = items;}
 	
+	
 	public CJSONObject getObject(String name) {return getObject(new CJSONString(name));}
 	public CJSONItem getItem(String name) {return getItem(new CJSONString(name));}
 	
@@ -26,6 +27,11 @@ public class CJSON {
 			if(item.getName().equals(name)) return item;
 		return null;
 	}
+	
+	public CJSONObject getObject(int index) {return items.get(index).getValue();}
+	public CJSONItem getItem(int index) {return items.get(index);}
+	
+	public int size() {return items.size();}
 	
 	@Override
 	public String toString() {

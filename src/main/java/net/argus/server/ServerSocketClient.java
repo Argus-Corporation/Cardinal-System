@@ -101,7 +101,7 @@ public class ServerSocketClient {
 		bui.addValue("message", message);
 		if(code != null)
 			bui.addValue("code", String.valueOf(code.getCode()));
-
+		
 		sendPackage(new Package(bui));
 		
 		if(type == PackageType.UNCONNECTION) {
@@ -120,13 +120,13 @@ public class ServerSocketClient {
 	
 	public synchronized void sendArray(int contentArray, String[] array) throws SecurityException {
 		PackageBuilder bui = new PackageBuilder(PackageType.ARRAY.getId());
-		PackageObject objArray = new PackageObject("value");
+		PackageObject objArray = new PackageObject();
 		
 		objArray.addItem("type", String.valueOf(contentArray));
-		objArray.addItemArray("array", array);
+		objArray.addArray("array", array);
 		
-		bui.addValue(objArray);
-
+		bui.addValue("value", objArray);
+		
 		sendPackage(new Package(bui));
 	}
 	
@@ -138,7 +138,7 @@ public class ServerSocketClient {
 	@SuppressWarnings("deprecation")
 	public Package nextPackage() throws SecurityException {
 		String n = nextString();
-		
+
 		if(n != null)
 			return PackagePareser.parse(n);
 		
