@@ -78,5 +78,12 @@ public class FTPClient {
 	
 	private URL getURL(String file) throws MalformedURLException {return new URL("ftp://" + user + ":" + key.decrypt(password) + "@" + host + "/" + file);}
 	public URL getURL() throws MalformedURLException {return new URL("ftp://" + user + ":" + password + "@" + host);}
+	
+	@Override
+	public String toString() {
+		try {return getURL().toString();}
+		catch (MalformedURLException e) {e.printStackTrace();}
+		return MalformedURLException.class.toString();
+	}
 
 }

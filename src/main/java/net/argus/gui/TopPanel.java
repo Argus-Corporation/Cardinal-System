@@ -33,6 +33,7 @@ public class TopPanel extends JPanel {
 	private JLabel iconFrame;
 	private static Point compCoords;
 	
+	@SuppressWarnings("deprecation")
 	public TopPanel(Frame fen, ImageIcon icon, boolean[] but, Properties config) {
 		super(new BorderLayout());
 		this.setBackground(Color.decode("#DDDEDD"));

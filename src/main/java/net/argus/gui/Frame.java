@@ -6,22 +6,23 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import net.argus.file.FileManager;
+import net.argus.event.frame.EventFrame;
+import net.argus.event.frame.FrameEvent;
+import net.argus.event.frame.FrameListener;
 import net.argus.file.Properties;
-import net.argus.file.css.CSSEngine;
+import net.argus.gui.animation.Animation;
 import net.argus.gui.animation.FrameAnimation;
-import net.argus.system.InitializationSystem;
-import net.argus.system.UserSystem;
-import net.argus.util.Direction;
-import net.argus.util.ListenerManager;
+import net.argus.gui.top.TitleBar;
+import net.argus.util.Display;
 
 public class Frame extends JFrame {
 
@@ -30,74 +31,80 @@ public class Frame extends JFrame {
 	 */
 	private static final long serialVersionUID = -6058458405056389502L;
 	
-	protected Properties config;
+	private TitleBar titleBar;
+	private Panel mainPan = new Panel();
 	
-	protected TopPanel topPan;
-	protected Panel mainPan = new Panel();
+	private ImageIcon iconFrame;
+	private ImageIcon iconOs;
+
+	private boolean fullScreen;
+	private boolean maximized;
 	
-	protected ImageIcon iconFrame;
-	protected ImageIcon iconOs;
+	private Dimension size;
+	private Point position;
 	
-	protected boolean undecorated;
-	protected boolean fullScreen;
-	protected boolean maximized;
+	private Animation anim;
 	
-	protected String imagePath;
-	
-	protected Dimension normalSize;
-	
-	protected Point position;
-	
-	protected ListenerManager<FrameListener> frameManager = new ListenerManager<FrameListener>();
+	private EventFrame event = new EventFrame();
 
 	public Frame(String title, String pathIcon, boolean[] but, Properties config) {
-		this.config = config;
-		this.undecorated = config.getBoolean("frame.undecorated");
+		boolean undecorated = config.getBoolean("frame.undecorated");
 		
 		mainPan = new Panel();
 		
 		iconFrame = new ImageIcon(pathIcon);
 		iconOs = new ImageIcon(pathIcon);
 		
-		this.setIconImage(iconOs.getImage());
+		setIconImage(iconOs.getImage());
 		
-		iconFrame = Icon.getIcon(pathIcon);
-		
-		this.setSize(config.getDimension("frame.size"));
-		this.normalSize = this.getSize();
+		setSize(config.getDimension("frame.size"));
+		saveSize();
 		
 		this.setTitle(title);
+		this.setFocusable(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(undecorated);
 		this.setAlwaysOnTop(config.getBoolean("frame.alwaysontop"));
 		
+		setBackground(new Color(0, 0, 0, 0));
+		
+		addFrameListener(getFrameListener());
+		
+		addWindowListener(getWindowListener());
+		
 		if(undecorated) {
-			topPan = new TopPanel(this, iconFrame, but, config);
-			super.add(BorderLayout.NORTH, topPan);
+			titleBar = new TitleBar(this);
+			super.add(BorderLayout.NORTH, titleBar);
 			super.add(BorderLayout.CENTER, mainPan);
 			
-			getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
+			//getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
 		}
 		
 		this.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {}
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_F11 && !maximized) {
-					setExtendedState(JFrame.MAXIMIZED_BOTH);
-					maximized = true;
-				}else if(e.getKeyCode() == KeyEvent.VK_F11 && maximized) {
-					setSize(normalSize);
+				/*if(e.getKeyCode() == KeyEvent.VK_F11 && !fullScreen) {
+					maximize(false);
+					
+					event.startEvent(EventFrame.FRAME_RESIZING, new FrameEvent(this, getSize()));
+				}else if(e.getKeyCode() == KeyEvent.VK_F11 && fullScreen) {
+					setSize(size);
+					
+					setLocation(position);
 					maximized = false;
+					fullScreen = false;
+					
+					event.startEvent(EventFrame.FRAME_RESIZING, new FrameEvent(this, getSize()));
+
 				}
-				
+				*/
 			}
 		});
 
 	}
 	
 	protected Frame(String title, String iconPath, Properties config) {
-		this.config = config;
 		this.setTitle(title);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(true);
@@ -107,30 +114,136 @@ public class Frame extends JFrame {
 	
 	public void removeAll() {
 		super.removeAll();
-		this.add(BorderLayout.NORTH, topPan);
+		this.add(BorderLayout.NORTH, titleBar);
 		this.repaint();
 	}
 	
 	public void setIcon(String iconPath) {
 		iconFrame = Icon.getIcon(iconPath);
-		topPan.setIcon(iconFrame);
+	//	titleBar.setIcon(iconFrame);
 	}
 	
-	public void setTitleUndeco(String title) {topPan.setTitle(title);}
+	@Override
+	public void setTitle(String title) {
+		if(titleBar != null) titleBar.setTitle(title);
+		super.setTitle(title);
+	}
 	
+	public ImageIcon getFrameIcon() {return iconFrame;}
+	public ImageIcon getOsIcon() {return iconOs;}
+		
+	public boolean isMaximized() {return maximized;}
 	public boolean isFullScreen() {return fullScreen;}
-	public void setFullScreen(boolean isFullScreen) {this.fullScreen = isFullScreen;}
 	
-	public TopPanel getTopPanel() {return this.topPan;}
-	public Dimension getNormalSize() {return normalSize;}
-	public Point getSavePosition() {return position;}
+	public void setMaximize(boolean maximized) {
+		if(maximized && !isMaximized())
+			maximize(true);
+		else {
+			setSize(size);
+			if(position != null) setLocation(position);
+			fullScreen = false;
+		}
+		
+		this.maximized = maximized;
+		
+		event.startEvent(EventFrame.FRAME_RESIZING, new FrameEvent(this, getSize()));
+		
+	}
 	
-	public void setNoramlSize(Dimension normalSize) {this.normalSize = normalSize;}
-	public void addFrameListener(FrameListener fenListener) {this.frameManager.addListener(fenListener);}
+	private void maximize(boolean maximized) {
+		if(maximized) {
+			Dimension scrnSize = Display.getSize();
+			Rectangle winSize = Display.getMaximumWindowBounds();
+					
+			int taskBarWidth = scrnSize.width - winSize.width;
+			int taskBarHeight = scrnSize.height - winSize.height;
+			
+			savePosition();
+			saveSize();
+			
+			setSize(scrnSize.width - taskBarWidth, scrnSize.height - taskBarHeight);
+			setLocationRelativeTo(null);
+		}else {
+			if(!isMaximized()) {
+				savePosition();
+				saveSize();
+			}
+			
+			setSize(Display.getSize());
+			setLocationRelativeTo(null);
+			
+			fullScreen = true;
+		}
+	}
+	
+	@Override
+	public void setSize(int width, int height) {
+		saveSize();
+		super.setSize(width, height);
+	}
+	
+	@Override
+	public void setSize(Dimension d) {
+		if(isMaximized()) saveSize();
+		super.setSize(d);
+	}
+	
+	@Override
+	public void setLocation(int x, int y) {
+		Rectangle winSize = Display.getMaximumWindowBounds();
+		
+		if(y < winSize.y)
+			y = winSize.y;
+		
+		if(x + getWidth() - 10 < winSize.x)
+			x = winSize.x - getWidth() + 10;
+		
+		if(x + 10 > winSize.x + winSize.width)
+			x = winSize.x + winSize.width - 10;
+				
+		if(y + 10 > winSize.y + winSize.height)
+			y = winSize.y + winSize.height - 10;
+		
+		super.setLocation(x, y);
+	}
+	
+	public TitleBar getTopPanel() {return titleBar;}
+	public Point getSavedPosition() {return position;}
+	
+	public void addFrameListener(FrameListener fenListener) {event.addListener(fenListener);}
+	
+	public void setAnimation(Animation anim) {this.anim = anim;}
 	
 	public void savePosition() {this.position = this.getLocation();}
+	public void saveSize() {this.size = this.getSize();}
 	
-	public Dimension getFrameSize() {return new Dimension(getSize().width, getSize().height - getTopPanel().getPreferredSize().height);}
+	private FrameListener getFrameListener() {
+		return new FrameListener() {
+			public void frameResizing(FrameEvent e) {}
+			public void frameMinimalized(FrameEvent e) {}
+			public void frameClosing(FrameEvent e) {
+				if(anim != null)
+					anim.play(FrameAnimation.CLOSE_MINIMIZE);
+			}
+		};
+	}
+	
+	private WindowListener getWindowListener() {
+		Frame fen = this;
+		return new WindowListener() {
+			public void windowOpened(WindowEvent e) {}
+			public void windowIconified(WindowEvent e) {}
+			public void windowDeiconified(WindowEvent e) {}
+			public void windowDeactivated(WindowEvent e) {}
+			public void windowClosing(WindowEvent e) {
+				event.startEvent(EventFrame.FRAME_CLOSING, new FrameEvent(fen, size));
+			}
+			public void windowClosed(WindowEvent e) {windowClosing(e);}
+			public void windowActivated(WindowEvent e) {}
+		};
+	}
+	
+	public void event(int event, Object source) {this.event.startEvent(event, new FrameEvent(source, getSize()));}
 	
 	@Override
 	public Component add(Component comp) {
@@ -148,68 +261,6 @@ public class Frame extends JFrame {
 	
 	public LayoutManager getMainLayout() {
 		return mainPan.getLayout();
-	}
-	
-	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
-		
-		Properties config = new Properties("config", "bin");
-		String sIcon = FileManager.getPath("res/logo.png");
-		boolean[] isE = new boolean[] {true, true, true};
-		Frame fen = new Frame("armin", sIcon, isE, config);
-		//new Splash("dfsd", sIcon, fen, 1000, config);
-		
-		fen.addFrameListener(new FrameListener() {
-			
-			@Override
-			public void frameResizing() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void frameMinimalized() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void frameClosing() {
-				new FrameAnimation(fen).play(); 
-				UserSystem.exit(0);
-			}
-		});
-	
-		CSSEngine.run("test", "bin");
-		
-		Label lab = new Label("bonjour", true);
-		fen.add(lab);
-		//Element.repaintElement();
-		fen.setVisible(true);
-		//fen.moveBar(false, fen.topPan);
-		int height = -fen.topPan.getHeight();
-		for(int i = 0; i != height; i--) {
-			fen.topPan.setBounds(fen.topPan.getX(), i, fen.topPan.getWidth(), fen.topPan.getHeight());
-			//System.out.println(i + "\n" + height);
-			Thread.sleep(20);
-		}
-		//System.out.println("ll");
-		for(int i = height; i < 0; i++) {
-			fen.topPan.setBounds(fen.topPan.getX(), i, fen.topPan.getWidth(), fen.topPan.getHeight());
-			Thread.sleep(20);
-		}
-	}
-	@Deprecated
-	public void moveBar(Direction dir, TopPanel tp) {
-		int height = -tp.getHeight();
-		
-		if(dir == Direction.UP) {
-			for(int i = 0; i != height; i--) {
-				tp.setBounds(tp.getX(), i, tp.getWidth(), tp.getHeight());
-				
-				try {Thread.sleep(20);} catch(InterruptedException e) {e.printStackTrace();}
-			}
-		}
 	}
 	
 }

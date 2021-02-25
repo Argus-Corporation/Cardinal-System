@@ -8,7 +8,6 @@ import net.argus.file.FileManager;
 import net.argus.file.FileSave;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSFile;
-import net.argus.gui.FontRegistry;
 import net.argus.system.Temp;
 import net.argus.util.debug.Debug;
 
@@ -36,8 +35,7 @@ public class Lang {
 	
 	public static void updateLang(LangType type) {
 		setLang(type);
-		LangRegistry.update();
-		FontRegistry.update();
+		LangRegister.update();
 	}
 	
 	private static void updateCSS() {

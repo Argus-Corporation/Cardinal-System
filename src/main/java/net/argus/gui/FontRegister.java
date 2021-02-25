@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.UIManager;
 
-public class FontRegistry {
+public class FontRegister {
 	
 private static List<GUI> elementGUI = new ArrayList<GUI>();
 	
@@ -16,7 +16,7 @@ private static List<GUI> elementGUI = new ArrayList<GUI>();
 	}
 	
 	public static void addElement(GUI element) {
-		FontRegistry.elementGUI.add(element);
+		FontRegister.elementGUI.add(element);
 	}
 
 }

@@ -3,7 +3,7 @@ package net.argus.gui;
 import javax.swing.JMenu;
 
 import net.argus.lang.Lang;
-import net.argus.lang.LangRegistry;
+import net.argus.lang.LangRegister;
 
 public class Menu extends JMenu implements GUI {
 	
@@ -19,8 +19,10 @@ public class Menu extends JMenu implements GUI {
 		
 		this.name = name;
 		
-		LangRegistry.addElementLanguage(this);
-		FontRegistry.addElement(this);
+		LangRegister.addElementLanguage(this);
+		FontRegister.addElement(this);
+		BackgoundRegister.addElement(this);
+		ForegroundRegiter.addElement(this);
 		
 		setText();
 	}

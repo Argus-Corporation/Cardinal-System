@@ -24,8 +24,8 @@ public class PanelRepaint {
 			if(Panel.allPanel.get(i).isBackImg) {
 				Panel.allPanel.get(i).backImg.clear();
 				
-				int widthScreen = Display.getWidhtDisplay();
-				int heightScreen = Display.getHeightDisplay();
+				int widthScreen = Display.getWidth();
+				int heightScreen = Display.getHeight();
 				sp.statusText = Panel.imgPaths.get(j).substring(Panel.imgPaths.get(j).lastIndexOf("/") + 1);
 				Panel.allPanel.get(i).backImg.add(Icon.getIconResize(Panel.imgPaths.get(j), fen.getSize()).getImage());
 				Panel.allPanel.get(i).backImg.add(Icon.getIcon(Panel.imgPaths.get(j), widthScreen, heightScreen).getImage());
@@ -41,8 +41,8 @@ public class PanelRepaint {
 			if(Panel.allPanel.get(i).isBackImg) {
 				Panel.allPanel.get(i).backImg.clear();
 				
-				int widthScreen = Display.getWidhtDisplay();
-				int heightScreen = Display.getHeightDisplay();
+				int widthScreen = Display.getWidth();
+				int heightScreen = Display.getHeight();
 				sp.statusText = Panel.imgPaths.get(j).substring(Panel.imgPaths.get(j).lastIndexOf("/") + 1);
 				Panel.allPanel.get(i).backImg.add(Icon.getIconResize(Panel.imgPaths.get(j), new Dimension(fen.getSize().width / diviseur, fen.getSize().height)).getImage());
 				Panel.allPanel.get(i).backImg.add(Icon.getIcon(Panel.imgPaths.get(j), widthScreen, heightScreen).getImage());

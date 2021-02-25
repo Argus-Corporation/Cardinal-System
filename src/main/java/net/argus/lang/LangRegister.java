@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.argus.gui.GUI;
 
-public class LangRegistry {
+public class LangRegister {
 	
 	private static List<GUI> elementGUI = new ArrayList<GUI>();
 	
@@ -16,7 +16,7 @@ public class LangRegistry {
 	}
 	
 	public static void addElementLanguage(GUI element) {
-		LangRegistry.elementGUI.add(element);
+		LangRegister.elementGUI.add(element);
 	}
 
 }

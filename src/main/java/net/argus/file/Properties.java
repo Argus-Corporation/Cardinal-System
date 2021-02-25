@@ -206,7 +206,6 @@ public class Properties extends AbstractFileSave {
 		return Boolean.valueOf(getString(key));
 	}
 	
-	@Deprecated
 	/**
 	 * Cette methode retourne la clef Color corespondante a la clef
 	 * @param key
@@ -318,7 +317,7 @@ public class Properties extends AbstractFileSave {
 	 * @param line
 	 * @return
 	 */
-	protected String getKey(String line) {
+	public String getKey(String line) {
 		int index = line.indexOf('=');
 		if(index > -1)
 			return line.substring(0, index);

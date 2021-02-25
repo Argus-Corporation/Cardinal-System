@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import net.argus.file.Properties;
 
-public class Panel extends JPanel implements Element {
+public class Panel extends JPanel implements Element, GUI {
 	
 	/**
 	 * 
@@ -39,7 +39,6 @@ public class Panel extends JPanel implements Element {
 	
 	private Frame fen;
 
-	@SuppressWarnings("deprecation")
 	public Panel(Properties config, boolean isRondBorder) {
 		super();
 		this.isRondBorder = isRondBorder;
@@ -53,7 +52,6 @@ public class Panel extends JPanel implements Element {
 		this.setBackground(config.getColor(nameType + ".color.background"));
 	}
 	
-	@SuppressWarnings("deprecation")
 	public Panel(Properties config, String imgPath, Frame fen) {
 		super();
 		allPanel.add(this);
@@ -78,6 +76,9 @@ public class Panel extends JPanel implements Element {
 		allPanel.add(this);
 		this.isBackImg = false;
 		this.isRondBorder = false;
+		
+		BackgoundRegister.addElement(this);
+		ForegroundRegiter.addElement(this);
 	}
 	
 	public static void setSelected(Panel selected) {
@@ -130,7 +131,7 @@ public class Panel extends JPanel implements Element {
 	@Override
 	public void paintComponent(Graphics g) {
 		if(isBackImg) {
-			if(fen.isFullScreen()) {g.drawImage(backImg.get(1), 0, 0, null);}
+			if(fen.isMaximized()) {g.drawImage(backImg.get(1), 0, 0, null);}
 			else {if(backImg.size() > 0) {g.drawImage(backImg.get(0), 0, 0, null);}}
 		}else if(isRondBorder) {
 			g.setColor(getBackground());
@@ -143,6 +144,14 @@ public class Panel extends JPanel implements Element {
 			
 			super.paintComponent(g);
 		}
+	}
+
+	@Override
+	public void setText() {}
+
+	@Override
+	public String getElementName() {
+		return "Panel";
 	}
 	
 }

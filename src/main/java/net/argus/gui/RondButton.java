@@ -29,6 +29,7 @@ import net.argus.system.CopyTemp;
 import net.argus.system.Temp;
 import net.argus.system.UserSystem;
 
+@Deprecated
 public class RondButton extends JButton {
 	
 	/**
@@ -118,16 +119,16 @@ public class RondButton extends JButton {
 				if(fen.isActive()) {
 					switch(id) {
 						case CROIX:
-							for(FrameListener frameListener : fen.frameManager.getListeners())
-								if(frameListener != null) frameListener.frameClosing();
+							/*for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameClosing(null);*/
 							
 							UserSystem.exit(0);
 							break;
 						case BAR:
 							fen.setState(JFrame.ICONIFIED);
 							
-							for(FrameListener frameListener : fen.frameManager.getListeners())
-								if(frameListener != null) frameListener.frameMinimalized();
+							/*for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameMinimalized(null);*/
 							break;
 						case FLECHE:
 							Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -139,24 +140,24 @@ public class RondButton extends JButton {
 							
 							fen.setSize(scrnSize.width, scrnSize.height - taskBarHeight);
 							fen.setLocationRelativeTo(null);
-							fen.setFullScreen(true);
+							fen.setMaximize(true);
 							
 							top.fullScreen = true;
 							id = INV_FLECHE;
-							for(FrameListener frameListener : fen.frameManager.getListeners())
-								if(frameListener != null) frameListener.frameResizing();
+							/*for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameResizing(null);*/
 							break;
 						case INV_FLECHE:
-							Dimension defaultSize = fen.getNormalSize();
+							Dimension defaultSize = new Dimension();
 							fen.setSize(defaultSize);
 							
-							fen.setLocation(fen.getSavePosition());
-							fen.setFullScreen(false);
+							fen.setLocation(fen.getSavedPosition());
+							fen.setMaximize(false);
 							top.fullScreen = false;
 							id = FLECHE;
 							
-							for(FrameListener frameListener : fen.frameManager.getListeners())
-								if(frameListener != null) frameListener.frameResizing();
+						/*	for(FrameListener frameListener : fen.frameManager.getListeners())
+								if(frameListener != null) frameListener.frameResizing(null);*/
 							break;
 					}
 					

@@ -82,7 +82,7 @@ public class GraphicsPanel extends Panel {
 		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
 		
-		Splash sp = new Splash("test", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 2000);
+		Splash sp = new Splash("test", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidth() - 20), 2000);
 		sp.play();
 		
 		Frame fen = new Frame("Graphics", FileManager.getPath("res/favicon32x32.png"), new boolean[] {true, true, true}, config);

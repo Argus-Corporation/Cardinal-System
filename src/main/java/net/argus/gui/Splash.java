@@ -214,7 +214,7 @@ public class Splash extends JFrame {
 	public static void main(String[] args) {
 		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
-		Splash splash = new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidhtDisplay() - 20), 1000);
+		Splash splash = new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidth() - 20), 1000);
 		splash.play();
 		
 		String iconPath = FileManager.getPath("res/favIcon32x32.png");

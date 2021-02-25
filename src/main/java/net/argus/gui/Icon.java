@@ -12,12 +12,23 @@ import javax.swing.ImageIcon;
 public class Icon {
 	
 	public static ImageIcon getIcon(String iconPath) {
-		BufferedImage img = null;
+		try {return getIcon(new ImageIcon(ImageIO.read(new File(iconPath))));}
+		catch(IOException e) {return null;}
+	}
+	
+	public static ImageIcon getIcon(ImageIcon icon) {return getIcon(icon, 32, 32);}
+	
+	public static ImageIcon getIcon(ImageIcon icon, int w, int h) {
+		return new ImageIcon(icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+	}
+	
+	public static ImageIcon getIcon(ImageIcon icon, int width) {
 		
-		try {img = ImageIO.read(new File(iconPath));}
-		catch (IOException e) {e.printStackTrace();}
+		int w = width, h;
+		int imgWidth = icon.getIconWidth(), imgHeight = icon.getIconHeight();
+		h = (w * imgHeight) / imgWidth;
 		
-		Image dimg = img.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
+		Image dimg = icon.getImage().getScaledInstance(w, h, Image.SCALE_REPLICATE);
 		return new ImageIcon(dimg);
 	}
 	
@@ -56,15 +67,7 @@ public class Icon {
 	}
 	
 	public static ImageIcon getIcon(String iconPath, int width) {
-		BufferedImage img = null;
-		try {img = ImageIO.read(new File(iconPath));}
-		catch (IOException e) {e.printStackTrace();}
-		int w = width, h;
-		int imgWidth = img.getWidth(), imgHeight = img.getHeight();
-		h = (w * imgHeight) / imgWidth;
-		
-		Image dimg = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-		return new ImageIcon(dimg);
+		return getIcon(new ImageIcon(iconPath), width);
 	}
 	
 	public static ImageIcon getIcon(String iconPath, int width, int height) {
