@@ -7,6 +7,9 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JWindow;
 
+import net.argus.gui.animation.Animation;
+import net.argus.gui.animation.NotifyAnimation;
+
 public class NotifyWindow extends JWindow {
 
 	/**
@@ -16,6 +19,8 @@ public class NotifyWindow extends JWindow {
 	
 	private int y = -1;
 	private int basY = -1;
+
+	private Animation anim;
 	
 	public NotifyWindow() {
 		setLocationRelativeTo(null);
@@ -25,6 +30,8 @@ public class NotifyWindow extends JWindow {
 		addMouseMotionListener(getMouseMotionListener());
 		
 		setBackground(new Color(0, 0, 0, 0));
+		
+		anim = new NotifyAnimation(this);
 	}
 	
 	public void setNotifyComponent(NotifyComponent comp) {add(comp); repaint();}
@@ -53,8 +60,22 @@ public class NotifyWindow extends JWindow {
 			public void mousePressed(MouseEvent e) {y = e.getPoint().y;}
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
+					setVisible(false);
+			}
 		};
+	}
+	
+	@Override
+	public void setVisible(boolean b) {
+		if(b) {
+			super.setVisible(b);
+			anim.play(NotifyAnimation.OPEN);
+		}else {
+			anim.play(NotifyAnimation.CLOSE);
+			super.setVisible(b);
+		}	
 	}
 	
 	@Override

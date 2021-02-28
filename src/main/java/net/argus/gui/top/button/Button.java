@@ -6,12 +6,10 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
 
 import javax.swing.JPanel;
 
@@ -76,16 +74,7 @@ class Button extends JPanel {
 		GradientPaint gp = new GradientPaint(0, 0, color, 0, height, color, true);
 		g2d.setPaint(gp);
 		
-		Ellipse2D.Float r2d = new Ellipse2D.Float(0, 0, width, height);
-		
-		Shape clip = g2d.getClip();
-		g2d.clip(r2d);
-		
-		g2d.fillOval(1, 1, width, height);
-		g2d.setClip(clip);
-		
-		g2d.drawOval(1, 1, width - 1, height - 1);
-		g2d.drawOval(1, 1, width - 3, height - 3);
+		g2d.fillOval(0, 0, width +1, height + 1);
 		
 		if(showImg) img.draw(g2d);
 		

@@ -94,28 +94,29 @@ public class GroupButton extends JPanel {
 			}
 			public void mouseClicked(MouseEvent e) {
 				Button but = (Button) e.getSource();
-				switch(but.getType()) {
-					case CLOSE:
-						fen.event(EventFrame.FRAME_CLOSING, e.getSource());
-						UserSystem.exit(0);
-						break;
-						
-					case MINIMIZE:
-						fen.event(EventFrame.FRAME_MINIMALIZED, e.getSource());
-						fen.setExtendedState(JFrame.ICONIFIED);
-						break;
-						
-					case EXPAND:
-						fen.event(EventFrame.FRAME_RESIZING, e.getSource());
-						fen.setMaximize(true);
-						break;
-						
-					case UNEXPAND:
-						fen.event(EventFrame.FRAME_RESIZING, e.getSource());
-						fen.setMaximize(false);
-						break;
-						
-				}
+				if(e.getButton() == MouseEvent.BUTTON1)
+					switch(but.getType()) {
+						case CLOSE:
+							fen.event(EventFrame.FRAME_CLOSING, e.getSource());
+							UserSystem.exit(0);
+							break;
+							
+						case MINIMIZE:
+							fen.event(EventFrame.FRAME_MINIMALIZED, e.getSource());
+							fen.setExtendedState(JFrame.ICONIFIED);
+							break;
+							
+						case EXPAND:
+							fen.event(EventFrame.FRAME_RESIZING, e.getSource());
+							fen.setMaximize(true);
+							break;
+							
+						case UNEXPAND:
+							fen.event(EventFrame.FRAME_RESIZING, e.getSource());
+							fen.setMaximize(false);
+							break;
+							
+					}
 			}
 		};
 	}

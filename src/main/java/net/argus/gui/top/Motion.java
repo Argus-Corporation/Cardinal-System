@@ -44,9 +44,7 @@ class Motion {
 			public void mouseReleased(MouseEvent e) {
 				clickPoint = null;
 				
-				int y = getY(e);
-				
-				if(!(titleBar.getFrame().isMaximized() || titleBar.getFrame().isFullScreen()) && y <= 0)
+				if(!titleBar.getFrame().isMaximized() && titleBar.getFrame().getLocation().y <= 0)
 					titleBar.getFrame().setMaximize(true);
 				
 			}
@@ -54,7 +52,7 @@ class Motion {
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2) {
+				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
 					titleBar.getFrame().setMaximize(!titleBar.getFrame().isMaximized());
 				}
 			}

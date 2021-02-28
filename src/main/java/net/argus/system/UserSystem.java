@@ -9,6 +9,8 @@ import net.argus.util.ListenerManager;
 import net.argus.util.RunTime;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
+import net.argus.util.notify.DefaultNotify;
+import net.argus.util.notify.Notify;
 
 public class UserSystem {
 	
@@ -17,6 +19,7 @@ public class UserSystem {
 	
 	public static RunTime runTime = RunTime.getRunTime();
 	public static Scanner in = new Scanner(System.in);
+	public static Notify notify = new DefaultNotify();
 	
 	
 	/**--INITIALIZATION--**/

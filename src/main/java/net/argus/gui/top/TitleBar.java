@@ -35,7 +35,7 @@ public class TitleBar extends JComponent {
 		this.groupButton = new GroupButton(fen);
 		this.title = new Title(fen.getTitle(), fen.getFrameIcon(), this);
 		
-		setPreferredSize(new Dimension(fen.getWidth() - 50, 35));
+		setPreferredSize(new Dimension(fen.getWidth(), 35));
 		
 		groupButton.setBounds(20, 7, groupButton.getPreferredSize().width, groupButton.getPreferredSize().height);
 		title.setBounds(0, 0, getPreferredSize().width, getPreferredSize().height);
@@ -71,7 +71,7 @@ public class TitleBar extends JComponent {
 		InitializationSystem.initSystem(args);
 		Frame fen = new Frame("Hello World!", "C:\\Users\\Jean\\Documents\\Django\\Cardinal\\res\\favicon16x16.png", null, new Properties("config", "bin"));
 		fen.setDefaultCloseOperation(3);
-		fen.setSize(1200, 700);
+		fen.setSize(300, 10);
 		fen.setLocationRelativeTo(null);	
 		fen.setAnimation(new FrameAnimation(fen));
 		

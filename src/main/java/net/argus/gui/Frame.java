@@ -31,6 +31,9 @@ public class Frame extends JFrame {
 	 */
 	private static final long serialVersionUID = -6058458405056389502L;
 	
+	public static final int MIN_WIDTH = 140;
+	public static final int MIN_HEIGHT = 35;
+	
 	private TitleBar titleBar;
 	private Panel mainPan = new Panel();
 	
@@ -49,7 +52,7 @@ public class Frame extends JFrame {
 
 	public Frame(String title, String pathIcon, boolean[] but, Properties config) {
 		boolean undecorated = config.getBoolean("frame.undecorated");
-		
+				
 		mainPan = new Panel();
 		
 		iconFrame = new ImageIcon(pathIcon);
@@ -76,7 +79,7 @@ public class Frame extends JFrame {
 			titleBar = new TitleBar(this);
 			super.add(BorderLayout.NORTH, titleBar);
 			super.add(BorderLayout.CENTER, mainPan);
-			
+
 			//getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
 		}
 		
@@ -178,6 +181,9 @@ public class Frame extends JFrame {
 	
 	@Override
 	public void setSize(int width, int height) {
+		width = width<=MIN_WIDTH?MIN_WIDTH:width;
+		height = height<=MIN_HEIGHT?MIN_HEIGHT:height;
+		
 		saveSize();
 		super.setSize(width, height);
 	}
