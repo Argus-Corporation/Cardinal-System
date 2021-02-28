@@ -1,11 +1,10 @@
 package net.argus.util.notify;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import net.argus.gui.border.NotifyBorder;
@@ -17,9 +16,7 @@ public abstract class NotifyComponent extends JPanel {
 	 */
 	private static final long serialVersionUID = 4209379136830926876L;
 	
-	protected String title, message;
-	
-	protected ImageIcon icon;
+	protected NotifyInfo info;
 	
 	protected Color titleColor = new Color(120, 120, 120), messageColor = new Color(70, 70, 70), backgroundColor = new Color(255, 255, 255, 180);
 	protected Font titleFont = new Font("roboto", 1, 13);
@@ -30,23 +27,24 @@ public abstract class NotifyComponent extends JPanel {
 		setBorder(new NotifyBorder(this));
 	}
 	
+	public NotifyWindow getWindow() {
+		Container cont = this;
+		while(!((cont = cont.getParent()) instanceof NotifyWindow)) {}
+		
+		return (NotifyWindow) cont;
+	}
+	
 	protected abstract void paintComponent(Graphics g);
 	
+	public abstract void show();
 	
-	public String getTitle() {return title;}
-	public String getMessage() {return message;}
-	public ImageIcon getIcon() {return icon;}
+	public NotifyInfo getInfo() {return info;}
 	
 	public Color getTitleColor() {return titleColor;}
 	public Color getMessageColor() {return messageColor;}
 	public Color getBackgoundColor() {return backgroundColor;}
 	
-	public void setTitle(String title) {this.title = title.toUpperCase();}
-	public void setMessage(String message) {this.message = message;}
-	
-	public void setIcon(ImageIcon icon) {this.icon = icon;}
-	public void setIcon(String iconPath) {this.icon = new ImageIcon(iconPath);}
-	public void setIcon(Image image) {this.icon = new ImageIcon(image);}
+	public void setInfo(NotifyInfo info) {this.info = info;}
 	
 	public void setTitleColor(Color title) {this.titleColor = title;}
 	public void setMessageColor(Color message) {this.messageColor = message;}

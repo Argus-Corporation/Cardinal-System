@@ -1,6 +1,5 @@
 package net.argus.util.notify;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -33,6 +32,11 @@ public class DefaultNotifyComponent extends NotifyComponent {
 	}
 	
 	@Override
+	public void show() {
+		init = false;
+	}
+	
+	@Override
 	protected void paintBorder(Graphics g) {}
 	
 	@Override
@@ -50,11 +54,11 @@ public class DefaultNotifyComponent extends NotifyComponent {
 	private void drawTitle(Graphics2D g) {
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString(title, minX + 20, minY + 14);
+		g.drawString(info.getTitle(), minX + 20, minY + 14);
 	}
 	
 	private void drawIcon(Graphics2D g) {
-		g.drawImage(Icon.getIcon(icon, 16, 16).getImage(), minX, minY, null);
+		g.drawImage(Icon.getIcon(info.getIcon(), 16, 16).getImage(), minX, minY, null);
 	}
 	
 	private void drawMessage(Graphics2D g) {
@@ -64,42 +68,43 @@ public class DefaultNotifyComponent extends NotifyComponent {
 		FontMetrics metrics = g.getFontMetrics();
 
 		String[] line = getLines(metrics);
-		getWindow();
-		if(!init)
-			for(int i = 2; i < line.length; i++) {
-				setPreferredSize(new Dimension(getPreferredSize().width, getPreferredSize().height + 15));
-				getBorder().paintBorder(this, g, 0, 0, getPreferredSize().width, getPreferredSize().height + 15);
-				getWindow().pack();
-				init = true;
-			}
+
+		if(!init) {
+			if(line.length > 2)
+				resize(g, heigth + (15 * (line.length - 2)));
+			else
+				resize(g, heigth);
+			init = true;	
+		}
 		
 		for(int i = 0, j = 20; i < line.length; i++, j += 15)
 			g.drawString(line[i], minX, minY + 15 + j);
 		
 	}
 	
-	private String[] getLines(FontMetrics metrics) {
-		int messWidth = metrics.stringWidth(message);
+	protected void resize(Graphics2D g, int height) {
+		setBounds(0, 0, getWidth(), height);
+		setPreferredSize(new Dimension(getWidth(), getHeight()));
+		
+		getBorder().paintBorder(this, g, 0, 0, getWidth(), getHeight());
+		getWindow().pack();
+	}
+	
+	protected String[] getLines(FontMetrics metrics) {
+		int messWidth = metrics.stringWidth(info.getMessage());
 		int nLine = (messWidth / maxWidth);
 		
 		int of = 0;
 		String[] line = new String[nLine + 1];		
-		for(int i = 0, j = 0; i < message.length() + 1; i++) {
-			if(metrics.stringWidth(message.substring(of, i)) >= maxWidth) {
+		for(int i = 0, j = 0; i < info.getMessage().length() + 1; i++) {
+			if(metrics.stringWidth(info.getMessage().substring(of, i)) >= maxWidth) {
 				of = i;
 				j++;
 			}
-			line[j] = message.substring(of, i);
+			line[j] = info.getMessage().substring(of, i);
 		}
 		
 		return line;
-	}
-	
-	public NotifyWindow getWindow() {
-		Container cont = this;
-		while(!((cont = cont.getParent()) instanceof NotifyWindow)) {}
-		
-		return (NotifyWindow) cont;
 	}
 	
 }

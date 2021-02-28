@@ -19,10 +19,10 @@ public class FrameAnimation extends Animation {
 	public void play(int id) {
 		switch(id) {
 			case CLOSE_MINIMIZE:
-				anim(-0.02f);
+				anim(-0.04f);
 				break;
 			case UNMINIIZE:
-				anim(0.02f);
+				anim(0.04f);
 				break;
 			
 		}

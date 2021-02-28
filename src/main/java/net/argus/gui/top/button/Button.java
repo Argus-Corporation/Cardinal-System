@@ -2,7 +2,6 @@ package net.argus.gui.top.button;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -38,11 +37,11 @@ class Button extends JPanel {
 	private boolean showImg;
 	private boolean enableColor = true;
 	
-	private ButtonType type; 
+	private TitleButtonType type; 
 	
 	private EventMouse event = new EventMouse();
 	
-	public Button(Frame fen, ImageButton img, ButtonType type, Color color) {
+	public Button(Frame fen, ImageButton img, TitleButtonType type, Color color) {
 		setPreferredSize(new Dimension(width + 2, height + 2));
 		setBounds(0, 0, width + 2, height + 2);
 		setOpaque(false);
@@ -71,12 +70,10 @@ class Button extends JPanel {
 	}
 	
 	private void drawButton(Graphics2D g2d, Color color) {
-		GradientPaint gp = new GradientPaint(0, 0, color, 0, height, color, true);
-		g2d.setPaint(gp);
-		
+		g2d.setColor(isEnabled()?color:unused);
 		g2d.fillOval(0, 0, width +1, height + 1);
 		
-		if(showImg) img.draw(g2d);
+		if(isEnabled() && showImg) img.draw(g2d);
 		
 		g2d.dispose();
 	}
@@ -88,12 +85,18 @@ class Button extends JPanel {
 		return g2d;
 	}
 	
-	public ButtonType getType() {return type;}
+	public TitleButtonType getType() {return type;}
 	
 	public void setEnableColor(boolean enable) {
 		this.enableColor = enable;
 		repaint();
-	} 
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setVisible(enabled);
+		super.setEnabled(enabled);
+	}
 	
 	public void addMouseTrackListener(MouseTrackListener listener) {event.addListener(listener);}
 	

@@ -123,7 +123,7 @@ public class Frame extends JFrame {
 	
 	public void setIcon(String iconPath) {
 		iconFrame = Icon.getIcon(iconPath);
-	//	titleBar.setIcon(iconFrame);
+		titleBar.setIcon(iconFrame);
 	}
 	
 	@Override

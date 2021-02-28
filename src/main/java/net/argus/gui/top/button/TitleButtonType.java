@@ -1,6 +1,6 @@
 package net.argus.gui.top.button;
 
-enum ButtonType {
+public enum TitleButtonType {
 	
 	CLOSE, MINIMIZE, EXPAND, UNEXPAND
 

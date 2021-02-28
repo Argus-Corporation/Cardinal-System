@@ -26,7 +26,7 @@ class Motion {
 			public void mouseMoved(MouseEvent e) {}
 			public void mouseDragged(MouseEvent e) {
 				
-				int y = getY(e);
+				int y = getY(e.getYOnScreen());
 				
 				if((titleBar.getFrame().isMaximized() || titleBar.getFrame().isFullScreen()) && y > 0)
 					titleBar.getFrame().setMaximize(false);
@@ -44,7 +44,7 @@ class Motion {
 			public void mouseReleased(MouseEvent e) {
 				clickPoint = null;
 				
-				if(!titleBar.getFrame().isMaximized() && titleBar.getFrame().getLocation().y <= 0)
+				if(!titleBar.getFrame().isMaximized() && getY(titleBar.getFrame().getLocation().y) <= 0)
 					titleBar.getFrame().setMaximize(true);
 				
 			}
@@ -52,17 +52,16 @@ class Motion {
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {
-				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
 					titleBar.getFrame().setMaximize(!titleBar.getFrame().isMaximized());
-				}
 			}
 		};
 	}
 	
-	private int getY(MouseEvent e) {
+	private int getY(int y) {
 		Rectangle winSize = Display.getMaximumWindowBounds();
 
-		return e.getYOnScreen() - winSize.y - titleBar.getHeight();
+		return y - winSize.y;
 	}
 	
 }

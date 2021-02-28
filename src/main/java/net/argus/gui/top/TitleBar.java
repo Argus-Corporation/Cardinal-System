@@ -7,13 +7,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import net.argus.file.Properties;
 import net.argus.gui.Frame;
 import net.argus.gui.animation.FrameAnimation;
 import net.argus.gui.top.button.GroupButton;
+import net.argus.gui.top.button.TitleButtonType;
 import net.argus.system.InitializationSystem;
+import net.argus.system.UserSystem;
 
 public class TitleBar extends JComponent {
 
@@ -64,18 +67,22 @@ public class TitleBar extends JComponent {
 	}
 	
 	public void setTitle(String title) {this.title.setTitle(title);}
+	public void setIcon(ImageIcon icon) {this.title.setIcon(icon);}
+	
+	public void setEnabled(TitleButtonType type, boolean b) {groupButton.setEnabled(type, b);}
 	
 	public Frame getFrame() {return fen;}
 
 	public static void main(String[] args) {
 		InitializationSystem.initSystem(args);
-		Frame fen = new Frame("Hello World!", "C:\\Users\\Jean\\Documents\\Django\\Cardinal\\res\\favicon16x16.png", null, new Properties("config", "bin"));
+		Frame fen = new Frame("Hello World!", "D:\\Django\\Document 1\\Chat\\Project\\res\\favicon16x16.png", null, new Properties("config", "bin"));
 		fen.setDefaultCloseOperation(3);
-		fen.setSize(300, 10);
+		fen.setSize(1000, 800);
 		fen.setLocationRelativeTo(null);	
 		fen.setAnimation(new FrameAnimation(fen));
 		
 		fen.setVisible(true);
+		UserSystem.notify.show("Hello World", "setVisible(true)");
 	}
 
 }

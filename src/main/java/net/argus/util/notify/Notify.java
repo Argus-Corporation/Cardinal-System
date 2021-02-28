@@ -1,24 +1,47 @@
 package net.argus.util.notify;
 
+import net.argus.event.notify.EventNotify;
+import net.argus.event.notify.NotifyListener;
 import net.argus.system.UserSystem;
+import net.argus.util.notify.center.NotifyCenter;
 
 public class Notify {
 	
-	private NotifyWindow window = new NotifyWindow();
+	private NotifyCenter center = new NotifyCenter();
+	
+	private NotifyWindow window = new NotifyWindow(this);
 	private NotifyComponent component;
 	
+	private EventNotify event = new EventNotify();
+	
+	private NotifyWait wait = new NotifyWait(this);
 	
 	public Notify(NotifyComponent component) {
 		this.component = component;
-		
 	}
 	
 	public void show(String title, String message) {
-		component.setTitle(title);
-		component.setIcon("C:\\Users\\Jean\\Documents\\Django\\Chat\\Project\\res\\favicon16x16.png");
-		component.setMessage(message);
-		window.setNotifyComponent(component);
+		NotifyInfo info = new NotifyInfo();
 		
+		info.setTitle(title);
+		info.setIcon("D:\\Django\\Document 1\\Chat\\Project\\res\\favicon16x16.png");
+		info.setMessage(message);
+		
+		show(info);
+	}
+	
+	public void show(NotifyInfo info) {
+		if(!window.isVisible()) {
+			center.addNotify(info);
+			component.setInfo(info);
+			show();
+		}else
+			wait.addNotify(info);
+	}
+	
+	private void show() {
+		window.setNotifyComponent(component);
+		component.show();
 		window.pack();
 		window.setVisible(true);
 	}
@@ -26,8 +49,16 @@ public class Notify {
 	public NotifyWindow getWindow() {return window;}
 	public NotifyComponent getComponent() {return component;}
 	
+	public NotifyCenter getCenter() {return center;}
+	
+	public void addNotifyListener(NotifyListener listener) {event.addListener(listener);}
+	protected EventNotify getEvent() {return event;}
+	
 	public static void main(String[] args) {
-		UserSystem.notify.show("Pokémon go", "Bonjour les copains, moi je vais bien et vous? Je suis à Vernet. A bientôt, Django."/*" comment aller vous? rgskjn df:j gdf:k gjidkf hikdfhnjgbhdkgnfsgdfjhgdshgdfkdsbg fbg,ndf bgk s bgbfsbhfdgsf"*/);
+		UserSystem.notify.show("Test", "Hello World!");
+		UserSystem.notify.show("Test", ":ldwrfgn:krdnjgkjfdngkdfhngkidfhngifdhfxdgfdx jknfgdxjfdb jhdfb gjxfdbgkjbngkidhfj!gndkguuirdkjhkghjkjhgkhjsfdugdf");
+		UserSystem.notify.show("Test", "eqfpdgklfdnjgifdjgndfih.");
+		
 	}
 	
 }

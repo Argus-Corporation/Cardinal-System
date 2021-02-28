@@ -31,10 +31,10 @@ public class GroupButton extends JPanel {
 	private boolean exp;
 	
 	public GroupButton(Frame fen) {
-		close = new Button(fen, ImageButton.close, ButtonType.CLOSE, Button.red);
-		minimize = new Button(fen, ImageButton.minimize, ButtonType.MINIMIZE, Button.yellow);
-		expand = new Button(fen, ImageButton.expand, ButtonType.EXPAND, Button.green);
-		unexpand = new Button(fen, ImageButton.unexpand, ButtonType.UNEXPAND, Button.green);
+		close = new Button(fen, ImageButton.close, TitleButtonType.CLOSE, Button.red);
+		minimize = new Button(fen, ImageButton.minimize, TitleButtonType.MINIMIZE, Button.yellow);
+		expand = new Button(fen, ImageButton.expand, TitleButtonType.EXPAND, Button.green);
+		unexpand = new Button(fen, ImageButton.unexpand, TitleButtonType.UNEXPAND, Button.green);
 	
 		int w = close.getPreferredSize().width;
 		int h = close.getPreferredSize().height;
@@ -61,6 +61,28 @@ public class GroupButton extends JPanel {
 	}
 	
 	public void setExpand(boolean exp) {this.exp = exp;}
+	
+	public void setEnabled(TitleButtonType type, boolean b) {
+		switch(type) {
+			case CLOSE:
+				close.setEnabled(b);
+				break;
+				
+			case MINIMIZE:
+				minimize.setEnabled(b);
+				break;
+				
+			case EXPAND:
+				expand.setEnabled(b);
+				unexpand.setEnabled(b);
+				break;
+				
+			case UNEXPAND:
+				expand.setEnabled(b);
+				unexpand.setEnabled(b);
+				break;
+		}
+	}
 	
 	public void showImgs(boolean show) {
 		close.showImg(show);
@@ -107,11 +129,13 @@ public class GroupButton extends JPanel {
 							break;
 							
 						case EXPAND:
+							System.out.println("expa");
 							fen.event(EventFrame.FRAME_RESIZING, e.getSource());
 							fen.setMaximize(true);
 							break;
 							
 						case UNEXPAND:
+							System.out.println("un");
 							fen.event(EventFrame.FRAME_RESIZING, e.getSource());
 							fen.setMaximize(false);
 							break;
@@ -146,7 +170,6 @@ public class GroupButton extends JPanel {
 		unexpand.setBounds((w + space) * 2, 0, w + 2, h);
 		
 		close.draw(g);
-		
 		g.translate(w + space, 0);
 		minimize.draw(g);
 		
@@ -154,12 +177,12 @@ public class GroupButton extends JPanel {
 		
 		if(!exp) {
 			expand.draw(g);
-			unexpand.setBounds((w + space) * 2, 0, 0, 0);
-
+			expand.setEnabled(true);
+			unexpand.setEnabled(false);
 		}else {
 			unexpand.draw(g);
-			expand.setBounds((w + space) * 2, 0, 0, 0);
-
+			unexpand.setEnabled(true);
+			expand.setEnabled(false);
 		}
 		
 		g.dispose();
