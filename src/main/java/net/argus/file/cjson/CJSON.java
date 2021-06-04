@@ -3,6 +3,7 @@ package net.argus.file.cjson;
 import java.io.IOException;
 import java.util.List;
 
+import net.argus.file.CJSONFile;
 import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 
@@ -46,10 +47,11 @@ public class CJSON {
 	public static void main(String[] args) throws IOException {
 		InitializationSystem.initSystem(new String[] {"-name", "Cardinal-System", "-id", "0xdev", "-log", "false"});
 		
-		CJSONFile file = new CJSONFile("tree", "/");
+		CJSONFile file = new CJSONFile("config", "bin");
 		CJSON cjson = CJSONPareser.parse(file);
-		System.out.println();
-		System.out.println(cjson.getObject("Config").getValue("Connection").getValue("bonjour"));
+	/*	System.out.println();
+		System.out.println(cjson.getObject("Config").getValue("Connection").getValue("bonjour"));*/
+		System.out.println(cjson);
 		//		.getValue("manifest").getValue("type").toString();
 			
 		//System.out.println(password);

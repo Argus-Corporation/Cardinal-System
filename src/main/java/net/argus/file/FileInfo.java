@@ -2,7 +2,9 @@ package net.argus.file;
 
 import java.io.File;
 
-public class FileInfo extends AbstractFileSave {
+import net.argus.instance.Instance;
+
+public class FileInfo extends CardinalFile {
 	
 	private String[] file;
 	
@@ -16,15 +18,26 @@ public class FileInfo extends AbstractFileSave {
 		super(fileName, extention, rep);
 		copyFile();
 	}
-
+	
 	/**
 	 * 
 	 * @param fileName
 	 * @param extention
-	 * @param path
+	 * @param rep
+	 * @param instance
 	 */
-	public FileInfo(String fileName, String extention, File path) {
-		super(fileName, extention, path);
+	public FileInfo(String fileName, String extention, String rep, Instance instance) {
+		super(fileName, extention, rep, instance);
+		copyFile();
+	}
+
+	/**
+	 * 
+	 * @param file
+	 * @param instance
+	 */
+	public FileInfo(File file, Instance instance) {
+		super(file, instance);
 		copyFile();
 	}
 	
@@ -64,7 +77,10 @@ public class FileInfo extends AbstractFileSave {
 	}
 
 	public void copyFile() {
-		file = getFile();
+		file = toArray();
+		
+		for(int i = 0; i < file.length; i++)
+			file[i] = valueOf(file[i]);
 	}
 	
 }

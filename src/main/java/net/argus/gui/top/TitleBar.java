@@ -75,7 +75,7 @@ public class TitleBar extends JComponent {
 
 	public static void main(String[] args) {
 		InitializationSystem.initSystem(args);
-		Frame fen = new Frame("Hello World!", "D:\\Django\\Document 1\\Chat\\Project\\res\\favicon16x16.png", null, new Properties("config", "bin"));
+		Frame fen = new Frame("Hello World!", "D:\\Django\\Document 1\\Chat\\Project\\res\\favicon16x16.png", new Properties("config", "bin"));
 		fen.setDefaultCloseOperation(3);
 		fen.setSize(1000, 800);
 		fen.setLocationRelativeTo(null);	

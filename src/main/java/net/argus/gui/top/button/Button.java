@@ -5,10 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 import javax.swing.JPanel;
 
@@ -45,7 +45,7 @@ class Button extends JPanel {
 		setPreferredSize(new Dimension(width + 2, height + 2));
 		setBounds(0, 0, width + 2, height + 2);
 		setOpaque(false);
-		fen.addFocusListener(getFrameFocusListener());
+		fen.addWindowFocusListener(getFrameFocusListener());
 		
 		this.img = img;
 		this.color = color;
@@ -111,10 +111,10 @@ class Button extends JPanel {
 		};
 	}
 	
-	private FocusListener getFrameFocusListener() {
-		return new FocusListener() {
-			public void focusLost(FocusEvent e) {setEnableColor(false);}
-			public void focusGained(FocusEvent e) {setEnableColor(true);}
+	private WindowFocusListener getFrameFocusListener() {
+		return new WindowFocusListener() {
+			public void windowLostFocus(WindowEvent e) {setEnableColor(false);}
+			public void windowGainedFocus(WindowEvent e) {setEnableColor(true);}
 		};
 	}
 

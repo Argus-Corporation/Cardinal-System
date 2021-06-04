@@ -7,10 +7,10 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -49,25 +49,25 @@ public class Frame extends JFrame {
 	private Animation anim;
 	
 	private EventFrame event = new EventFrame();
-
-	public Frame(String title, String pathIcon, boolean[] but, Properties config) {
-		boolean undecorated = config.getBoolean("frame.undecorated");
-				
+	
+	public Frame(String title, Dimension dimension, boolean undecorated, boolean alwaysOnTop, ImageIcon iconFrame, ImageIcon iconOs) {
+		//boolean undecorated = config.getBoolean("frame.undecorated");
+		
 		mainPan = new Panel();
 		
-		iconFrame = new ImageIcon(pathIcon);
-		iconOs = new ImageIcon(pathIcon);
+		this.iconFrame = iconFrame;
+		this.iconOs = iconOs;
 		
 		setIconImage(iconOs.getImage());
 		
-		setSize(config.getDimension("frame.size"));
+		setSize(dimension);
 		saveSize();
 		
 		this.setTitle(title);
 		this.setFocusable(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(undecorated);
-		this.setAlwaysOnTop(config.getBoolean("frame.alwaysontop"));
+		this.setAlwaysOnTop(alwaysOnTop);
 		
 		setBackground(new Color(0, 0, 0, 0));
 		
@@ -83,7 +83,7 @@ public class Frame extends JFrame {
 			//getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
 		}
 		
-		this.addKeyListener(new KeyListener() {
+		/*this.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {}
 			public void keyPressed(KeyEvent e) {
@@ -101,19 +101,32 @@ public class Frame extends JFrame {
 					event.startEvent(EventFrame.FRAME_RESIZING, new FrameEvent(this, getSize()));
 
 				}
-				*/
+				
 			}
-		});
+		});*/
 
 	}
+
+	public Frame(String title, String pathIcon, Properties config) {
+		this(title, config.getDimension("frame.size"), config.getBoolean("frame.undecorated"),
+				config.getBoolean("frame.alwaysontop"), new ImageIcon(pathIcon), new ImageIcon(pathIcon));
+	}
 	
-	protected Frame(String title, String iconPath, Properties config) {
+	public Frame(String iconPath) throws MalformedURLException {
+		this(new URL(iconPath));
+	}
+	
+	public Frame(URL iconPath) {
+		this("", new Dimension(1200, 700), true, false, new ImageIcon(iconPath), new ImageIcon(iconPath));
+	}
+	
+	/*protected Frame(String title, String iconPath, Properties config) {
 		this.setTitle(title);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setSize(config.getDimension("frame.size"));
 		this.setAlwaysOnTop(config.getBoolean("frame.alwaysontop"));
-	}
+	}*/
 	
 	public void removeAll() {
 		super.removeAll();
@@ -213,7 +226,7 @@ public class Frame extends JFrame {
 		super.setLocation(x, y);
 	}
 	
-	public TitleBar getTopPanel() {return titleBar;}
+	public TitleBar getTitleBar() {return titleBar;}
 	public Point getSavedPosition() {return position;}
 	
 	public void addFrameListener(FrameListener fenListener) {event.addListener(fenListener);}
@@ -250,6 +263,8 @@ public class Frame extends JFrame {
 	}
 	
 	public void event(int event, Object source) {this.event.startEvent(event, new FrameEvent(source, getSize()));}
+	
+	public Panel getMainPane() {return mainPan;}
 	
 	@Override
 	public Component add(Component comp) {

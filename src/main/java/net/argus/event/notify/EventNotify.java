@@ -1,7 +1,5 @@
 package net.argus.event.notify;
 
-import java.util.List;
-
 import net.argus.event.Event;
 
 public class EventNotify extends Event<NotifyListener> {
@@ -10,14 +8,14 @@ public class EventNotify extends Event<NotifyListener> {
 	public static final int HIDE = 1;
 
 	@Override
-	public void event(NotifyListener listener, int event, List<Object> objs) {
+	public void event(NotifyListener listener, int event, Object ... objs) {
 		switch(event) {
 			case SHOW:
-				listener.show((NotifyEvent) objs.get(0));
+				listener.show((NotifyEvent) objs[0]);
 				break;
 	
 			case HIDE:
-				listener.hide((NotifyEvent) objs.get(0));
+				listener.hide((NotifyEvent) objs[0]);
 				break;
 		}
 	}

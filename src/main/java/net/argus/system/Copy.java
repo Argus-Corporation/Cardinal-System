@@ -6,12 +6,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Copy {
 	
-	public static void copy(String file, String fileCopy) throws IOException {
-		DataInputStream in = new DataInputStream(new FileInputStream(new File(file)));
-		DataOutputStream out = new DataOutputStream(new FileOutputStream(new File(fileCopy)));
+	public static void copy(InputStream in, OutputStream out) throws IOException {
+		copy(new DataInputStream(in), new DataOutputStream(out));	
+	}
+	
+	public static void copy(String fileIn, String fileOut) throws IOException {
+		copy(new FileInputStream(new File(fileIn)), new FileOutputStream(new File(fileOut)));	
+	}
+	
+	public static void copy(DataInputStream in, DataOutputStream out) throws IOException {
 		byte[] data = new byte[in.available()];
 		
 		in.readFully(data);
@@ -19,7 +27,6 @@ public class Copy {
 		
 		out.write(data);
 		out.close();
-		
 	}
 
 }

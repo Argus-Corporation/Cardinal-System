@@ -25,7 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.argus.file.Properties;
-import net.argus.system.CopyTemp;
+import net.argus.system.ExtractTemp;
 import net.argus.system.Temp;
 import net.argus.system.UserSystem;
 
@@ -70,7 +70,7 @@ public class RondButton extends JButton {
 		pathImg.add("res/images/croix.png");
 		
 		try {
-			CopyTemp copy = new CopyTemp();
+			ExtractTemp copy = new ExtractTemp();
 			copy.copy(pathImg);
 		}catch(IOException | URISyntaxException e) {e.printStackTrace();}
 		

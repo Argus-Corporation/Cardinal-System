@@ -1,17 +1,17 @@
 package net.argus;
 
+import net.argus.util.Version;
+
 public final class Cardinal {
 	
-	public static final String VERSION = "pre 1.4";
+	public static final Version VERSION = new Version("1.4");
 	public static final String NAME = "Cardinal-System";
 	
 	public static final String WEB = "https://argus.alwaysdata.net/";
 	public static final String GIT = "https://github.com/Argus-corporation/Cardinal-System/";
 	
-	/**
-	 * 
-	 * 
-	 */
-	public static final long id = 8965655415512574257l;
+	public static void printInfo() {
+		System.out.println(NAME + " version " + VERSION);
+	}
 	
 }

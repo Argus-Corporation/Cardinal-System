@@ -10,10 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import net.argus.instance.Instance;
 import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 
-public class Properties extends AbstractFileSave {
+public class Properties extends CardinalFile {
 	
 	private static final String EXTENTION = "properties";
 	
@@ -23,17 +24,17 @@ public class Properties extends AbstractFileSave {
 	 * @param rep
 	 */
 	public Properties(String fileName, String rep) {
-		this(fileName, EXTENTION, rep);
+		super(fileName, EXTENTION, rep);
 	}
 	
 	/**
 	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
-	 * @param fileName 
-	 * @param extention
+	 * @param fileName
 	 * @param rep
+	 * @param instance
 	 */
-	protected Properties(String fileName, String extention, String rep) {
-		super(fileName, extention, rep);
+	public Properties(String fileName,  String rep, Instance instance) {
+		super(fileName, EXTENTION, rep, instance);
 	}
 	
 	/**
@@ -41,8 +42,8 @@ public class Properties extends AbstractFileSave {
 	 * @param fileName
 	 * @param file
 	 */
-	public Properties(String fileName, File file) {
-		this(fileName, EXTENTION, file);
+	public Properties(File file) {
+		super(file);
 	}
 	
 	/**
@@ -51,8 +52,17 @@ public class Properties extends AbstractFileSave {
 	 * @param extention
 	 * @param file
 	 */
-	public Properties(String fileName, String extention, File file) {
-		super(fileName, extention, file);
+	public Properties(String path) {
+		super(path);
+	}
+	
+	/**
+	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
+	 * @param path
+	 * @param instance
+	 */
+	public Properties(String path, Instance instance) {
+		super(path, instance);
 	}
 	
 	/**
@@ -62,7 +72,7 @@ public class Properties extends AbstractFileSave {
 	 * @throws IOException
 	 */
 	public void write(String key, String value) throws IOException {
-		super.write(key + "=" + value);
+		super.writeAppend(key + "=" + value);
 	}
 	
 	/**
@@ -71,7 +81,7 @@ public class Properties extends AbstractFileSave {
 	 * @throws IOException
 	 */
 	public void write(List<String> lines) throws IOException {
-		for(int i = 0; i < lines.size(); i++) super.write(lines.get(i));
+		for(String line : lines) super.writeAppend(line);
 	}
 	
 	/**
@@ -102,8 +112,8 @@ public class Properties extends AbstractFileSave {
 	 * @throws IOException
 	 */
 	public void removeKey(String key) throws IOException {
-		copyFile();
-		int line = getIdKey(key) -1;
+		List<String> data = toList();
+		int line = indexOf(key);
 		
 		data.remove(line);
 		
@@ -118,11 +128,11 @@ public class Properties extends AbstractFileSave {
 	 * @throws IOException 
 	 */
 	public void setKey(String key, String value) throws IOException {
-		copyFile();	
-		int line = getIdKey(key);
+		List<String> data = toList();
+		int line = indexOf(key);
 		
 		if(line != -1)
-			data.set(line - 1, key + "=" + value);
+			data.set(line, key + "=" + value);
 		else
 			data.add(key + "=" + value);
 		
@@ -154,19 +164,18 @@ public class Properties extends AbstractFileSave {
 	 * Cette methode retourne la ligne ou se touve le parametre
 	 * @param key
 	 * @return numberLine
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
 	 */
-	public int getIdKey(String key) {
-		copyFile();
-		try {
-			for(int i = 1; i < getNumberLine() + 1; i++) {
-				String lineKey;
-				lineKey = getKey(getLine(i));
-				
-				if(lineKey != null && lineKey.equals(key))
-					return i;
-			}
-		}catch(IOException e) {}
+	public int indexOf(String key) throws IOException {
+		List<String> data = toList();
+		
+		for(int i = 0; i < data.size(); i++) {
+			String line = data.get(i);
+			//System.out.println(line + " cou");
+			line = line.substring(0, line.indexOf('='));
+			if(line.equals(key))
+				return i;
+		}
 		
 		return -1;
 	}
@@ -179,8 +188,14 @@ public class Properties extends AbstractFileSave {
 	public String getString(String key) {
 		String line = null;
 		
-		try {line = getLine(getIdKey(key));}
-		catch(IOException e) {}
+		try {
+			int index = indexOf(key);
+
+			if(index == -1)
+				return null;
+			
+			line = read(index);
+		}catch(IOException e) {}
 		if(line != null)
 			return getValue(line);
 		else
@@ -303,11 +318,9 @@ public class Properties extends AbstractFileSave {
 	public boolean containsKey(String key) {
 		try {
 			String lineKey = null;
-			for(int i = 1; i < getNumberLine(); i++) {
-				if((lineKey = getKey(getLine(i))) != null && lineKey.equals(key)) {
+			for(int i = 0; i < countLine(); i++)
+				if((lineKey = getKey(read(i))) != null && lineKey.equals(key))
 					return true;
-				}
-			}
 		}catch(IOException e) {}
 		return false;
 	}

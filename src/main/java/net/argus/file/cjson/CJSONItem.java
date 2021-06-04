@@ -93,7 +93,7 @@ public class CJSONItem {
 	
 	@Override
 	public String toString() {
-		return "\"" + name + "\": " + value;
+		return "\"" + name + "\": " + value.toString();
 	}
 
 }

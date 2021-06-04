@@ -9,44 +9,40 @@ public class LangManager {
 	
 	private static List<LangManager> langValues = new ArrayList<LangManager>();	
 	
-	private String langName;
-	private List<LangValue> langValue;
+	private LangType type;
+	private LangValues values;
 	private CSSFile cssFile;
 	
-	public LangManager(String langName, List<LangValue> langValues, CSSFile cssFile) {
-		this.langName = langName;
-		this.langValue = langValues;
+	public LangManager(LangType type, LangValues values, CSSFile cssFile) {
+		this.type = type;
+		this.values = values;
 		this.cssFile = cssFile;
 	}
 	
-	public static void addLang(String langName, List<LangValue> langValue, CSSFile cssFile) {
-		LangManager.langValues.add(new LangManager(langName, langValue, cssFile));
+	public static void addLang(LangType type, LangValues values, CSSFile cssFile) {
+		LangManager.langValues.add(new LangManager(type, values, cssFile));
 	}
 	
 	public static String getElement(String key) {
-		int index = getIndex(Lang.getLangName());
+		int index = getIndex();
 		if(index != -1)
-			for(LangValue value : langValues.get(index).langValue) {
-				String keyElement = value.getKey();
-				
-				if(keyElement != null && keyElement.equals(key))
-					return value.getValue();
-			}
+			if(index < langValues.size())
+				return langValues.get(index).values.getValue(key);
 		
 		return key;
 	}
 	
 	public static CSSFile getCSSFile() {
-		int index = getIndex(Lang.getLangName());
-		if(index != -1)
+		int index = getIndex();
+		if(index != -1 && index < langValues.size())
 			return langValues.get(index).cssFile;
 			
 		return null;
 	}
 	
-	private static int getIndex(String langName) {
+	private static int getIndex() {
 		for(int i = 0; i < langValues.size(); i++)
-			if(langValues.get(i).langName.equals(langName))
+			if(langValues.get(i).type.equals(Lang.currentLang()))
 				return i;
 			
 		return -1;

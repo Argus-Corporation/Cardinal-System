@@ -2,21 +2,20 @@ package net.argus.file.css;
 
 import java.io.File;
 
-public class CSSEngine {
-	
-	private CSSFile css;
+import net.argus.instance.Instance;
 
-	public CSSEngine(String fileName, String rep) {
-		css = new CSSFile(fileName, rep);
-		css.execut();
-	}
+public class CSSEngine {
 	
 	public static void run(File path) {
 		new CSSFile(path).execut();
 	}
 	
-	public static void run(String fileName, File path) {
-		new CSSFile(fileName, path).execut();
+	public static void run(File path, Instance instance) {
+		new CSSFile(path, instance).execut();
+	}
+	
+	public static void run(String fileName, String rep, Instance instance) {
+		new CSSFile(fileName, rep, instance).execut();
 	}
 	
 	public static void run(String fileName, String rep) {

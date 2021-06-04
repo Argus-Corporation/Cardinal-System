@@ -3,74 +3,52 @@ package net.argus.game;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+
+import net.argus.exception.GameException;
+import net.argus.util.CardinalEnum;
 
 public class Matrix {
 	
-	private static GamePixel[][] pixels;
-	private static List<GamePixel> newPixels = new ArrayList<GamePixel>();
+	private static Pixel[][] pixels;
 	
-	private static int width, height;
+	private static List<Point> newPoint = new ArrayList<Point>();
 	
-	public static void create(int width, int height) {
-		pixels = new GamePixel[width][height];
-		newPixels = new ArrayList<GamePixel>();
+	private static int w, h;
+	
+	public static void load() throws GameException {
+		if(pixels == null)
+			throw new GameException();
 		
-		Matrix.width = width;
-		Matrix.height = height;
+		for(int i = 0, x = 0, y = 0; i < w * h; i++, y += x == w-1 ? 1 : 0, x = x < w-1 ? x + 1: 0)
+			addPixel(new Pixel(new Point(x, y), Color.BLACK));
+		System.out.println("end init");
 	}
 	
-	public static void load() {
-		for(int i = 0, x = 0, y = 0; i < width * height; i++, y += x >= width-1 ? 1 : 0, x = x < width-1 ? x + 1: 0) {
-			addPixel(new GamePixel(new Point(x, y), Color.BLACK));
-		}
+	public static void create(int w, int h) {
+		pixels = new Pixel[w][h];
+		
+		Matrix.w = w;
+		Matrix.h = h;
 	}
 	
-	public static void addPixel(GamePixel pix) {
-		if(!CardiGame.endRender)
-			newPixels.add(pix);
+	public synchronized static void addPixel(Pixel pix) {
+		pixels[pix.getPoint().x][pix.getPoint().y] = pix;
+		newPoint.add(pix.getPoint());
 	}
 	
-	public static synchronized boolean isSuperimposed(int x0, int y0) {
-		List<GamePixel> pixs = newPixels;
-		for(GamePixel pix : pixs)
-			if(pix.getPoint().x == x0 && pix.getPoint().y == y0)
-				return true;
-		return false;
+	public synchronized static Enumeration<Pixel> getPixels() {
+		List<Pixel> pixs = new ArrayList<Pixel>();
+		for(Point p : newPoint)
+			pixs.add(pixels[p.x][p.y]);
+			
+		//newPoint.clear();
+		
+		return new CardinalEnum<Pixel>(pixs);
+		
+		//return new CardinalEnum<Pixel>(ArrayManager.convert(pixels));
 	}
-	
-	public static synchronized void clear() {
-		pixels = null;
-		pixels = new GamePixel[width][height];
-	}
-	
-	public static synchronized void transfert() {
-		for(int i = 0; i < newPixels.size(); i++) {
-			//System.out.println(newPixels.get(i).getPoint().x + "  " + newPixels.get(i).getPoint().x);
-			pixels[newPixels.get(i).getPoint().x][newPixels.get(i).getPoint().y] = newPixels.get(i);
-		}
-		System.out.println("end trans");
-		newPixels.clear();
-	}
-	
-	public static GamePixel getPixel(int x, int y) {
-		return pixels[x][y];
-	}
-	
-	public static List<GamePixel> getNewPixels() {
-		return newPixels;
-	}
-	
-	public static int length() {
-		int count = 0;
-		for(int i = 0, x = 0, y = 0; i < width * height; i++, y += x >= width-1 ? 1 : 0, x = x < width-1 ? x + 1: 0)
-			if(pixels[x][y] != null)
-				count++;
-		return count;
-	}
-	
-	public static int getWidth() {return width;}
-	public static int getHeight() {return height;}
 	
 
 }

@@ -2,6 +2,7 @@ package net.argus.example;
 
 import java.awt.Color;
 
+import net.argus.exception.GameException;
 import net.argus.game.CardiGame;
 import net.argus.game.Display;
 import net.argus.game.Graphics;
@@ -14,29 +15,26 @@ public class ExampleGame extends CardiGame {
 	}
 
 	@Override
-	public void init() {
+	public void init() throws GameException {
 		Display.create(1200, 700);
 		
 		Matrix.create(1200, 700);
-		//Matrix.load();
+		Matrix.load();
 		
 		Display.setVisible(true);
 	}
 
-	int pos = 0;
+	int pos = 10;
 	
 	@Override
-	public void update() {
+	public void update() throws GameException {
 		g.setColor(Color.CYAN);
-		g.drawRect(pos++, pos++, 100, 100);
+		g.drawRect(pos++, pos++, 10, 10);
 	}
 
 	@Override
-	public void render(Graphics g) {
-		CardiGame.endRender = true;
-		Display.repaint();
-		CardiGame.endRender = false;
-		
+	public void render(Graphics g) throws GameException {
+		Display.repaint();		
 	}
 	
 	public static void main(String[] args) {

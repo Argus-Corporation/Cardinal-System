@@ -7,6 +7,7 @@ import net.argus.security.Key;
 import net.argus.system.InitializationSystem;
 import net.argus.util.debug.Debug;
 
+@SuppressWarnings("deprecation")
 public class ExampleSecurity {
 	
 	public ExampleSecurity() {

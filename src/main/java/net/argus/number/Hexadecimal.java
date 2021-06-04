@@ -7,7 +7,7 @@ import net.argus.util.Math;
 
 public class Hexadecimal {
 	
-	private static final char[] character = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	private static final char[] character = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', '-'};
 	
 	public enum CharHex {
 		
@@ -62,7 +62,11 @@ public class Hexadecimal {
 	
 	public static Hexadecimal valueOf(int n) {
 		List<Character> hex = new ArrayList<Character>();
-		String hexs = "";
+		
+		String hexs = n < 0?"-":"";
+		if(n < 0)
+			n = -n;
+		
 		long n0 = n;
 
 		do {
@@ -82,11 +86,14 @@ public class Hexadecimal {
 	public int toInt() {
 		char[] chs = value.toCharArray();
 		int n = 0;
-		
+			
+			
 		for(int i = 0, j = chs.length - 1; i < chs.length; i++, j--) {
 			int val = CharHex.getValue(chs[i]);
 			n += val * Math.pow(16, j);
 		}
+		if(chs[0] == '-')
+			n = -n;
 		
 		return n;
 	}
@@ -99,6 +106,9 @@ public class Hexadecimal {
 			int val = CharHex.getValue(chs[i]);
 			n += val * Math.pow(16, j);
 		}
+		
+		if(chs[0] == '-')
+			n = -n;
 		
 		return n;
 	}

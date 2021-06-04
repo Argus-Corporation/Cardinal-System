@@ -5,8 +5,6 @@ import static java.lang.Thread.currentThread;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.argus.util.debug.Debug;
-
 public class ThreadManager {
 	
 	public static List<Thread> threads = new ArrayList<Thread>();
@@ -35,19 +33,17 @@ public class ThreadManager {
 		start(new Thread(run));
 	}
 	
-	public void start(Thread thread) {
-		setTemporaryName(THREAD_MANAGER.getName());
-		
-		this.thread = thread;
+	public void start(Thread run) {		
+		this.thread = run;
 		
 		thread.setName(name);
 		thread.start();
 		
 		addThread(thread);
-		
-		Debug.log("Thread \"" + name + "\" started");
-		
-		restorOldParameter(0);
+	}
+	
+	public static void startThread(Thread run) {
+		new Thread(run).start();
 	}
 	
 	public void setTemporaryName() {oldName = currentThread().getName(); currentThread().setName(name);}

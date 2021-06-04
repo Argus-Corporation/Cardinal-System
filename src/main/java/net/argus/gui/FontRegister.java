@@ -7,7 +7,7 @@ import javax.swing.UIManager;
 
 public class FontRegister {
 	
-private static List<GUI> elementGUI = new ArrayList<GUI>();
+	private static List<GUI> elementGUI = new ArrayList<GUI>();
 	
 	public static void update() {
 		for(GUI gui : elementGUI) {

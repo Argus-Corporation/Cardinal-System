@@ -218,9 +218,10 @@ public class Splash extends JFrame {
 		splash.play();
 		
 		String iconPath = FileManager.getPath("res/favIcon32x32.png");
+		@SuppressWarnings("unused")
 		boolean[] isE = new boolean[] {true, true, true};
 		
-		Frame fen = new Frame("School", iconPath, isE, config);
+		Frame fen = new Frame("School", iconPath, config);
 		
 		Panel pan = new Panel(config, FileManager.getPath("res/favIcon16x16.png"), fen);
 		new PanelRepaint(fen, splash).initImage();

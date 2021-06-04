@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.jar.Attributes;
 
+import net.argus.file.FileManager;
 import net.argus.file.JarFile;
 
 public class Manifest {
@@ -26,7 +27,7 @@ public class Manifest {
 	}
 	
 	public static Manifest getManifest() throws IOException {
-		return new Manifest(new File(Launcher.getCodeSourceLocation().getPath()));
+		return new Manifest(new File(FileManager.getCodeSourceLocation().getPath()));
 	}
 
 }

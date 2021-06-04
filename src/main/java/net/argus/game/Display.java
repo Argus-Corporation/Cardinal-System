@@ -8,7 +8,7 @@ public class Display {
 	
 	public static void create(int width, int height) {
 		fen = new JFrame();
-		fen.setContentPane(new GamePanel());
+		fen.setContentPane(new GameComponent());
 		fen.setDefaultCloseOperation(3);
 		fen.setSize(width, height);
 	}

@@ -129,13 +129,11 @@ public class GroupButton extends JPanel {
 							break;
 							
 						case EXPAND:
-							System.out.println("expa");
 							fen.event(EventFrame.FRAME_RESIZING, e.getSource());
 							fen.setMaximize(true);
 							break;
 							
 						case UNEXPAND:
-							System.out.println("un");
 							fen.event(EventFrame.FRAME_RESIZING, e.getSource());
 							fen.setMaximize(false);
 							break;

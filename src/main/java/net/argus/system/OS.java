@@ -4,7 +4,7 @@ public enum OS {
 	
 	WINDOWS, LINUX;
 	
-	public static OS getOS() {
+	public static OS currentOS() {
 		String os = System.getProperty("os.name");
 		
 		if(os.startsWith("Win")) return WINDOWS;

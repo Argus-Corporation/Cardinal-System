@@ -28,14 +28,15 @@ public class InitializationSystem {
 		InitializedSystemManager systemManager = UserSystem.getDefaultInitializedSystemManager();
 		addInitializedUI(new InitializedUI());
 		
-		UserSystem.defineProperty("config", true);
-		
-		showInfo();
+		UserSystem.defineProperty("showInfo", true);
 		
 		preInit(args);
 		if(ui) preInitUi(args);
 		if(systemManager != null) systemManager.preInit(args);
 		if(manager != null) manager.preInit(args);
+		
+		if(UserSystem.getBooleanProperty("showInfo"))
+			showInfo();
 		
 		init(args);
 		if(ui) initUi(args);
@@ -51,8 +52,12 @@ public class InitializationSystem {
 	}
 	
 	public static void preInit(String[] args) {
-		for(int i = 0; i < args.length; i += 2)
-			System.setProperty(args[i].substring(1), Argument.getArgument(args, args[i].substring(1)));
+		for(int i = 0; i < args.length; i++) {
+			if(args[i].charAt(0) == '-') {
+				System.setProperty(args[i].substring(1), Argument.getArgument(args, args[i].substring(1)));
+				i++;
+			}
+		}
 	}
 	
 	public static void init(String[] args) {
@@ -66,7 +71,7 @@ public class InitializationSystem {
 	
 	public static void postInit(String[] args) {
 		init = true;
-		if(UserSystem.getBooleanProperty("update")) UserSystem.update.check();
+		if(UserSystem.getBooleanProperty("update") && UserSystem.update != null) UserSystem.update.check();
 		
 		Debug.log("System initialized");
 	}

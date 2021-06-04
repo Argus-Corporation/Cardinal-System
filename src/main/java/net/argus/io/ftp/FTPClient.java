@@ -14,6 +14,7 @@ import net.argus.security.Key;
 import net.argus.util.ASCII;
 import net.argus.util.Math;
 
+@SuppressWarnings("deprecation")
 public class FTPClient {
 	
 	private String host, user, password;

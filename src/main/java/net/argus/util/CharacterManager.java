@@ -9,8 +9,8 @@ public class CharacterManager {
 	}
 	
 	public static boolean isNumber(String str) {
-		try {Integer.valueOf(str);}
-		catch(NumberFormatException e) {return false;}
+		try {Float.valueOf(str);}
+		catch(NumberFormatException e) {if(str.equals(".")) return true; else return false;}
 		return true;
 	}
 	

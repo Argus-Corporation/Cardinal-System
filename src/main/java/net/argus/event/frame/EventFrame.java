@@ -1,7 +1,5 @@
 package net.argus.event.frame;
 
-import java.util.List;
-
 import net.argus.event.Event;
 
 public class EventFrame extends Event<FrameListener> {
@@ -12,18 +10,18 @@ public class EventFrame extends Event<FrameListener> {
 	
 
 	@Override
-	public void event(FrameListener listener, int event, List<Object> objs) {
+	public void event(FrameListener listener, int event, Object ... objs) {
 		switch(event) {
 			case FRAME_CLOSING:
-				listener.frameClosing((FrameEvent) objs.get(0));
+				listener.frameClosing((FrameEvent) objs[0]);
 				break;
 				
 			case FRAME_MINIMALIZED:
-				listener.frameMinimalized((FrameEvent) objs.get(0));
+				listener.frameMinimalized((FrameEvent) objs[0]);
 				break;
 				
 			case FRAME_RESIZING:
-				listener.frameResizing((FrameEvent) objs.get(0));
+				listener.frameResizing((FrameEvent) objs[0]);
 				break;
 		}
 	}

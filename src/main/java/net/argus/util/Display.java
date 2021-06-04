@@ -17,4 +17,6 @@ public class Display {
 	public static int getWidthMaximumWindowBounds() {return getMaximumWindowBounds().width;}
 	public static int getHeightMaximumWindowBounds() {return getMaximumWindowBounds().height;}
 	
+	public static boolean isHeadlessInstance() {return GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadlessInstance();}
+	
 }
