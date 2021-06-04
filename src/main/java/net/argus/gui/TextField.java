@@ -51,7 +51,9 @@ public class TextField extends JTextField implements Element, GUI {
 	}
 	
 	private void common() {
-		FontRegistry.addElement(this);
+		FontRegister.addElement(this);
+		BackgoundRegister.addElement(this);
+		ForegroundRegiter.addElement(this);
 		
 		nameTypes.add(nameType);
 		isBacks.add(isBack);

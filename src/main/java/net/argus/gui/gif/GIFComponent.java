@@ -69,7 +69,6 @@ public class GIFComponent extends JComponent {
 						
 						ThreadManager.sleep(1000 / fps);
 					}else {
-						System.out.println("hello");
 						stop();
 						break;
 					}
@@ -77,13 +76,12 @@ public class GIFComponent extends JComponent {
 				if(gif.isLoop())
 					numLoop++;
 				else
-					ThreadManager.stop(Thread.currentThread());
+					return;
 			}
 
 			for(GIFListener mana : gifManager)
 				mana.stop(new GIFEvent(this, numLoop, index, currentImage));
 			
-			ThreadManager.stop(Thread.currentThread());
 		};
 	}
 	

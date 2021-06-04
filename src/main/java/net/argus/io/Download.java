@@ -28,7 +28,7 @@ public class Download {
 	
 	public void download(String file, File path) {
 		finish = false;
-		
+
 		ThreadManager.DOWNLOAD.start(new ThreadDownload(file, path));
 		if(!newThread)
 			while(!finish)
@@ -103,7 +103,7 @@ public class Download {
 				
 				Debug.log("File downloaded");
 				write(data, new File(path + "/" + file));
-			}catch(Throwable e) {Debug.log("Download filed");}
+			}catch(Throwable e) {Debug.log("Download failed");}
 			finish = true;
 		}
 		

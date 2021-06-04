@@ -9,7 +9,7 @@ public class SystemProcess {
 	private ProcessBuilder builder;
 	
 	public SystemProcess(String arg) {
-		builder = new ProcessBuilder(new ArrayManager<String>().convert(arg.split(" ")));
+		builder = new ProcessBuilder(ArrayManager.convert(arg.split(" ")));
 	}
 	
 	public void redirectErrorStream(boolean b) {

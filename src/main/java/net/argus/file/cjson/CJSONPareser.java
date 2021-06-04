@@ -3,6 +3,7 @@ package net.argus.file.cjson;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.file.CJSONFile;
 import net.argus.util.ArrayManager;
 
 public class CJSONPareser {
@@ -24,7 +25,7 @@ public class CJSONPareser {
 	}
 	
 	public static CJSON parse(CJSONFile file) {
-		return parse(getFile(file.getFile()));
+		return parse(getFile(file.toArray()));
 	}
 	
 	private static char[] getFile(String file) {

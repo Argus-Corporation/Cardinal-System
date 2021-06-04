@@ -1,28 +1,17 @@
 package net.argus.http;
 
 import java.io.BufferedReader;
-import java.io.DataInput;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.ProcessBuilder.Redirect;
-import java.lang.reflect.Array;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import net.argus.file.AbstractFileSave;
 import net.argus.file.FileManager;
-import net.argus.util.ArrayManager;
 
-@SuppressWarnings("unused")
 public class HTTPClient {
 	
 	private Socket client;

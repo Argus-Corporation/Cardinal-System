@@ -218,13 +218,13 @@ public class AbstractFileSave {
 				first = first.substring(0, first.lastIndexOf("%"));
 				second = value.substring(value.lastIndexOf("%") + 1);
 				
-				value = first + Integer.toString(Display.getWidhtDisplay()) + second;
+				value = first + Integer.toString(Display.getWidth()) + second;
 			}else if(value.contains("%heightDisplay%")){
 				first = value.substring(0, value.lastIndexOf("%"));
 				first = first.substring(0, first.lastIndexOf("%"));
 				second = value.substring(value.lastIndexOf("%") + 1);
 				
-				value = first + Integer.toString(Display.getHeightDisplay()) + second;
+				value = first + Integer.toString(Display.getHeight()) + second;
 			}else if(value.contains("%20")) {
 				first = value.substring(0, value.lastIndexOf("%20"));
 				second = value.substring(value.lastIndexOf("%20") + 3);

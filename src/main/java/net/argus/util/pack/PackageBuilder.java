@@ -1,29 +1,30 @@
 package net.argus.util.pack;
 
 import net.argus.file.cjson.CJSON;
-import net.argus.file.cjson.CJSONArray;
 import net.argus.file.cjson.CJSONBuilder;
+import net.argus.file.cjson.CJSONInteger;
 import net.argus.file.cjson.CJSONItem;
 import net.argus.file.cjson.CJSONObject;
 import net.argus.file.cjson.CJSONString;
 
 public class PackageBuilder extends CJSONBuilder {
 	
-	private CJSONObject mainObj, manifest;
+	private CJSONObject packageObject; 
+	private CJSONObject manifest;
 	
 	public PackageBuilder(CJSON cjson) {
-		this.mainObj = cjson.getObject("package");
-		this.manifest = mainObj.getValue("manifest");
+		this.packageObject = cjson.getItem("package").getValue();
+		this.manifest = packageObject.getItem("manifest").getValue();
 	}
 	
 	public PackageBuilder(int type) {
-		mainObj = new PackageObject("package");
-		manifest = new PackageObject("manifest");
-		mainObj.addItem(new PackageItem("manifest", manifest));
+		packageObject = new PackageObject();
+		manifest = new PackageObject();
 		
-		manifest.addItem(new PackageItem("type", String.valueOf(type)));
+		manifest.addValue("type", new CJSONInteger(type));
 		
-		addObject(mainObj);
+		packageObject.addItem(new CJSONItem("manifest", manifest));
+		addItem(new PackageItem("package", packageObject));
 	}
 	
 	public PackageBuilder(PackageType type) {
@@ -34,15 +35,20 @@ public class PackageBuilder extends CJSONBuilder {
 	public PackageBuilder addManifestValue(String name, CJSONObject value) {manifest.addItem(new PackageItem(name, value)); return this;}
 	
 	public PackageBuilder addValue(String name, String value) {addValue(name, new CJSONString(value)); return this;}
-	public PackageBuilder addValue(String value) {addValue(new CJSONString(value)); return this;}
-	public PackageBuilder addValue(String name, CJSONObject value) {mainObj.addItem(new CJSONItem(name, value)); return this;}
-	public PackageBuilder addValue(CJSONObject value) {mainObj.addItem(new CJSONItem(value.getName(), value)); return this;}
+	public PackageBuilder addValue(String name, CJSONObject value) {addValue(new CJSONItem(name, value)); return this;}
+	public PackageBuilder addValue(CJSONItem value) {packageObject.addItem(value); return this;}
 	
-	public PackageBuilder addItem(CJSONItem item) {mainObj.addItem(item); return this;}
-	public PackageBuilder addItemArray(CJSONArray array) {mainObj.addItemArray(array); return this;}
+	//public PackageBuilder addItem(CJSONItem item) {mainObj.addItem(item); return this;}
+	/*public PackageBuilder addItemArray(CJSONArray array) {mainObj.addItemArray(array); return this;}
 	public PackageBuilder addItemArray(String name, String[] array) {addItemArray(new CJSONArray(name, array)); return this;}
+	*/
 	
-	public CJSONObject getPackage() {return mainObj;}
+	public CJSONObject getValue(String name) {return packageObject.getValue(name);}
+	public CJSONObject[] getArray(String name) {return packageObject.getArrayValue(name);}
+	public CJSONObject getManifestValue(String name) {return manifest.getValue(name);}
+
+	
+	public CJSONObject getPackage() {return packageObject;}
 	public CJSONObject getManifest() {return manifest;}
 
 }

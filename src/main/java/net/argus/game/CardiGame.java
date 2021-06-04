@@ -1,13 +1,13 @@
 package net.argus.game;
 
+import net.argus.exception.GameException;
+
 public abstract class CardiGame extends Thread {
 	
 	protected Graphics g;
 	
 	private long normalTPS = 60;
-	
-	public static boolean endRender;
-	
+		
 	private boolean tick, render;
 	private boolean running;
 	
@@ -15,17 +15,14 @@ public abstract class CardiGame extends Thread {
 		this.g = new Graphics();
 	}
 	
+	@Override
 	public void run() {
 		running = true;
-		try {
-			loop();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		try {loop();}
+		catch(GameException e) {e.printStackTrace();}
 	}
 	
-	public void loop() throws InterruptedException {
+	public void loop() throws GameException {
 		init();
 		
 		long timer = System.currentTimeMillis();
@@ -34,13 +31,13 @@ public abstract class CardiGame extends Thread {
 		double elapsed = 0;
 		double nanoSeconds = 1000000000.0 / normalTPS;
 		
-		//@SuppressWarnings("unused")
+		@SuppressWarnings("unused")
 		int ticks = 0;
-		//@SuppressWarnings("unused")
+		@SuppressWarnings("unused")
 		int frames = 0;
 		
 		while(running) {
-		/*	if(Display.isCloseRequested()) stop();
+			/*if(Display.isCloseRequested()) stop();
 			DisplayManager.update();*/
 			
 			tick = false;
@@ -58,16 +55,15 @@ public abstract class CardiGame extends Thread {
 				frames++;
 			}
 			
-			if(tick) {
+			if(tick)
 				update();
 				
-			}
-			if(render) {
+			if(render)
 				render(g);
-			}
+				
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				System.out.println(frames + "  " + ticks);
+				//System.out.println(frames + "  " + ticks);
 				ticks = 0;
 				frames = 0;
 			}
@@ -75,11 +71,12 @@ public abstract class CardiGame extends Thread {
 		
 	}
 	
-	public abstract void init();
+	public abstract void init() throws GameException;
 	
-	public abstract void update();
+	public abstract void update() throws GameException;
 	
-	public abstract void render(Graphics g);
+	public abstract void render(Graphics g) throws GameException;
+	
 	
 	public long getNormalTPS() {return normalTPS;}
 	

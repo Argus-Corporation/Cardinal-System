@@ -13,7 +13,7 @@ public class Graphics {
 	}
 	
 	public void draw(int x, int y) {
-		Matrix.addPixel(new GamePixel(new Point(x, y), color));
+		Matrix.addPixel(new Pixel(new Point(x, y), color));
 	}
 	
 	public void setColor(Color color) {this.color = color;}

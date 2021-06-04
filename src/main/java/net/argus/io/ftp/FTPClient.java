@@ -14,6 +14,7 @@ import net.argus.security.Key;
 import net.argus.util.ASCII;
 import net.argus.util.Math;
 
+@SuppressWarnings("deprecation")
 public class FTPClient {
 	
 	private String host, user, password;
@@ -78,5 +79,12 @@ public class FTPClient {
 	
 	private URL getURL(String file) throws MalformedURLException {return new URL("ftp://" + user + ":" + key.decrypt(password) + "@" + host + "/" + file);}
 	public URL getURL() throws MalformedURLException {return new URL("ftp://" + user + ":" + password + "@" + host);}
+	
+	@Override
+	public String toString() {
+		try {return getURL().toString();}
+		catch (MalformedURLException e) {e.printStackTrace();}
+		return MalformedURLException.class.toString();
+	}
 
 }

@@ -90,6 +90,19 @@ public class CJSONArray extends CJSONObject {
 			data[i] = Byte.valueOf(values[i].toString());
 		return data;
 	}
+	
+	@Override
+	public String toString() {
+		String str = name.toString() + ": [";
+		for(CJSONObject obj : values)
+			str += obj.toString() + ", ";
+		
+		if(ArrayManager.isExist(str.toCharArray(), str.length()-2))
+			str = str.substring(0, str.length() - 2);
+		
+		str += "]";
+		return str;
+	}
 
 	public void setName(CJSONString name) {this.name = name;}
 	public void setValues(CJSONObject[] values) {this.values = values;}

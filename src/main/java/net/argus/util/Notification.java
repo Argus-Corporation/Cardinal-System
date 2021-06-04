@@ -27,7 +27,7 @@ public class Notification {
 	 * @param iconPath
 	 */
 	public static void showNotification(String mes, String name, String projectName, MessageType type, String iconPath) {
-		if(OS.getOS() != OS.LINUX)
+		if(OS.currentOS() != OS.LINUX)
 			try {
 			    if(isFirst) {
 			    	tray = SystemTray.getSystemTray();

@@ -33,20 +33,31 @@ public class DialogProgress extends JDialog {
 		this.parent = parent;
 	}
 	
-	public void show(int min, int max, String statusText, boolean freezParent) {
-		this.statusText = statusText;
-		this.min = min;
-		this.max = max;
-		
+	public void showDialog(int min, int max, String statusText) {
+		setStatusText(statusText);
+		createPanel(min, max);
+		showDialog();
+	}
+	
+	public void showDialog() {
 		this.setSize(350, 100);
 		this.setLocationRelativeTo(parent);
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
 		
-		if(freezParent) parent.setEnabled(false);
-		
+		this.setVisible(true);
+	}
+	
+	public void updateStatus() {
+		status.setText(progress.getValue() + " " + statusText + " " + max);
+	}
+	
+	private void createPanel(int min, int max) {
 		JPanel pan = new JPanel();
 		this.setContentPane(pan);
+		
+		this.min = min;
+		this.max = max;
 		
 		progress = new JProgressBar(min, max);
 		progress.setPreferredSize(new Dimension(325, 25));
@@ -60,16 +71,18 @@ public class DialogProgress extends JDialog {
 			public void windowIconified(WindowEvent e) {}
 			public void windowDeiconified(WindowEvent e) {}
 			public void windowDeactivated(WindowEvent e) {}
-			public void windowClosing(WindowEvent e) {if(freezParent) parent.setEnabled(true);}
+			public void windowClosing(WindowEvent e) {}
 			public void windowClosed(WindowEvent e) {}
 			public void windowActivated(WindowEvent e) {}
 		});
 		
-		this.setVisible(true);
 	}
 	
-	private void updateStatus() {
-		status.setText(progress.getValue() + " " + statusText + " " + max);
+	public void setStatusText(String statusText) {this.statusText = statusText;}
+	
+	public void setProgress(int min, int max) {
+		createPanel(min, max);
+		updateStatus();
 	}
 	
 	public void setValue(int n) {progress.setValue(n); updateStatus();}
@@ -80,13 +93,21 @@ public class DialogProgress extends JDialog {
 		this.setVisible(false);
 	}
 	
-	/*public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException {
 		DialogProgress dp = new DialogProgress("erts", null);
-		dp.show(0, 10, "fichier telecharger sur", false);
+		dp.setStatusText("fichier native telecharger sur");
+		dp.setProgress(0, 5);
+		dp.showDialog();
 		for(int i = 0; i < 11; i++) {
 			dp.setValue(i);
 			Thread.sleep(250);
 		}
-	}*/
+		dp.setStatusText("fichier native telecharger sur");
+		dp.setProgress(0, 5);
+		for(int i = 0; i < 6; i++) {
+			dp.setValue(i);
+			Thread.sleep(250);
+		}
+	}
 
 }

@@ -98,7 +98,7 @@ public class JarFile {
 			String thisRootLocation = file.getPath().substring(file.getPath().lastIndexOf(rootLocation) + this.mainRootLocation.length());
 			
 			if(file.isDirectory()) {
-				new ArrayManager<String>().add(fileName, getAllFile(file.getPath() + File.separator));
+				ArrayManager.add(fileName, getAllFile(file.getPath() + File.separator));
 			}else
 				fileName.add(thisRootLocation);		
 		}
@@ -113,7 +113,7 @@ public class JarFile {
 			
 			if(file.isDirectory()) {
 				dirName.add(thisRootLocation);
-				new ArrayManager<String>().add(dirName, getAllDirectory(file.getPath() + File.separator));
+				ArrayManager.add(dirName, getAllDirectory(file.getPath() + File.separator));
 			}
 		}
 		return dirName;

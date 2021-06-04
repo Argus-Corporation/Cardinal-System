@@ -8,14 +8,15 @@ import java.util.List;
 
 import javax.swing.UIManager;
 
-import net.argus.file.AbstractFileSave;
+import net.argus.file.CardinalFile;
 import net.argus.file.Filter;
+import net.argus.instance.Instance;
 import net.argus.util.ArrayManager;
 import net.argus.util.FontStyle;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
 
-public class CSSFile extends AbstractFileSave {
+public class CSSFile extends CardinalFile {
 	
 	public static final String EXTENTION = "css";
 	
@@ -26,17 +27,22 @@ public class CSSFile extends AbstractFileSave {
 	
 	public CSSFile(String fileName, String rep) {
 		super(fileName, EXTENTION, rep);
-		fileComplied = compile(getFile());
+		fileComplied = compile(toArray());
 	}
 	
-	public CSSFile(String fileName, File path) {
-		super(fileName, EXTENTION, path);
-		fileComplied = compile(getFile());
+	public CSSFile(String fileName, String rep, Instance instance) {
+		super(fileName, EXTENTION, rep, instance);
+		fileComplied = compile(toArray());
 	}
 	
 	public CSSFile(File path) {
 		super(path);
-		fileComplied = compile(getFile());
+		fileComplied = compile(toArray());
+	}
+	
+	public CSSFile(File path, Instance instance) {
+		super(path, instance);
+		fileComplied = compile(toArray());
 	}
 	
 	public String compile(String[] file) {
@@ -45,7 +51,7 @@ public class CSSFile extends AbstractFileSave {
 		
 		for(String str : file)
 			lines += str;
-		
+
 		char[] charLines = ArrayManager.remove(lines.toCharArray(), ' ');
 		charLines = ArrayManager.remove(charLines, '\t');
 		
@@ -127,17 +133,31 @@ public class CSSFile extends AbstractFileSave {
 					if(type.equals("family")) {
 						for(int j = 0; j < objectTypes.size(); j++) {
 							Font old = UIManager.getFont(objectTypes.get(j) + ".font");
-							object.add(new Font(value.substring(0, value.indexOf(';')), old.getStyle(), old.getSize()));
+
+							if(old != null)
+								object.add(new Font(value.substring(0, value.indexOf(';')), old.getStyle(), old.getSize()));
+							else
+								object.add(new Font(value.substring(0, value.indexOf(';')), 0, 10));
 						}
 					}
 					if(type.equals("style")) {
 						for(int j = 0; j < objectTypes.size(); j++) {
-							object.add(UIManager.getFont(objectTypes.get(j) + ".font").deriveFont(FontStyle.getStyle(value.substring(0, value.indexOf(';'))).getId()));
+							Font old = UIManager.getFont(objectTypes.get(j) + ".font");
+							if(old != null)
+								object.add(old.deriveFont(FontStyle.getStyle(value.substring(0, value.indexOf(';'))).getId()));
+							else
+								object.add(new Font("default", FontStyle.getStyle(value.substring(0, value.indexOf(';'))).getId(), 10));
+								
 						}
 					}
 					if(type.equals("size")) {
 						for(int j = 0; j < objectTypes.size(); j++) {
-							object.add(UIManager.getFont(objectTypes.get(j) + ".font").deriveFont(Float.valueOf(value.substring(0, value.indexOf(';')))));
+							//objectTypes.set(j, StringManager.remove(objectTypes.get(j), '\n'));
+							Font old = UIManager.getFont(objectTypes.get(j) + ".font");
+							if(old != null)
+								object.add(UIManager.getFont(objectTypes.get(j) + ".font").deriveFont(Float.valueOf(value.substring(0, value.indexOf(';')))));
+							else
+								object.add(new Font("default", 0, Integer.valueOf(value.substring(0, value.indexOf(';')))));
 						}
 					}
 					

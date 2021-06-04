@@ -2,7 +2,7 @@
 
 Cardinal-System is a java API
 
-version: 1.3
+version: 1.4
 
 ---
 <li> <a herf="https://github.com/Argus-corporation/Chat">Chat</a>

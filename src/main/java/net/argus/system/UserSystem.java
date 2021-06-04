@@ -1,22 +1,31 @@
 package net.argus.system;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
-import net.argus.file.Loggeur;
-import net.argus.file.cjson.CJSONFile;
+import net.argus.file.CJSONFile;
+import net.argus.file.FileLogger;
+import net.argus.file.FileManager;
+import net.argus.instance.Instance;
+import net.argus.lang.DefaultLangValue;
 import net.argus.system.update.AutoUpdate;
 import net.argus.util.ListenerManager;
 import net.argus.util.RunTime;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
+import net.argus.util.debug.Logger;
+import net.argus.util.notify.DefaultNotify;
+import net.argus.util.notify.Notify;
 
 public class UserSystem {
 	
-	public static Loggeur log;
+	public static Logger log;
 	public static AutoUpdate update;
 	
 	public static RunTime runTime = RunTime.getRunTime();
 	public static Scanner in = new Scanner(System.in);
+	public static Notify notify = new DefaultNotify();
 	
 	
 	/**--INITIALIZATION--**/
@@ -24,17 +33,20 @@ public class UserSystem {
 		public void preInit(String[] args) {
 			runTime.start();
 			
+			DefaultLangValue.applyDefault();
+			
 			Debug.addBlackList(ThreadManager.UPDATE_UI);
 		}
 		
 		public void init(String[] args) {
-			
-			if(getBooleanProperty("log"))
-				log = new Loggeur("log");
+			if(getBooleanProperty("log") && log == null) {
+				log = new FileLogger("log");
+				Debug.addLoggeur(log);
+			}
 			
 			if(getBooleanProperty("update"))
 				if(Network.isConnected())
-					update = new AutoUpdate(new CJSONFile("manifest", "/"));
+					update = new AutoUpdate(new CJSONFile("manifest", "/", Instance.SYSTEM));
 				
 		}
 		
@@ -67,12 +79,14 @@ public class UserSystem {
 		
 		String extention = LIBRARY_WINDOWS;
 		
-		if(OS.getOS() == OS.LINUX)
+		if(OS.currentOS() == OS.LINUX)
 			extention = LIBRARY_LINUX;
 		
 		String libFile = name + System.getProperty("os.arch").substring(3) + "." + extention;
 		
-		System.load(System.getProperty("java.library.path") + "/natives/" + name + System.getProperty("os.arch").substring(3) + "." + extention);
+		try {
+			System.load(new File(System.getProperty("java.library.path")).getCanonicalPath() + "/" + name + System.getProperty("os.arch").substring(3) + "." + extention);
+		}catch(IOException e) {e.printStackTrace();}
 		
 		Debug.log("Library " + libFile + " loaded");
 		ThreadManager.restorOldParameter(0);
@@ -124,8 +138,13 @@ public class UserSystem {
 	}
 	
 	public static void exit(int status) {
+		FileManager.delete(Temp.getTempDir() + "/");
 		Debug.log("Program run in " + runTime.stop() + " milliseconde");
 		System.exit(status);
+	}
+	
+	public static void exit(ExitCode status) {
+		exit(status.getCode());
 	}
 
 }

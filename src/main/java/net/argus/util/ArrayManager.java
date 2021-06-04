@@ -1,9 +1,10 @@
 package net.argus.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ArrayManager<T> {
+public class ArrayManager {
 	
 	public static char[] add(char[] array, char add, int pos) {
 		char[] newArray = new char[array.length + 1];
@@ -24,6 +25,14 @@ public class ArrayManager<T> {
 		for(int i = array.length; i < newArray.length; i++)
 			newArray[i] = add[i - array.length];
 		return newArray;
+	}
+	
+	public static <E> E[] add(E[] array, E[] add) {
+		int oldLength = array.length;
+		array = Arrays.copyOf(array, array.length + add.length);
+		for(int i = 0; i < add.length; i++)
+			array[i + oldLength] = add[i];
+		return array;
 	}
 	
 	public static Object[] add(Object[] objs, Object add, int pos) {
@@ -79,6 +88,24 @@ public class ArrayManager<T> {
 		return newArray;
 	}
 	
+	public static <T> T[] remove(T[] array, int sub) {
+		for(int i = sub + 1; i < array.length; i++) {
+			array[i - 1] = array[i];
+		}
+		array = Arrays.copyOf(array, array.length - 1);
+		return array;
+	}
+	
+	public static <T> T[] remplace(T[] array, int pos, int length, T newValue) {
+		
+		array[pos] = newValue;
+		for(int i = pos + 1; i < array.length - length + 1; i++)
+			array[i] = array[i + length - 1];
+		array = Arrays.copyOf(array, array.length - length + 1);
+		
+		return array;
+	}
+	
 	public static String remplace(String str, char[] old, char newCar) {
 		char[] chars = str.toCharArray();
 		
@@ -127,24 +154,33 @@ public class ArrayManager<T> {
 		return true;
 	}
 	
-	public List<T> convert(T[] array) {
+	public static <T> List<T> convert(T[] array) {
 		List<T> list = new ArrayList<T>();
 		for(T t : array)
 			list.add(t);
 		return list;
 	}
 	
-	public void add(List<T> list, T[] array) {
-		for(T t : array) list.add(t);
-	}
-	
-	public void add(List<T> list, List<T> array) {
-		for(T t : array) list.add(t);
-	}
-	
-	public static String[] convert(List<String> list) {
-		String[] array = new String[list.size()];
+	public static <T> List<T> convert(T[][] array) {
+		List<T> list = new ArrayList<T>();
 		
+		for(T[] ta : array)
+			for(T t: ta)
+				list.add(t);
+		
+		return list;
+	}
+	
+	public static <T> void add(List<T> list, T[] array) {
+		for(T t : array) list.add(t);
+	}
+	
+	public static <T> void add(List<T> list, List<T> array) {
+		for(T t : array) list.add(t);
+	}
+	
+	public static <T> T[] convert(List<T> list, T[] array) {
+		array = Arrays.copyOf(array, list.size());
 		for(int i = 0; i < array.length; i++) array[i] = list.get(i);
 		
 		return array;
@@ -158,6 +194,22 @@ public class ArrayManager<T> {
 		result = result.substring(0, result.length() - 1);
 	
 		return result;
+	}
+	
+	public static <T> String toString(T[] objs) {
+		String str = "";
+		for(T t : objs)
+			str += t;
+		
+		return str;
+	}
+	
+	public static int[] convert(Integer[] array) {
+		int[] ints = new int[array.length];
+		for(int i = 0; i < array.length; i++)
+			ints[i] = array[i];
+		
+		return ints;
 	}
 	
 	public static boolean content(Object[] array, Object cont) {
@@ -175,11 +227,15 @@ public class ArrayManager<T> {
 	}
 	
 	public static void main(String[] args) {
-		//List<String> list = new ArrayList<String>();
-		//list.add("gsdg");
-		String[] test = new String[] {"lol"};
-		
-		System.out.println(add(test, "azertyuiop", 1)[1]);
+		/*List<String> list = new ArrayList<String>();
+		list.add("gsdg");
+		list.add("sdfg");*/
+		String[] test = new String[] {"lol", "gg", "comment", "aller", "vous", "sdfgh"};
+		//char[] test = new char[] {'a', 'b', 'c', 'd'};
+		//String[] test2 = new String[] {"hello", "world"};
+		for(String s : remove(test, 2))
+			System.out.println(s);
+		//System.out.println(remove(test, 1, 3)[0]);
 	}
 
 }

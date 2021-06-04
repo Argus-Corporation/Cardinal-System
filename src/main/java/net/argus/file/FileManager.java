@@ -1,14 +1,19 @@
 package net.argus.file;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
+import net.argus.Cardinal;
+import net.argus.system.UserSystem;
 import net.argus.util.Identifiant;
 
 public class FileManager {
 	
 	public static String getMainPath() {
 		String mainPath = System.getProperty("user.dir");
-		if(System.getProperty("id").equals(Identifiant.DEV.getId())) mainPath = mainPath.substring(0, mainPath.lastIndexOf('\\'));
+		
+		String id = UserSystem.getProperty("id");
+		if(id != null && id.equals(Identifiant.DEV.getId())) mainPath = mainPath.substring(0, mainPath.lastIndexOf('\\'));
 		return mainPath;
 	}
 	
@@ -18,7 +23,7 @@ public class FileManager {
 		
 		if(res == null) res = "";
 		
-		path = mainPath + File.separator + res;
+		path = mainPath + "/" + res;
 		
 		return path;
 	}
@@ -30,6 +35,14 @@ public class FileManager {
 		path = AbstractFileSave.regulary(new FileManager().getClass().getResource("/" + res).getPath());
 	
 		return path;
+	}
+	
+	public static File getCodeSourceLocation() {
+		try {return new File(Cardinal.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+		}catch(URISyntaxException e) {
+			e.printStackTrace();
+			return null;
+		} 
 	}
 	
 	public static void delete(String path) {

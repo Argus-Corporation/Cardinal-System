@@ -19,7 +19,6 @@ public class Audio {
 	private FloatControl gain;
 	private boolean isPlay;
 	private boolean isStoped;
-	
 
 	public Audio(String path) {
 		try {

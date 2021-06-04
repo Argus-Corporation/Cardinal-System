@@ -2,6 +2,7 @@ package net.argus.gui.component;
 
 import java.awt.Component;
 import java.awt.Image;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -94,6 +95,14 @@ public abstract class DialogComponent {
 	 */
 	public void addWindowListener(WindowListener l) {
 		dialog.addWindowListener(l);
+	}
+	
+	/**
+	 * addFocusListener
+	 * @param l
+	 */
+	public void addFocusListener(FocusListener l) {
+		dialog.addFocusListener(l);
 	}
 	
 	/**

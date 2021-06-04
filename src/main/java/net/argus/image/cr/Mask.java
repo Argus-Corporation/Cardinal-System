@@ -3,7 +3,7 @@ package net.argus.image.cr;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.argus.graphic.Fonction;
+import net.argus.graphic.Function;
 import net.argus.number.Binary;
 import net.argus.util.Math;
 
@@ -32,11 +32,11 @@ public class Mask {
 	
 	public int[] getPoint() {return point;}
 	
-	public static Mask valueOf(String id, Fonction func) {
+	public static Mask valueOf(String id, Function func) {
 		int[] p = new int[7*7];
 		
 		for(int i = 0, x = 0, y = 0; i < 7 * 7; i++, y += x == 7-1 ? 1 : 0, x = x < 7-1 ? x + 1: 0) {
-			int bin = (int) func.fonction(x, y);
+			int bin = (int) func.f(x, y);
 			bin = bin!=0?0:1;
 			p[i] = bin;
 		}

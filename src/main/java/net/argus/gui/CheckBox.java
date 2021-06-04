@@ -3,7 +3,7 @@ package net.argus.gui;
 import javax.swing.JCheckBox;
 
 import net.argus.lang.Lang;
-import net.argus.lang.LangRegistry;
+import net.argus.lang.LangRegister;
 
 public class CheckBox extends JCheckBox implements GUI {
 
@@ -18,9 +18,10 @@ public class CheckBox extends JCheckBox implements GUI {
 		super();
 		this.name = name;
 		
-		LangRegistry.addElementLanguage(this);
-		FontRegistry.addElement(this);
-		
+		LangRegister.addElementLanguage(this);
+		FontRegister.addElement(this);
+		BackgoundRegister.addElement(this);
+		ForegroundRegiter.addElement(this);		
 		
 		setText();
 	}

@@ -1,9 +1,9 @@
 package net.argus.system;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
 
-import net.argus.util.ArrayManager;
 import net.argus.util.CharacterManager;
 
 public class Network {
@@ -29,15 +29,10 @@ public class Network {
 		return connect;
 	}
 	
-	public static boolean isIp(String ip) {
-		char[] chars = ip.toCharArray();
-		
-		if(ArrayManager.isExist(chars, 0)) {
-			for(int i = 0; i < chars.length; i++)
-				if(!CharacterManager.isNumber(chars[i]) && chars[i] != '.')
-					return false;
-		}else
-			return false;
+	public static boolean isIp(String host) {
+		if(checkConnection())
+			try{InetAddress.getByName(host);}
+			catch(IOException e) {return false;}
 		
 		return true;
 	}

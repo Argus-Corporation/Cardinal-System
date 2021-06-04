@@ -3,98 +3,97 @@ package net.argus.file.cjson;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.util.ArrayManager;
 import net.argus.util.CharacterManager;
 import net.argus.util.StringManager;
 
 public class CJSONBuilder {
 	
-	protected List<CJSONObject> objs = new ArrayList<CJSONObject>();
+	protected List<CJSONItem> items = new ArrayList<CJSONItem>();
 	protected String file;
 	
+	public CJSONBuilder() {}
 	
-	public void addObject(CJSONObject obj) {objs.add(obj);}
+	public CJSONBuilder(CJSON cjson) {
+		for(int i = 0 ; i < cjson.size(); i++) {
+			addItem(cjson.getItem(i));
+		}
+	}
 	
-	public CJSONObject getObject(int index) {return objs.get(index);}
+	public void addItem(CJSONItem item) {items.add(item);}
+	
+	public CJSONItem getItem(int index) {return items.get(index);}
 	
 	public CJSONBuilder build() {
 		file = "";
 		
-		for(CJSONObject mainObj :  objs) {
-			file += "\"" + mainObj.getName() + "\": {";
-			file += nextObject(mainObj);
-			file += "} ";
+		for(CJSONItem mainItem : items) {
+			file += nextItem(mainItem);
 		}
+		
+		if(ArrayManager.isExist(file.toCharArray(), file.length() - 2))
+			file = file.substring(0, file.length() - 2);
 		
 		return this;
 	}
 	
-	protected String nextObject(CJSONObject mainObj) {
+	protected String nextObject(CJSONObject mainObject) {
 		String file = "";
-		String item = "";
-		String array = "";
-		
-		item = nextItem(mainObj);
-		array = nextItemArray(mainObj);
-		
-		if(array.equals("") && !item.equals(""))
-			item = item.substring(0, item.length() - 2);
-		
-		file += item + array;
-		return file;
-	}
-	
-	protected String nextItem(CJSONObject parent) {
-		String file = "";
-		for(CJSONItem mainItem : parent.getItems()) {
-			file += "\"" + mainItem.getName() + "\": ";
-			if(isObject(mainItem.getValue())) {
-				file += "{";
-				file += nextObject(mainItem.getValue());
-				file += "} ";
-			}else
-				if(!mainItem.getValue().toString().equals("") && CharacterManager.isNumber(mainItem.getValue().toString().charAt(0)) ||
-						CharacterManager.isBoolean(mainItem.getValue().toString()))
-					file += mainItem.getValue();
-				else
-					file += "\"" +  StringManager.secureString(mainItem.getValue().toString()) + "\"";
+		if(isObject(mainObject)) {
+			file += "{";
+			for(int i = 0; i < mainObject.size(); i++)
+				file += nextItem(mainObject.getItem(i));
 			
-			file += ", ";
-		}
+			for(int i = 0; i < mainObject.arraySize(); i++)
+				file += nextArray(mainObject.getArray(i));
+			
+			if(ArrayManager.isExist(file.toCharArray(), file.length() - 2))
+				file = file.substring(0, file.length() - 2);
+			
+			file += "} ";
+		}else
+			if(!mainObject.toString().equals("") && CharacterManager.isNumber(mainObject.toString().charAt(0)) ||
+					CharacterManager.isBoolean(mainObject.toString()))
+				file += mainObject;
+			else
+				file += "\"" +  StringManager.secureString(mainObject.toString()) + "\"";
+				
+		file += ", ";
+		
+		return file;
+		
+	}
+	
+	protected String nextItem(CJSONItem cjsonItem) {
+		String file = "";
+		String obj = "";
+		
+		file += "\"" + cjsonItem.getName() + "\": ";
+		
+		obj = nextObject(cjsonItem.getValue());
+		
+		/*
+		*/
+		file += obj;
 		
 		return file;
 	}
 	
-	protected String nextItemArray(CJSONObject parent) {
+	protected String nextArray(CJSONArray cjsonArray) {
 		String file = "";
-		
-		for(CJSONArray mainArray : parent.getArray()) {
-			file += "\"" + mainArray.getName() + "\": [";
-			for(CJSONObject obj : mainArray.getValues()) {
-				if(isObject(obj)) {
-					file += "{";
-					file += nextObject(obj);
-					file += "}, ";
-				}else if(CharacterManager.isNumber(obj.toString().charAt(0)) ||
-						CharacterManager.isBoolean(obj.toString()))
-					file += obj.toString() + ", ";
-				else
-					file += "\"" +  obj.toString() + "\", ";
-			}
-			if(!file.equals("")) {
-				file = file.substring(0, file.length() - 2);
-			}
-			file += "], ";
-		}
+		file += "\"" + cjsonArray.getName() + "\": [";
+		for(CJSONObject obj : cjsonArray.getValues())
+			file += nextObject(obj);
 		
 		if(!file.equals(""))
 			file = file.substring(0, file.length() - 2);
+		
+		file += "], ";
 		return file;
 	}
 	
 	protected boolean isObject(CJSONObject obj) {
-		try {obj.getItem(0);}
-		catch (NullPointerException | IndexOutOfBoundsException e) {return false;}
-		return true;
+		return !(obj instanceof CJSONElement);
 	}
 	
 	public String getFile() {return file;}

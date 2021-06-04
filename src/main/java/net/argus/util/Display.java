@@ -1,29 +1,22 @@
 package net.argus.util;
 
+import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.io.IOException;
-
-import net.argus.file.Properties;
 
 public class Display {
 	
-	public static int getWidhtDisplay() {return Toolkit.getDefaultToolkit().getScreenSize().width;}
-	public static int getHeightDisplay() {return Toolkit.getDefaultToolkit().getScreenSize().height;}
+	public static int getWidth() {return getSize().width;}
+	public static int getHeight() {return getSize().height;}
 	
-	public static int getWidthMaximumWindowBounds() {return GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;}
-	public static int getHeightMaximumWindowBounds() {return GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;}
+	public static Dimension getSize() {return Toolkit.getDefaultToolkit().getScreenSize();}
 	
-	public static int getWidhtDisplay(Properties config) {
-		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-		try {config.setKey("display.size.width", width);}
-		catch(IOException e) {}
-		return width;
-	}
-	public static int getHeightDisplay(Properties config) {
-		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-		try {config.setKey("display.size.height", height);}
-		catch(IOException e) {}
-		return height;
-	}
+	public static Rectangle getMaximumWindowBounds() {return GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();}
+	
+	public static int getWidthMaximumWindowBounds() {return getMaximumWindowBounds().width;}
+	public static int getHeightMaximumWindowBounds() {return getMaximumWindowBounds().height;}
+	
+	public static boolean isHeadlessInstance() {return GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadlessInstance();}
+	
 }

@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import net.argus.lang.Lang;
-import net.argus.lang.LangRegistry;
+import net.argus.lang.LangRegister;
 
 public class Label extends JLabel implements Element, GUI {
 
@@ -35,8 +35,9 @@ public class Label extends JLabel implements Element, GUI {
 	}
 	
 	private void common(String name, boolean lang) {
-		FontRegistry.addElement(this);
-		
+		FontRegister.addElement(this);
+		BackgoundRegister.addElement(this);
+		ForegroundRegiter.addElement(this);
 		
 		nameTypes.add(elementType);
 		isBacks.add(isBack);
@@ -44,7 +45,7 @@ public class Label extends JLabel implements Element, GUI {
 		isFonts.add(isFont);
 		element.add(this);
 		if(lang) {
-			LangRegistry.addElementLanguage(this);
+			LangRegister.addElementLanguage(this);
 			this.name = name;
 			setText();
 		}else

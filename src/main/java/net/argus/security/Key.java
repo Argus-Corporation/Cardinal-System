@@ -6,6 +6,7 @@ import net.argus.util.Math;
 import net.argus.util.ThreadManager;
 import net.argus.util.debug.Debug;
 
+@Deprecated
 public class Key {
 
 	private double password;
@@ -36,7 +37,7 @@ public class Key {
 	public String crypt(String chaine) throws SecurityException {
 		char[] chaineChar = chaine.toCharArray();
 		String crypt = "";
-		
+
 		for(int i = 0; i < chaineChar.length; i++) {
 			for(int j = 0; j < caracter.length; j++) {
 				if(caracter[j] == chaineChar[i])
@@ -64,11 +65,8 @@ public class Key {
 	public static void main(String[] args) throws SecurityException {
 		InitializationSystem.initSystem(args);
 		Debug.addBlackList(ThreadManager.PROGRESSE);
-		Key k = new Key("$^ù**^$ùm$ùmefsd^mù6548#5{DSG3d47g4354j4ù4$*84mi1olukjhgf85j#[|'(--è_k45");
+		//Key k = new Key("$^ù**^$ùm$ùmefsd^mù6548#5{DSG3d47g4354j4ù4$*84mi1olukjhgf85j#[|'(--è_k45");
 		
-		System.out.println(k.decrypt(k.crypt("hello xx")));
-		
-		//System.out.println(k.crypt("hello world!"));
 	}
 
 }

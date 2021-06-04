@@ -43,6 +43,10 @@ public class Math {
 	}
 	
 	public static int[] getFirstNumber(int max) {
+		return getFirstNumber(0, max);
+	}
+	
+	public static int[] getFirstNumber(int min, int max) {
 		List<Integer> allDiviser = new ArrayList<Integer>();
 		List<Integer> first = new ArrayList<Integer>();
 		Object[] obj = null;
@@ -50,11 +54,11 @@ public class Math {
 		
 		ThreadManager.PROGRESSE.setTemporaryName();
 		
-		for(int n = 2; n < max; n++) {
+		for(int n = min<2?2:min; n < max; n++) {
 			for(int i = 1; i <= n; i++) if(n % i == 0) allDiviser.add(i);
 			if(allDiviser.get(0) == 1 && allDiviser.get(1) == n) first.add(n);
 			allDiviser.clear();
-			Debug.log(n * 101 / max + "%");
+			//Debug.log(n * 101 / max + "%");
 		}
 		
 		obj = intConvert.toArray(first);
@@ -65,7 +69,15 @@ public class Math {
 		return in;
 	}
 	
-	public static boolean isDivisible(int number, int div) {return number%div==0?true:false;}
+	public static double reverse(double n) {
+		 return 1 / n;
+	}
+	
+	public static boolean isOdd(int n) {
+		return isDivisible(n, 2);
+	}
+	
+	public static boolean isDivisible(int number, int div) {return number%div==0;}
 	
 	public static native double square(double n);
 	
@@ -135,9 +147,11 @@ public class Math {
 	
 	public static void main(String[] args) {
 		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
+		//
+		//System.out.println(new Hexadecimal("5457465517e5665a465274b654fffffff654265465d458414c54").toLong());
+		//UserSystem.exit(0);
 		
-		System.out.println(new Hexadecimal("5457465517e5665a465274b654fffffff654265465d458414c54").toLong());
-		UserSystem.exit(0);
+		System.out.println(reverse(2));
 	}
 	
 }
