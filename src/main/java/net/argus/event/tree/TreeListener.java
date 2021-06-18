@@ -1,9 +1,9 @@
-package net.argus.gui.tree;
+package net.argus.event.tree;
 
 import net.argus.util.Listener;
 
 public interface TreeListener extends Listener {
 	
-	public void selectedItemValue(int id);
+	public void treeNodeSelected(TreeEvent e);
 
 }

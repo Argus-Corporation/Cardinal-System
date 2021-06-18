@@ -122,6 +122,27 @@ public class StringManager {
 		return new String(chars);
 	}
 	
+	public static String remplace(String str, String old, String newStr) {
+		if(str == null)
+			return str;
+		
+		for(boolean valid = false; !valid;) {
+			if(str.contains(old))
+				str = valueOf(str, old, newStr);
+			else
+				valid = true;
+		}
+				
+		return str;
+	}
+	
+	private static String valueOf(String str, String old, String add) {
+		String first = str.substring(0, str.indexOf(old));
+		String second = str.substring(str.indexOf(old) + 1);
+
+		return first + add + second;
+	}
+	
 	public static String remove(String str, char rem) {
 		char[] chars = str.toCharArray();
 		String value = "";

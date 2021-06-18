@@ -7,6 +7,7 @@ import net.argus.file.CJSONFile;
 import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 
+@Deprecated
 public class CJSON {
 	
 	private List<CJSONItem> items;

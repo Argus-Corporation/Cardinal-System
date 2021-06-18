@@ -1,5 +1,6 @@
 package net.argus.file.cjson;
 
+@Deprecated
 public class CJSONBoolean extends CJSONElement {
 	
 	private boolean value;

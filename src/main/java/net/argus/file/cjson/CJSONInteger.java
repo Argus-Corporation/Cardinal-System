@@ -2,6 +2,7 @@ package net.argus.file.cjson;
 
 import net.argus.util.ArrayManager;
 
+@Deprecated
 public class CJSONInteger extends CJSONElement {
 	
 	private int value;

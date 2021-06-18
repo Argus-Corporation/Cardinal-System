@@ -4,6 +4,7 @@ import net.argus.file.cjson.CJSONArray;
 import net.argus.file.cjson.CJSONItem;
 import net.argus.file.cjson.CJSONObject;
 
+@SuppressWarnings("deprecation")
 public class PackageObject extends CJSONObject {
 	
 	public PackageObject addItem(String name, String value) {

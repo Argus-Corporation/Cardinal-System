@@ -3,6 +3,7 @@ package net.argus.util.pack;
 import net.argus.file.cjson.CJSON;
 import net.argus.file.cjson.CJSONPareser;
 
+@SuppressWarnings("deprecation")
 public class PackagePareser {
 	
 	public static Package parse(String file) {

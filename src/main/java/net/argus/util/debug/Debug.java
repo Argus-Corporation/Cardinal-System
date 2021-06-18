@@ -67,6 +67,28 @@ public class Debug {
 		System.out.println();
 	}
 	
+	public static void print(List<?> list, char sep) {
+		for(Object c : list)
+			System.out.print(c + "" + sep);
+		System.out.println();
+	}
+	
+	public static void print(Object[] array) {
+		for(Object c : array)
+			System.out.print(c);
+		System.out.println();
+	}
+	
+	public static void println(List<?> list) {
+		for(Object c : list)
+			System.out.println(c);
+	}
+	
+	public static void println(Object[] array) {
+		for(Object c : array)
+			System.out.println(c);
+	}
+	
 	static {
 		addLoggeur(new PrintLogger(System.out, System.err));
 	}

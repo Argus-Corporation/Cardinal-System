@@ -2,6 +2,7 @@ package net.argus.file.cjson;
 
 import net.argus.util.CharacterManager;
 
+@Deprecated
 public enum CJSONType {
 	
 	OBJECT, ARRAY, STRING, INTEGER, FLOAT, BOOLEAN;

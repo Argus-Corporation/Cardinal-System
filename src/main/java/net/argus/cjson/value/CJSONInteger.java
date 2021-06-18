@@ -15,7 +15,7 @@ public class CJSONInteger extends CJSONValue {
 	public static CJSONInteger nextInteger(List<Character> chars) {
 		String num = "";
 
-		while(StringManager.isInteger(Character.toString(chars.get(0)))) {
+		while(StringManager.isInteger(Character.toString(chars.get(0))) || chars.get(0) == '-') {
 			num += chars.get(0);
 			chars.remove(0);
 		}
@@ -24,7 +24,11 @@ public class CJSONInteger extends CJSONValue {
 		if(next != ',' && next != '}' && next != ']')
 			throw new CJSONException("integer syntax error");
 		
-		return new CJSONInteger(Integer.valueOf(num));
+		int value;
+		try {value = Integer.valueOf(num);}
+		catch(NumberFormatException e) {throw new CJSONException("integer syntax error: " + num);}
+		
+		return new CJSONInteger(value);
 	}
 	
 	@Override

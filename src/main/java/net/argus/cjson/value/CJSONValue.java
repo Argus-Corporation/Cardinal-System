@@ -43,7 +43,7 @@ public abstract class CJSONValue {
 		if(StringManager.convert(chars).startsWith("true") || StringManager.convert(chars).startsWith("false"))
 			return CJSONType.BOOLEAN;
 		
-		if(StringManager.isInteger(Character.toString(chars.get(0))))
+		if(StringManager.isInteger(Character.toString(chars.get(0))) || chars.get(0) == '-')
 			return CJSONType.INTEGER;
 		
 		if(StringManager.convert(chars).startsWith("null"))

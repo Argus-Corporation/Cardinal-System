@@ -63,7 +63,7 @@ class ProcessDownload {
 					folder = file.substring(0, i);
 								
 				File fileOut = new File(writeFolder + "/" + folder);
-				
+								
 				if(!fileOut.exists()) {
 					fileOut.mkdirs();
 					fileOut = new File(fileOut.getAbsolutePath() + "/" + fileAndSuff);

@@ -71,7 +71,7 @@ public class InitializationSystem {
 	
 	public static void postInit(String[] args) {
 		init = true;
-		if(UserSystem.getBooleanProperty("update") && UserSystem.update != null) UserSystem.update.check();
+		if(UserSystem.getBooleanProperty("update") && UserSystem.update != null) UserSystem.update.check(InitializationSplash.getSplash());
 		
 		Debug.log("System initialized");
 	}

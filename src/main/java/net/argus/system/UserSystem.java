@@ -22,7 +22,7 @@ public class UserSystem {
 	
 	public static Logger log;
 	public static AutoUpdate update;
-	
+		
 	public static RunTime runTime = RunTime.getRunTime();
 	public static Scanner in = new Scanner(System.in);
 	public static Notify notify = new DefaultNotify();

@@ -32,22 +32,50 @@ public class Launcher {
 	
 	public Launcher(String[] progArgs) throws IOException {
 		Manifest manifest = Manifest.getManifest();
-		
 		extractNatives = Boolean.valueOf(manifest.getValue("Extract-Natives"));
 		
-		String classPath = manifest.getValue("Launcher-Class-Path");
-		String vmArgs = manifest.getValue("Launcher-VM-Args");
-	    String args = manifest.getValue("Launcher-Args");
+		String classPath = valueOf(manifest.getValue("Launcher-Class-Path"));
+		String vmArgs = valueOf(manifest.getValue("Launcher-VM-Args"));
+	    String args = valueOf(manifest.getValue("Launcher-Args"));
 	    
 	    mainInstanceClass = manifest.getValue("Main-Instance-Class");
-	    
-	    for(String cp : classPath.split(" "))
+
+	    for(String cp : classPath.split(";")) {
 	    	addClassPath(cp);
+	    }
 	    
 	    if(vmArgs != null) this.vmArgs = ArrayManager.convert(vmArgs.split(" "));
 	    if(args != null) this.args = ArrayManager.convert(args.split(" "));
 	    
 	    this.args = ArrayManager.convert(ArrayManager.add((String[]) this.args.toArray(new String[this.args.size()]), progArgs));
+	}
+	
+	public static String valueOf(String str) {
+		if(str == null)
+			return str;
+		
+		for(boolean valid = false; !valid;) {
+			if(str.contains("%path%"))
+				str = valueOf(str, System.getProperty("user.dir") + "/");
+			else if(str.contains("%name%"))
+				str = valueOf(str, FileManager.getFileName(FileManager.getCodeSourceLocation()));
+			else if(str.contains("%suf%"))
+				str = valueOf(str, FileManager.getFileSuffix(FileManager.getCodeSourceLocation()));
+			else if(str.contains("%temp%"))
+				str = valueOf(str, Temp.getTempDir() + "/");
+			else
+				valid = true;
+		}
+						
+		return str;
+	}
+	
+	private static String valueOf(String str, String add) {
+		String first = str.substring(0, str.indexOf("%"));
+		String second = str.substring(str.indexOf("%") + 1);
+		second = second.substring(second.indexOf("%") + 1);
+
+		return first + add + second;
 	}
 	
 	public static String getSeperator() {return OS.currentOS()==OS.WINDOWS?";":":";}
@@ -84,17 +112,18 @@ public class Launcher {
 		}else
 			commands.add("-Djava.library.path=.");
 		
-		for(String vmArg : vmArgs)
-			commands.add(vmArg);
+		commands.add("-Dinstance.class=" + mainInstanceClass);
+		
+		for(String vmArg : vmArgs) {
+			if(vmArg != null && !vmArg.equals(" "))
+				commands.add(vmArg);
+		}
 		
 		commands.add(Loader.class.getCanonicalName());
 		
-		commands.add("-instance.class");
-		commands.add(mainInstanceClass);
-		
 		for(String arg : args)
 			commands.add(arg);
-		
+								
 		state = ProgramState.RUNNING;
 		int status = launch(commands);
 		state = ProgramState.TERMINATED;
@@ -109,6 +138,7 @@ public class Launcher {
 		builder.redirectErrorStream(true);
 		
 		RunningProgram run = new RunningProgram(builder.start());
+		run.writeErrorConsoleOutput();
 		run.writeConsoleOutput();
 		run.readConsoleInput();
 		

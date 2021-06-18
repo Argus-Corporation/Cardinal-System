@@ -11,6 +11,7 @@ public interface GUI {
 	public static final String MENU = "menu";
 	public static final String MENUCHECKITEM = "menucheckitem";
 	public static final String MENUITEM = "menuitem";
+	public static final String TREE = "tree";
 	
 	public void setForeground(Color fore);
 	

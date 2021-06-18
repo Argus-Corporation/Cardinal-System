@@ -13,6 +13,7 @@ public class RunningProgram {
 	
 	private Thread read;
 	private Thread write;
+	private Thread writeError;
 	
 	public RunningProgram(Process process) {
 		this.process = process;
@@ -22,9 +23,13 @@ public class RunningProgram {
 		
 		write = new Thread(getWriteConsoleOutput());
 		write.setName("writer");
+		
+		writeError = new Thread(getWriteErrorConsoleOutput());
+		writeError.setName("writer error");
 	}
 	
 	public void writeConsoleOutput() {write.start();}
+	public void writeErrorConsoleOutput() {writeError.start();}
 	
 	public void readConsoleInput() {read.start();}
 	
@@ -37,6 +42,20 @@ public class RunningProgram {
 			try {
 				while((line = in.readLine()) != null)
 					System.out.println(line);
+			}catch(IOException e) {}
+			read.stop();
+		};
+	}
+	
+	@SuppressWarnings("deprecation")
+	private Runnable getWriteErrorConsoleOutput() {
+		return () -> {
+			BufferedReader in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+			String line;
+			
+			try {
+				while((line = in.readLine()) != null)
+					System.err.println(line);
 			}catch(IOException e) {}
 			read.stop();
 		};

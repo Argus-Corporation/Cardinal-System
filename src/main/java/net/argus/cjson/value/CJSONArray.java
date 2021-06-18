@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.argus.cjson.Array;
+import net.argus.util.ArrayManager;
 
 public class CJSONArray extends CJSONValue {
 	
@@ -11,6 +12,7 @@ public class CJSONArray extends CJSONValue {
 	
 	public CJSONArray() {}
 	public CJSONArray(List<CJSONValue> array) {this.array.setArray(array);}
+	public CJSONArray(CJSONValue[] array) {this.array.setArray(ArrayManager.convert(array));}
 	
 	public static CJSONArray nextArray(List<Character> chars) {
 		List<CJSONValue> values = new ArrayList<CJSONValue>();

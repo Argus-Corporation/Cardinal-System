@@ -50,11 +50,11 @@ public abstract class DialogComponent {
 	
 	/**
 	 * setSize
-	 * @param with
+	 * @param width
 	 * @param height
 	 */
-	public void setSize(int with, int height) {
-		dialog.setSize(with, height);
+	public void setSize(int width, int height) {
+		dialog.setSize(width, height);
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public abstract class DialogComponent {
 	 * load
 	 */
 	protected void load() {
-		dialog.add(getComponent());
+		dialog.setContentPane(getComponent());
 		dialog.setLocationRelativeTo(parent);
 		
 		if(pack) dialog.pack();
@@ -138,6 +138,14 @@ public abstract class DialogComponent {
 	@SuppressWarnings("deprecation")
 	public void hide() {
 		dialog.hide();
+	}
+	
+	/**
+	 * getDialog
+	 * @return
+	 */
+	public JDialog getDialog() {
+		return dialog;
 	}
 	
 	/**

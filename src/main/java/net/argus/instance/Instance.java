@@ -6,7 +6,7 @@ import net.argus.util.ThreadLocal;
 
 public class Instance {
 	
-	public static final Instance SYSTEM = new Instance("system-cardinal", "");
+	public static final Instance SYSTEM = new Instance("system", "");
 	
 	private static ThreadLocal<Instance> inst = new ThreadLocal<Instance>();
 	
