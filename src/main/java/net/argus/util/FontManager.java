@@ -2,15 +2,11 @@ package net.argus.util;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
-import net.argus.file.FileManager;
-
 public class FontManager {
-
-	public static final Font ARGUS_UI = loadFont(new File(FileManager.getPathInJar("res/font/ARGUS-UI.ttf")), 0, 25);
-	public static final Font SF_UI = loadFont(new File(FileManager.getPathInJar("res/font/SF-UI.otf")), 0, 15);
 	
 	private Font font;
 	
@@ -39,6 +35,12 @@ public class FontManager {
 		catch(FontFormatException | IOException e) {e.printStackTrace();}
 		
 		return font;
+	}
+	
+	public static void registerFont(Font font) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		
+		ge.registerFont(font);
 	}
 	
 	public Font getFont() {

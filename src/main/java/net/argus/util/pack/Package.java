@@ -4,6 +4,7 @@ import net.argus.file.cjson.CJSONObject;
 import net.argus.system.InitializationSystem;
 import net.argus.util.ErrorCode;
 
+@SuppressWarnings("deprecation")
 public class Package {
 	
 	private PackageBuilder builder;

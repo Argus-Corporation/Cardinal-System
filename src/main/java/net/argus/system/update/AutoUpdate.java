@@ -14,12 +14,14 @@ import net.argus.cjson.CJSONParser;
 import net.argus.file.CJSONFile;
 import net.argus.file.FileManager;
 import net.argus.gui.OptionPane;
+import net.argus.gui.splash.SplashScreen;
 import net.argus.io.download.Download;
 import net.argus.system.Copy;
-import net.argus.system.InitializationSplash;
 import net.argus.system.SystemProcess;
 import net.argus.system.Temp;
 import net.argus.system.UserSystem;
+import net.argus.util.Version;
+import net.argus.util.Version.State;
 import net.argus.util.debug.Debug;
 
 public class AutoUpdate {
@@ -32,32 +34,50 @@ public class AutoUpdate {
 		this.manifest = CJSONParser.getCJSON(manifest);
 	}
 	
-	public boolean isLatestVersion() {
+	public Version getCurrentVersion() {
+		return new Version(manifest.getString("manifest.version"));
+	}
+	
+	public Version getLatestVersion() {
 		CJSON newManifest = CJSONParser.getCJSON(downloadManifest());
-		String currentVersion = manifest.getString("manifest.version");
 		version = newManifest.getString("manifest.version");
 		
-		Debug.log("Current version: " + currentVersion);
-		
-		return !currentVersion.equals(version);
+		return new Version(version);
+	}
+	
+	public boolean isLatestVersion() {
+		Version newVersion = getLatestVersion();
+		if(getCurrentVersion().getState(newVersion) == State.INFERIOR) {
+			Debug.log("New version available: " + newVersion);
+			return false;
+		}
+		return true;
 	}
 	
 	public void check() {
-		boolean newVersion = isLatestVersion();
-		if(newVersion) {
-			Debug.log("New version available");
+		check(null);
+	}
+	
+	public void check(SplashScreen splashScreen) {
+		if(!isLatestVersion()) {			
+			if(splashScreen != null) splashScreen.hideSplash();
 			
-			if(InitializationSplash.getSplash() != null) InitializationSplash.getSplash().hideSplash();
-			
-			int result = OptionPane.showConfirmDialog(null, UIManager.get("Text.newVersion"), "New Version", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			int result = showDialog(UIManager.get("Text.newVersion"));
 			
 			if(result == JOptionPane.YES_OPTION)
 				UserSystem.update.downloadNewVersion();
-			
 			else
-				if(InitializationSplash.getSplash() != null) InitializationSplash.getSplash().setVisible(true);
+				if(splashScreen != null) splashScreen.setVisible(true);
 				
 		}
+	}
+	
+	public int showDialog(Object text) {
+		return showDialog(text, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public int showDialog(Object text, int option, int messageType) {
+		return OptionPane.showConfirmDialog(null, text, "Update", option, messageType);
 	}
 	
 	public void downloadNewVersion() {
@@ -83,12 +103,12 @@ public class AutoUpdate {
 			byte[] data = Download.get(url);
 			File fileOut = new File(Temp.getTempDir() + "/");
 			
-			if(!fileOut.exists()) {
+			if(!fileOut.exists())
 				fileOut.mkdirs();
-				fileOut = new File(fileOut.getAbsolutePath() + "/manifest.cjson");
-				fileOut.createNewFile();
-			}
-			
+				
+			fileOut = new File(fileOut.getAbsolutePath() + "/manifest.cjson");
+			fileOut.createNewFile();
+
 			DataOutputStream out = new DataOutputStream(new FileOutputStream(fileOut));
 			
 			out.write(data);

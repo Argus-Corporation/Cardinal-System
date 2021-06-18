@@ -7,6 +7,7 @@ import net.argus.file.cjson.CJSONItem;
 import net.argus.file.cjson.CJSONObject;
 import net.argus.file.cjson.CJSONString;
 
+@SuppressWarnings("deprecation")
 public class PackageBuilder extends CJSONBuilder {
 	
 	private CJSONObject packageObject; 

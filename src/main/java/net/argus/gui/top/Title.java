@@ -46,8 +46,8 @@ class Title extends JComponent {
         
         setBounds(titleBar.getBounds());
         
-        g2d.drawImage(Icon.getIcon(icon, 16).getImage(), x, y + 5, null);
-        g2d.drawString(title, x + 20, y + 20);
+        g2d.drawImage(Icon.getIcon(icon, 22).getImage(), x, y, null);
+        g2d.drawString(title, x + 27, y + 20);
         
 		super.paintComponent(g);
 	}

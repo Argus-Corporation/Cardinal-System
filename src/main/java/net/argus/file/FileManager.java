@@ -32,7 +32,7 @@ public class FileManager {
 		String path = "";
 		if(res == null) res = "";
 		
-		path = AbstractFileSave.regulary(new FileManager().getClass().getResource("/" + res).getPath());
+		path = CardinalFile.valueOf(new FileManager().getClass().getResource("/" + res).getPath());
 	
 		return path;
 	}
@@ -43,6 +43,30 @@ public class FileManager {
 			e.printStackTrace();
 			return null;
 		} 
+	}
+	
+	public static String getFileName(File file) {
+		if(file == null)
+			return null;
+		
+		int index = file.getName().lastIndexOf('.');
+		
+		if(index == -1)
+			return file.getName();
+		
+		return file.getName().substring(0, index);
+	}
+	
+	public static String getFileSuffix(File file) {
+		if(file == null)
+			return null;
+		
+		int index = file.getName().lastIndexOf('.');
+		
+		if(index == -1)
+			return file.getName();
+		
+		return file.getName().substring(index + 1);
 	}
 	
 	public static void delete(String path) {

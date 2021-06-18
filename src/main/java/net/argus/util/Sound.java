@@ -14,9 +14,10 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import net.argus.file.AbstractFileSave;
+import net.argus.file.CardinalFile;
 import net.argus.file.Properties;
 
+@Deprecated
 public class Sound {
 	
 	private static AudioFormat format;
@@ -26,7 +27,7 @@ public class Sound {
 	private static String path;
 	  
 	public Sound(String fileName, String rep, String extention, Properties config) {
-		path = AbstractFileSave.regulary(getClass().getResource("/assets/images/google.png").toString());
+		path = CardinalFile.valueOf(getClass().getResource("/assets/images/google.png").toString());
 		path = path.substring(path.indexOf("/") + 1, path.lastIndexOf(config.getString("project.name")));
 		path = path + rep + "/" + fileName+ "." + extention;
 		try {

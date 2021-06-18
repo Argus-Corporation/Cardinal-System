@@ -6,6 +6,7 @@ import java.util.List;
 import net.argus.file.CJSONFile;
 import net.argus.util.ArrayManager;
 
+@Deprecated
 public class CJSONPareser {
 	
 	public static CJSON parse(char[] chars) {

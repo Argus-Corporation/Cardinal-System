@@ -16,7 +16,7 @@ import net.argus.util.debug.Info;
 
 public class Lang {
 	
-	private static LangType currentLang;
+	private static LangType currentLang = LangType.en_US;
 	
 	private static List<Properties> saver = new ArrayList<Properties>();
 	
@@ -37,6 +37,7 @@ public class Lang {
 		updateCSS();
 		
 		Debug.log("Lang: " + currentLang.getName());
+		LangRegister.update();
 	}
 	
 	public static void setLang(Properties config) {
@@ -63,7 +64,6 @@ public class Lang {
 	
 	public static void updateLang(LangType type) {
 		setLang(type);
-		LangRegister.update();
 	}
 	
 	private static void updateCSS() {

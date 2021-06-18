@@ -7,6 +7,7 @@ import net.argus.util.ArrayManager;
 import net.argus.util.CharacterManager;
 import net.argus.util.StringManager;
 
+@Deprecated
 public class CJSONBuilder {
 	
 	protected List<CJSONItem> items = new ArrayList<CJSONItem>();

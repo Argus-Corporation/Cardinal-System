@@ -18,6 +18,7 @@ import net.argus.system.UserSystem;
 import net.argus.util.Display;
 import net.argus.util.debug.Debug;
 
+@Deprecated
 public class AbstractFileSave {
 	
 	protected String path;

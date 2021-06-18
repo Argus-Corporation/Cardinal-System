@@ -2,7 +2,6 @@ package net.argus.instance;
 
 import net.argus.system.AnnotationManager;
 import net.argus.system.ExitCode;
-import net.argus.system.InitializationSystem;
 import net.argus.system.UserSystem;
 import net.argus.util.debug.Debug;
 import net.argus.util.debug.Info;
@@ -62,18 +61,7 @@ public class Loader {
 	
 	public static void main(String[] args) {
 		Instance.setThreadInstance(Instance.SYSTEM);
-		String[] initArgs = new String[args.length];
-		for(int i = 0; i < args.length; i++) {
-			initArgs[i] = args[i];
-			if(args[i].equals("-update")) {
-				initArgs[i+1] = "false";
-				i++;
-				continue;
-			}
-		}
-
-		InitializationSystem.initSystem(initArgs);
-
+		
 		load();
 		CardinalProgram main = ProgramRegister.getMainProgram();
 		if(main == null) {
