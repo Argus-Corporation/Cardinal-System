@@ -4,7 +4,6 @@ import java.awt.Component;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 public class OptionPane {
 	
@@ -29,10 +28,11 @@ public class OptionPane {
 	public static int showMessageDialog(Component parentComponent, Object message, String title, int optionType, int messageType) {
 		return showConfirmDialog(parentComponent, message, title, optionType, messageType);
 	}
-
-	public static void main(String[] args) {
-		Look.chageLook(UIManager.getSystemLookAndFeelClassName());
-		System.out.println(showConfirmDialog(null, "test mes", "title", JOptionPane.CLOSED_OPTION, JOptionPane.WARNING_MESSAGE));
+	
+	public static int showErrorDialog(Component parentComponent, String programName, Throwable e) {
+		return showConfirmDialog(parentComponent,
+				"<html>An error occurred in " + programName + "<hr/>" +
+ 				e.getClass().getCanonicalName() + ": " + e.getMessage()  + "</html>", "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 	}
 	
 }

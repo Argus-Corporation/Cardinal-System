@@ -15,9 +15,9 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import net.argus.event.frame.EventFrame;
-import net.argus.event.frame.FrameEvent;
-import net.argus.event.frame.FrameListener;
+import net.argus.event.gui.frame.EventFrame;
+import net.argus.event.gui.frame.FrameEvent;
+import net.argus.event.gui.frame.FrameListener;
 import net.argus.file.Properties;
 import net.argus.gui.animation.Animation;
 import net.argus.gui.animation.FrameAnimation;

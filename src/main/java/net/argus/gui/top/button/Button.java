@@ -29,6 +29,8 @@ class Button extends JPanel {
 	
 	public static Color unused = new Color(180, 180, 180);
 	
+	public static Color border = new Color(128, 128, 128, 128);
+	
 	private static int width = 17, height = width;
 	
 	private Color color;
@@ -71,7 +73,10 @@ class Button extends JPanel {
 	
 	private void drawButton(Graphics2D g2d, Color color) {
 		g2d.setColor(isEnabled()?color:unused);
-		g2d.fillOval(0, 0, width +1, height + 1);
+		g2d.fillOval(0, 0, width + 1, height + 1);
+		
+		g2d.setColor(border);
+		g2d.drawOval(0, 0, width, height);
 		
 		if(isEnabled() && showImg) img.draw(g2d);
 		

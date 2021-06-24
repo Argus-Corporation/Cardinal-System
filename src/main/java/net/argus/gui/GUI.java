@@ -7,6 +7,7 @@ public interface GUI {
 	
 	public static final String BUTTON = "button";
 	public static final String CHECKBOX = "checkbox";
+	public static final String TEXT_FIELD = "textfield";
 	public static final String LABEL = "text";
 	public static final String MENU = "menu";
 	public static final String MENUCHECKITEM = "menucheckitem";

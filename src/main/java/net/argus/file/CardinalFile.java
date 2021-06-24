@@ -47,10 +47,8 @@ public class CardinalFile {
 		
 		this.file = file;
 
-		if(!file.exists())
-			createFile();
-		
-		Debug.log("File Loaded: " + file.getAbsolutePath());
+		if(file.exists())	
+			Debug.log("File Loaded: " + file.getAbsolutePath());
 		
 	}
 	
@@ -79,6 +77,14 @@ public class CardinalFile {
 	
 	private void init(String fileName, String extention, String rep) {
 		init(fileName, extention, rep, Instance.currentInstance());
+	}
+	
+	/**
+	 * exists
+	 * @return
+	 */
+	public boolean exists() {
+		return file.exists();
 	}
 	
 	/**
@@ -161,6 +167,15 @@ public class CardinalFile {
 	 * @throws IOException
 	 */
 	public void writeAppend(String text) throws IOException {
+		FileIO.writeAppend(file, text);
+	}
+	
+	/**
+	 * write append
+	 * @param text
+	 * @throws IOException
+	 */
+	public void writeAppend(Object[] text) throws IOException {
 		FileIO.writeAppend(file, text);
 	}
 	

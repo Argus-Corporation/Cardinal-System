@@ -23,6 +23,7 @@ import net.argus.system.UserSystem;
 import net.argus.util.Version;
 import net.argus.util.Version.State;
 import net.argus.util.debug.Debug;
+import net.argus.util.debug.Info;
 
 public class AutoUpdate {
 	
@@ -39,7 +40,12 @@ public class AutoUpdate {
 	}
 	
 	public Version getLatestVersion() {
-		CJSON newManifest = CJSONParser.getCJSON(downloadManifest());
+		CJSONFile file = downloadManifest();
+		
+		if(file == null)
+			return null;
+		
+		CJSON newManifest = CJSONParser.getCJSON(file);
 		version = newManifest.getString("manifest.version");
 		
 		return new Version(version);
@@ -47,6 +53,10 @@ public class AutoUpdate {
 	
 	public boolean isLatestVersion() {
 		Version newVersion = getLatestVersion();
+		
+		if(newVersion == null)
+			return true;
+		
 		if(getCurrentVersion().getState(newVersion) == State.INFERIOR) {
 			Debug.log("New version available: " + newVersion);
 			return false;
@@ -101,6 +111,7 @@ public class AutoUpdate {
 			
 			URL url = new URL(mainUrl + "/manifest.cjson");
 			byte[] data = Download.get(url);
+				
 			File fileOut = new File(Temp.getTempDir() + "/");
 			
 			if(!fileOut.exists())
@@ -113,7 +124,8 @@ public class AutoUpdate {
 			
 			out.write(data);
 			out.close();
-		}catch(IOException e) {e.printStackTrace();}
+			
+		}catch(IOException e) {Debug.log("Error: unable to download update manifest", Info.ERROR); return null;}
 		
 		return new CJSONFile(new File(Temp.getTempDir() + "/manifest.cjson"));
 	}
