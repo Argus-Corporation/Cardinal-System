@@ -7,9 +7,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import net.argus.event.frame.EventFrame;
-import net.argus.event.frame.FrameEvent;
-import net.argus.event.frame.FrameListener;
+import net.argus.event.gui.frame.EventFrame;
+import net.argus.event.gui.frame.FrameEvent;
+import net.argus.event.gui.frame.FrameListener;
 import net.argus.event.mouse.MouseTrackListener;
 import net.argus.gui.Frame;
 import net.argus.system.UserSystem;

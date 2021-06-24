@@ -12,7 +12,7 @@ public class LangParser {
 	public static void parser(LangType type, String[] file) {
 		LangValues values = new LangValues();
 		for(String line : file) 
-			values.addValue(nextLine(line));
+			values.putValue(nextLine(line));
 		
 		CSSFile cssFile = null;
 		if(isInfoFile(file)) {

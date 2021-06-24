@@ -1,4 +1,4 @@
-package net.argus.event.frame;
+package net.argus.event.gui.frame;
 
 import net.argus.util.Listener;
 

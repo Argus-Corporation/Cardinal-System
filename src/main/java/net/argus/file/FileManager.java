@@ -69,6 +69,10 @@ public class FileManager {
 		return file.getName().substring(index + 1);
 	}
 	
+	public static boolean isExists(String path) {
+		return new File(path).exists();
+	}
+	
 	public static void delete(String path) {
 		delete(new File(path));
 	}

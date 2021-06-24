@@ -66,7 +66,7 @@ public class Lang {
 		setLang(type);
 	}
 	
-	private static void updateCSS() {
+	public static void updateCSS() {
 		CSSFile cssFile = LangManager.getCSSFile();
 		if(cssFile != null)
 			cssFile.execut();
@@ -83,6 +83,10 @@ public class Lang {
 	public static void addLang(LangType type, FileLang lang) {
 		LangParser.parser(type, lang.toArray());
 		
+		addLang(type);
+	}
+	
+	public static void addLang(LangType type) {
 		if(!langs.contains(type))
 			langs.add(type);
 	}
@@ -120,6 +124,10 @@ public class Lang {
 	}
 	
 	public static String get(String key) {return LangManager.getElement(key);}
+	
+	public static void put(String key, String value) {
+		LangManager.putElement(key, value, currentLang);
+	}
 	
 	public static String getLangName() {return currentLang.getName();}
 	public static LangType currentLang() {return currentLang;}

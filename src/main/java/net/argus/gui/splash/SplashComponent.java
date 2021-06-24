@@ -19,9 +19,9 @@ public class SplashComponent extends JComponent {
 	}
 	
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) {		
 		g.drawImage(img, 0, 0, null);
+		
 	}
-	
 
 }

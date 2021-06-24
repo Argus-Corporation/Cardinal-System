@@ -21,6 +21,8 @@ public class Downloader {
 	private String[] commonFiles;
 	private String[] nativeFiles;
 	
+	private String[] optionalFiles;
+	
 	private ProcessDownload d;
 	
 	private EventDownload event = new EventDownload();
@@ -43,13 +45,15 @@ public class Downloader {
 			
 			commonFiles = cjson.getStringArray("download.files.common");
 			nativeFiles = cjson.getStringArray("download.files." + os.toString().toLowerCase());
+			
+			optionalFiles = cjson.getStringArray("download.files.optional");
 		}catch(CJSONException e) {throw new Error(e);}
 	}
 	
 	public void getAll(String writeFolder) throws IOException {
 		d = new ProcessDownload(url, event);
 		
-		event.startEvent(EventDownload.START_PROCESS, new DownloadEvent(url, "common", commonFiles.length, true));
+		event.startEvent(EventDownload.START_PROCESS, new DownloadEvent(url, "common", commonFiles.length + optionalFiles.length, true));
 		getCommons(d, writeFolder);
 		
 		event.startEvent(EventDownload.START_PROCESS, new DownloadEvent(url, "native", nativeFiles.length, true));
@@ -58,7 +62,7 @@ public class Downloader {
 		event.startEvent(EventDownload.END_DOWNLOAD, new DownloadEvent(url, "all", -1, true));
 	}
 	
-	public void getCommons(ProcessDownload d, String writeFolder) throws IOException {d.getFiles(commonFiles, writeFolder);}
+	public void getCommons(ProcessDownload d, String writeFolder) throws IOException {d.getFiles(commonFiles, optionalFiles, writeFolder);}
 	
 	public void getNatives(ProcessDownload d, String writeFolder) throws IOException {d.getFiles(nativeFiles, writeFolder);}
 	

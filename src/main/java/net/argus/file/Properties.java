@@ -171,8 +171,12 @@ public class Properties extends CardinalFile {
 		
 		for(int i = 0; i < data.size(); i++) {
 			String line = data.get(i);
-			//System.out.println(line + " cou");
-			line = line.substring(0, line.indexOf('='));
+			
+			int index = line.indexOf('=');
+			if(index == -1)
+				continue;
+			
+			line = line.substring(0, index);
 			if(line.equals(key))
 				return i;
 		}

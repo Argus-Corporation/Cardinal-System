@@ -1,4 +1,4 @@
-package net.argus.event.tree;
+package net.argus.event.gui.tree;
 
 import net.argus.event.Event;
 
