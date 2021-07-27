@@ -45,6 +45,12 @@ public class FileManager {
 		} 
 	}
 	
+	public static String getCodeSourcePath() {
+		String path = getCodeSourceLocation().getAbsolutePath();
+		
+		return path.substring(0, path.lastIndexOf(File.separator));
+	}
+	
 	public static String getFileName(File file) {
 		if(file == null)
 			return null;
@@ -67,6 +73,10 @@ public class FileManager {
 			return file.getName();
 		
 		return file.getName().substring(index + 1);
+	}
+	
+	public static boolean isExists(String path) {
+		return new File(path).exists();
 	}
 	
 	public static void delete(String path) {

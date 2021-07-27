@@ -2,12 +2,15 @@ package net.argus.gui.animation;
 
 import java.awt.Dimension;
 
-import net.argus.gui.Frame;
+import net.argus.gui.frame.Frame;
 
 public class FrameAnimation extends Animation {
 	
-	public static final int CLOSE_MINIMIZE = 0;
-	public static final int UNMINIIZE = 1;
+	public static final int CLOSE = 0;
+	public static final int OPEN = 1;
+	
+	public static final float ADD = 0.23f;
+	public static final int SIZE_ADD = 10;
 	
 	private Frame fen;
 	
@@ -18,47 +21,49 @@ public class FrameAnimation extends Animation {
 	@Override
 	public void play(int id) {
 		switch(id) {
-			case CLOSE_MINIMIZE:
-				anim(-0.04f);
+			case CLOSE:
+				anim(-ADD, -SIZE_ADD);
 				break;
-			case UNMINIIZE:
-				anim(0.04f);
+			case OPEN:
+				anim(ADD-0.05f, SIZE_ADD);
 				break;
-			
 		}
 		
 	}
 	
-	private void anim(float add) {
-		Dimension max = fen.getSize();
-		Dimension old;
-		
+	private void anim(float add, int sizeAdd) {
 		float f;
 		if(add < 0)
 			f = 1f;
-		else
+		else {
 			f = 0f;
-		
-		for(;valid(f, add); f = f + add) {
-			fen.setOpacity(f);
-			old = fen.getSize();
-			
-			int width = (int) (f * max.width / 1f);
-			int height = (int) (f * max.height / 1f);
-			
-			if(width <= 0)
-				width++;
-			if(height <= 0)
-				height++;
-			
-			fen.setSize(width, height);
-						
-			fen.setLocation(fen.getLocation().x + (old.width - fen.getSize().width) / 2, fen.getLocation().y + (old.height - fen.getSize().height) / 2);
-			fen.repaint();
-			
-			try {Thread.sleep(1);}
-			catch(InterruptedException e) {e.printStackTrace();}
 		}
+		
+		Dimension maxDim = fen.getSize();
+		
+		for(int i = 0; valid(f, add); f = f + add, i++) {
+			fen.setOpacity(f);				
+			
+			if(add < 0)
+				if((i % 2) == 0) {
+					int width = fen.getWidth() + sizeAdd;
+					int height = fen.getHeight() + sizeAdd;
+					
+					if(width <= 0)
+						width++;
+					if(height <= 0)
+						height++;
+					
+					fen.setSize(width, height);
+					fen.setLocation(fen.getX() - sizeAdd / 2, fen.getY() - sizeAdd / 2);
+				}
+			
+		}
+		
+		if(add > 0)
+			fen.setOpacity(1f);
+		else
+			fen.setSize(maxDim);
 	}
 	
 	private boolean valid(float f, float add) {

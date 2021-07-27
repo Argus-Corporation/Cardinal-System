@@ -57,15 +57,6 @@ public class Properties extends CardinalFile {
 	}
 	
 	/**
-	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
-	 * @param path
-	 * @param instance
-	 */
-	public Properties(String path, Instance instance) {
-		super(path, instance);
-	}
-	
-	/**
 	 * Cette méthode permer d'écrire dans un fichier properties
 	 * @param key
 	 * @param value
@@ -171,8 +162,12 @@ public class Properties extends CardinalFile {
 		
 		for(int i = 0; i < data.size(); i++) {
 			String line = data.get(i);
-			//System.out.println(line + " cou");
-			line = line.substring(0, line.indexOf('='));
+			
+			int index = line.indexOf('=');
+			if(index == -1)
+				continue;
+			
+			line = line.substring(0, index);
 			if(line.equals(key))
 				return i;
 		}

@@ -24,10 +24,17 @@ public class PackageKey {
 	public Object getValue() {
 		try{return value[0];}
 		catch (ArrayIndexOutOfBoundsException e) {return null;}
-		
 	}
 
 	public Object[] getValues() {return value;}
+	
+	public boolean isValueNull() {
+		for(Object obj : value) {
+			if(obj == null || obj.toString().equals(""))
+				return true;
+		}
+		return false;
+	}
 	
 	public static List<PackageKey> getKeys(List<String> lines) {
 		List<PackageKey> keys = new ArrayList<PackageKey>();

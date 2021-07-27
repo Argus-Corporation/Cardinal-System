@@ -46,6 +46,18 @@ public class ThreadManager {
 		new Thread(run).start();
 	}
 	
+	public static Thread createThread(String name, Runnable run) {
+		Thread th  = new Thread(run);
+		if(name != null)
+			th.setName(name);
+		
+		return th;
+	}
+	
+	public static Thread createThread(Runnable run) {
+		return createThread(null, run);
+	}
+	
 	public void setTemporaryName() {oldName = currentThread().getName(); currentThread().setName(name);}
 	public void restorOldParameter() {currentThread().setName(oldName);}
 	

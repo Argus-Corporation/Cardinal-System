@@ -1,5 +1,9 @@
 package net.argus.net.pack;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.argus.net.Profile;
 import net.argus.net.socket.CardinalSocket;
 import net.argus.util.Version;
 
@@ -73,8 +77,23 @@ public class PackagePrefab {
 		return builder.genPackage();
 	}
 	
+	public static <E> Package genInfoPackage(List<E> info) {
+		return genInfoPackage((Object[]) info.toArray(new Object[info.size()]));
+	}
+	
 	public static Package genInfoPackage(Object info) {
 		return genInfoPackage(new Object[] {info});
+	}
+	
+	/**--USER_INFO--**/
+	public static Package genUserInfoPackage(Profile profile) {
+		List<Object> objs = new ArrayList<Object>();
+		
+		objs.add("User-Name: " + profile.getName());
+		objs.add("Role: " + profile.getRole());
+		objs.add("UID: " + profile.getUID());
+		
+		return genInfoPackage(objs);
 	}
 	
 	/**--SYSTEM--**/

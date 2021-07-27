@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import net.argus.gui.Frame;
+import net.argus.gui.frame.Frame;
 
 public class Sprite {
 	
@@ -75,6 +75,9 @@ public class Sprite {
 	}
 	
 	private Color getColor(int[] pix, int i) {
+		if(i >= pix.length)
+			return new Color(1f, 1f, 1f, 1f);
+		
 		int p = pix[i<0?0:i];
 		int r = 0xff & (p >> 16);
 		int g = 0xff & (p >> 8);
@@ -117,7 +120,7 @@ public class Sprite {
 		pan.setLayout(null);
 		fen.setContentPane(pan);
 		
-		s = new Sprite("D:\\Django\\Document 1\\Game\\Among Us\\Platformer\\resources\\player\\player.png");
+		s = new Sprite("C:\\Users\\Django\\Pictures\\among-us-sprite.png");
 		
 		fen.setSize(500, 500);
 		fen.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);

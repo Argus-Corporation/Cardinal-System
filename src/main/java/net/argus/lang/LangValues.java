@@ -15,9 +15,11 @@ public class LangValues {
 		String value = values.get(key);
 		return value!=null?value:key;
 	}
+	
+	public Map<String, String> getValues() {return values;}
 
-	public void addValue(String key, String value) {values.put(key, value);}
-	public void addValue(DoubleStock<String, String> values) {addValue(values.getFirst(), values.getSecond());}
+	public LangValues putValue(String key, String value) {values.put(key, value); return this;}
+	public LangValues putValue(DoubleStock<String, String> values) {return putValue(values.getFirst(), values.getSecond());}
 	
 	@Override
 	public String toString() {

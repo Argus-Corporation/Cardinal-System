@@ -3,8 +3,9 @@ package net.argus.system;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 
-import net.argus.util.CharacterManager;
+import net.argus.util.StringManager;
 
 public class Network {
 	
@@ -38,10 +39,14 @@ public class Network {
 	}
 	
 	public static boolean isPort(String port) {
-		if(CharacterManager.isNumber(port) && Integer.valueOf(port) <= MAX_PORT_VALUE)
+		if(StringManager.isInteger(port) && Integer.valueOf(port) <= MAX_PORT_VALUE)
 			return true;
 		
 		return false;
 	}
+	
+	public static InetAddress getLocalHost() {try {return InetAddress.getLocalHost();}catch(UnknownHostException e) {return null;}}
+	
+	public static InetAddress getByName(String host) {try {return InetAddress.getByName(host);}catch(UnknownHostException e) {return null;}}
 	
 }

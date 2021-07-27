@@ -56,6 +56,8 @@ public class Terminal extends Thread {
 					temDir = direct;
 				if(new File(temDir).exists())
 					directory = temDir;
+				
+				
 				break;
 				
 			case "cls":

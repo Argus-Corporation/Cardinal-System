@@ -11,6 +11,7 @@ import java.util.Map;
 
 import net.argus.event.download.DownloadEvent;
 import net.argus.event.download.EventDownload;
+import net.argus.file.FileManager;
 import net.argus.instance.CardinalProgram;
 import net.argus.util.debug.Debug;
 import net.argus.util.debug.Info;
@@ -28,12 +29,31 @@ class ProcessDownload {
 	}
 	
 	public void getFiles(String[] files, String writeFolder) throws IOException {
+		getFiles(files, new String[0], writeFolder);
+	}
+	
+	public void getFiles(String[] files, String[] optional, String writeFolder) throws IOException {
 		int i = 0;
-		if(files.length == 0)
+		if(files == null || files.length == 0)
 			return;
 		
+		if(optional == null)
+			optional = new String[0];
+			
+		
 		for(String file : files) {
-			Thread thread = getDownloadThread(file, writeFolder, files.length, i);
+			Thread thread = getDownloadThread(file, writeFolder, files.length + optional.length, i);
+			downloader.put(i, thread);
+			
+			i++;
+			thread.start();
+		}
+		
+		for(String op : optional) {
+			if(FileManager.isExists(writeFolder + "/" + op))
+				continue;
+			
+			Thread thread = getDownloadThread(op, writeFolder, files.length + optional.length, i);
 			downloader.put(i, thread);
 			
 			i++;

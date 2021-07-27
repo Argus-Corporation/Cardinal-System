@@ -27,7 +27,7 @@ public class Download {
 		return get(openStream(url));
 	}
 	
-	public static byte[] get(URLConnection connection) throws IOException {		
+	public static byte[] get(URLConnection connection) throws IOException {
 		DataInputStream in = new DataInputStream(connection.getInputStream());
 		byte[] data = new byte[length(connection.getURL())];
 		

@@ -4,15 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+import net.argus.cjson.CJSON;
+import net.argus.cjson.CJSONParser;
 import net.argus.file.CJSONFile;
 import net.argus.file.FileLogger;
 import net.argus.file.FileManager;
 import net.argus.instance.Instance;
 import net.argus.lang.DefaultLangValue;
-import net.argus.system.update.AutoUpdate;
 import net.argus.util.ListenerManager;
 import net.argus.util.RunTime;
 import net.argus.util.ThreadManager;
+import net.argus.util.Version;
 import net.argus.util.debug.Debug;
 import net.argus.util.debug.Logger;
 import net.argus.util.notify.DefaultNotify;
@@ -21,11 +23,13 @@ import net.argus.util.notify.Notify;
 public class UserSystem {
 	
 	public static Logger log;
-	public static AutoUpdate update;
+	private static AutoUpdate update;
+	
+	private static CJSON manifest;
 		
-	public static RunTime runTime = RunTime.getRunTime();
-	public static Scanner in = new Scanner(System.in);
-	public static Notify notify = new DefaultNotify();
+	public final static RunTime runTime = RunTime.getRunTime();
+	public final static Scanner in = new Scanner(System.in);
+	public final static Notify notify = new DefaultNotify();
 	
 	
 	/**--INITIALIZATION--**/
@@ -44,10 +48,14 @@ public class UserSystem {
 				Debug.addLoggeur(log);
 			}
 			
-			if(getBooleanProperty("update"))
-				if(Network.isConnected())
-					update = new AutoUpdate(new CJSONFile("manifest", "/", Instance.SYSTEM));
+			CJSONFile man = new CJSONFile("manifest", "/", Instance.SYSTEM);
+			if(man.exists()) {
+				manifest = CJSONParser.getCJSON(man);
 				
+				if(getBooleanProperty("update"))
+					if(Network.isConnected())
+						update = new AutoUpdate();
+			}
 		}
 		
 		public void postInit(String[] args) {}
@@ -85,14 +93,41 @@ public class UserSystem {
 		String libFile = name + System.getProperty("os.arch").substring(3) + "." + extention;
 		
 		try {
-			System.load(new File(System.getProperty("java.library.path")).getCanonicalPath() + "/" + name + System.getProperty("os.arch").substring(3) + "." + extention);
-		}catch(IOException e) {e.printStackTrace();}
+			String lib = getLibrary(libFile);
+			
+			if(lib != null)
+				System.load(lib);
+		}catch(IOException e) {return;}
 		
 		Debug.log("Library " + libFile + " loaded");
 		ThreadManager.restorOldParameter(0);
 	}
 	
+	private static String getLibrary(String name) throws IOException {
+		String[] paths = getProperty("java.library.path").split(Launcher.getSeperator());
+		
+		File file = null;
+		for(String path : paths) {
+			file = new File(new File(path).getCanonicalPath() + "/" + name);
+			if(file.exists())
+				return file.getCanonicalPath();
+		}
+		
+		return null;
+	}
 	
+	public static Version getCurrentVersion() {
+		return new Version(manifest.getString("manifest.version"));
+	}
+	
+	public static Version getCurrentDebug() {
+		return new Version(manifest.getString("manifest.debug"));
+	}
+	
+	public static String getCurrentStringVersion() {
+		return getCurrentVersion() + "." + getCurrentDebug();
+	}
+		
 	/**--PROPERTY--**/
 	public static String getProperty(String key) {
 		return System.getProperty(key);
@@ -136,6 +171,9 @@ public class UserSystem {
 		if(getProperty(key) == null) 
 			setProperty(key, value);
 	}
+	
+	public static AutoUpdate getUpdate() {return update;}
+	public static CJSON getManifest() {return manifest;}
 	
 	public static void exit(int status) {
 		FileManager.delete(Temp.getTempDir() + "/");

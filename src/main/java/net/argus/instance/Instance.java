@@ -6,7 +6,7 @@ import net.argus.util.ThreadLocal;
 
 public class Instance {
 	
-	public static final Instance SYSTEM = new Instance("system", "");
+	public static final Instance SYSTEM = new Instance("system").setRootPath("");
 	
 	private static ThreadLocal<Instance> inst = new ThreadLocal<Instance>();
 	
@@ -15,12 +15,15 @@ public class Instance {
 	private String rootPath;
 	
 	public Instance(String name) {
-		this(name, "data/" + name);
+		this(name, "data");
 	}
 	
-	private Instance(String name, String rootFolder) {
+	public Instance(String name, String rootFolder) {
 		this.name = name;
-		this.rootPath = FileManager.getMainPath() + "/" + rootFolder + "/";
+		if(rootFolder == null || rootFolder.equals(""))
+			rootFolder = "data";
+		
+		setRootPath(rootFolder + "/" + name);
 		
 		InstanceRegister.addInstance(this);
 	}
@@ -50,6 +53,15 @@ public class Instance {
 	
 	public String getName() {return name;}
 	public String getRootPath() {return rootPath;}
+	
+	private Instance setRootPath(String rootFolder) {
+		this.rootPath = FileManager.getMainPath() + "/" + rootFolder + "/";
+		return this;
+	}
+	
+	public Instance setRootFolder(String rootFolder) {
+		return setRootPath(rootFolder + "/" + name);
+	}
 	
 	public static Instance currentInstance() {return inst.get();}
 	

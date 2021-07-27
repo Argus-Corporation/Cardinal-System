@@ -14,9 +14,12 @@ public class FileLogger extends CardinalFile implements Logger {
 	
 	public static final String EXTENTION = "log";
 	
+	public static final Filter FILTER = new Filter(EXTENTION, "Log File");
+	
 	public FileLogger(String rep) throws InstanceException {
 		super(new SimpleDateFormat("YYYY-MM-dd_HH-mm-ss").format(new Date()), EXTENTION, rep, Instance.SYSTEM);
-		
+		if(!exists())
+			createFile();
 	}
 	
 	@Override

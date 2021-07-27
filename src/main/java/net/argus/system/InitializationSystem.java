@@ -29,6 +29,7 @@ public class InitializationSystem {
 		addInitializedUI(new InitializedUI());
 		
 		UserSystem.defineProperty("showInfo", true);
+		UserSystem.setProperty("file.encoding", "UTF-8");
 		
 		preInit(args);
 		if(ui) preInitUi(args);
@@ -71,7 +72,7 @@ public class InitializationSystem {
 	
 	public static void postInit(String[] args) {
 		init = true;
-		if(UserSystem.getBooleanProperty("update") && UserSystem.update != null) UserSystem.update.check(InitializationSplash.getSplash());
+		if(UserSystem.getBooleanProperty("update") && UserSystem.getUpdate() != null) UserSystem.getUpdate().check(InitializationSplash.getSplash());
 		
 		Debug.log("System initialized");
 	}

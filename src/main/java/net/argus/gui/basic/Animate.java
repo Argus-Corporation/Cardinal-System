@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
+@Deprecated
 public abstract class Animate extends JComponent {
 	
 	/**

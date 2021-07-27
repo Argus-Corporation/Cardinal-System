@@ -22,7 +22,5 @@ public class SystemUser {
 	public void start(InputStream in, PrintStream out) {
 		Instance.startThread(new Thread(new SystemUserProcess(process, in, out)));
 	}
-
 	
-
 }

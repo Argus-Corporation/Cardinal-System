@@ -78,8 +78,6 @@ public class Launcher {
 		return first + add + second;
 	}
 	
-	public static String getSeperator() {return OS.currentOS()==OS.WINDOWS?";":":";}
-	
 	public void setExtractNatives(boolean extract) {this.extractNatives = extract;}
 	public void setMainInstanceClass(String mainInstanceClass) {this.mainInstanceClass = mainInstanceClass;}
 	
@@ -104,7 +102,7 @@ public class Launcher {
 		
 		commands.add("-cp");
 		commands.add(getClassPath());
-		
+				
 		if(extractNatives) {
 			extractNatives();
 			commands.add("-Djava.library.path=" + Temp.getTempDir() + "/");
@@ -133,14 +131,15 @@ public class Launcher {
 		return status;
 	}
 	
+	public static String getSeperator() {return OS.currentOS()==OS.WINDOWS?";":":";}
+	
 	private static int launch(List<String> commands) throws Exception {
 		ProcessBuilder builder = new ProcessBuilder(commands);
-		builder.redirectErrorStream(true);
 		
 		RunningProgram run = new RunningProgram(builder.start());
+		run.readConsoleInput();
 		run.writeErrorConsoleOutput();
 		run.writeConsoleOutput();
-		run.readConsoleInput();
 		
 		run.waitFor();
 		

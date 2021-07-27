@@ -3,6 +3,8 @@ package net.argus.net.server.room;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.net.server.ServerProcess;
+
 public class RoomRegister {
 	
 	private static List<Room> rooms = new ArrayList<Room>();
@@ -34,6 +36,14 @@ public class RoomRegister {
 		for(Room room : rooms)
 			if(room.getName().toUpperCase().equals(name.toUpperCase()))
 				return true;
+		return false;
+	}
+	
+	public static boolean isUserExist(String name) {
+		for(Room room : rooms)
+			for(ServerProcess pro : room.getClients())
+				if(pro.getCardinalSocket().getProfile().getName().equals(name))
+					return true;
 		return false;
 	}
 

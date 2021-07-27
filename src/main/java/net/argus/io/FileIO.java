@@ -8,7 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.List;
 
 import net.argus.file.Properties;
@@ -19,7 +21,7 @@ public class FileIO {
 	
 	/**--READ--**/
 	public static char[] readChar(File file) throws IOException {
-		DataInputStream in = openInputStream(file);
+		DataInputStream in = openDataInputStream(file);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 	//	byte[] data = new byte[(int) file.length()];
 		//in.read(data);
@@ -75,7 +77,7 @@ public class FileIO {
 	}
 	
 	public static void write(File file, byte[] data) throws IOException {
-		write(openOutputStream(file), data);
+		write(openDataOutputStream(file), data);
 	}
 	
 	public static void write(File file, String text) throws IOException {
@@ -106,26 +108,41 @@ public class FileIO {
 	
 	
 	public static void writeAppend(File file, byte[] data) throws IOException {
-		write(openOutputStream(file, true), data);
+		write(openDataOutputStream(file, true), data);
 	}
 	
 	public static void writeAppend(File file, String text) throws IOException {
 		text += "\n";
 		writeAppend(file, text.getBytes());
 	}
+	
+	public static void writeAppend(File file, Object[] array) throws IOException {
+		String text = "";
+		for(Object str : array)
+			text += str + "\n";
+		
+		writeAppend(file, text.getBytes());
+	}
 
 	
 	/**--STREAM--**/
-	public static DataInputStream openInputStream(File file) throws FileNotFoundException {
-		return new DataInputStream(new FileInputStream(file));
+	public static DataInputStream openDataInputStream(File file) throws FileNotFoundException {
+		return new DataInputStream(openInputStream(file));
 	}
 	
-	public static DataOutputStream openOutputStream(File file) throws FileNotFoundException {return openOutputStream(file, false);}
+	public static DataOutputStream openDataOutputStream(File file) throws FileNotFoundException {return openDataOutputStream(file, false);}
 	
-	public static DataOutputStream openOutputStream(File file, boolean append) throws FileNotFoundException {
-		return new DataOutputStream(new FileOutputStream(file, append));
+	public static DataOutputStream openDataOutputStream(File file, boolean append) throws FileNotFoundException {
+		return new DataOutputStream(openOutputStream(file, append));
 	}
 	
+	public static OutputStream openOutputStream(File file, boolean append) throws FileNotFoundException {
+		return new FileOutputStream(file, append);
+	}
+	
+	public static InputStream openInputStream(File file) throws FileNotFoundException {
+		return new FileInputStream(file);
+	}
 	
 	public static String valueOf(char[] data) {return new String(data);}
 	

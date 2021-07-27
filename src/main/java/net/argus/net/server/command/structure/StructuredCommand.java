@@ -1,5 +1,7 @@
 package net.argus.net.server.command.structure;
 
+import net.argus.util.ArrayManager;
+
 public class StructuredCommand {
 	
 	private StructuredKey[] keys;
@@ -14,5 +16,10 @@ public class StructuredCommand {
 	public StructuredKey getKey(int index) {return keys[index];}
 	
 	public Object get(int index) {return getKey(index).getValue();}
+	
+	@Override
+	public String toString() {
+		return ArrayManager.convert(keys).toString();
+	}
 
 }

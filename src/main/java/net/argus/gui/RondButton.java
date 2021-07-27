@@ -5,11 +5,8 @@ import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
@@ -131,17 +128,17 @@ public class RondButton extends JButton {
 								if(frameListener != null) frameListener.frameMinimalized(null);*/
 							break;
 						case FLECHE:
-							Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
+							/*Dimension scrnSize = Toolkit.getDefaultToolkit().getScreenSize();
 							Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-							
-							int taskBarHeight = scrnSize.height - winSize.height;
-							
+							*/
+					//		int taskBarHeight = scrnSize.height - winSize.height;
+							/*
 							fen.savePosition();
 							
 							fen.setSize(scrnSize.width, scrnSize.height - taskBarHeight);
 							fen.setLocationRelativeTo(null);
 							fen.setMaximize(true);
-							
+							*/
 							top.fullScreen = true;
 							id = INV_FLECHE;
 							/*for(FrameListener frameListener : fen.frameManager.getListeners())
@@ -150,9 +147,9 @@ public class RondButton extends JButton {
 						case INV_FLECHE:
 							Dimension defaultSize = new Dimension();
 							fen.setSize(defaultSize);
-							
+							/*
 							fen.setLocation(fen.getSavedPosition());
-							fen.setMaximize(false);
+							fen.setMaximize(false);*/
 							top.fullScreen = false;
 							id = FLECHE;
 							

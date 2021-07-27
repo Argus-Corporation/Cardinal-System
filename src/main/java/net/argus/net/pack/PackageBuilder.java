@@ -20,8 +20,10 @@ public class PackageBuilder {
 	public PackageBuilder addKey(PackageKey key) {
 		if(key != null &&
 				key.getName() != null && key.getValue() != null &&
-				!key.getName().equals("") && !key.getValue().equals(""))
+				!key.getName().equals("") && !key.isValueNull())
 			keys.add(key);
+		else
+			return this;
 		
 		return this;
 	}

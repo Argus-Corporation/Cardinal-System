@@ -30,16 +30,6 @@ public class FileInfo extends CardinalFile {
 		super(fileName, extention, rep, instance);
 		copyFile();
 	}
-
-	/**
-	 * 
-	 * @param file
-	 * @param instance
-	 */
-	public FileInfo(File file, Instance instance) {
-		super(file, instance);
-		copyFile();
-	}
 	
 	/**
 	 * 

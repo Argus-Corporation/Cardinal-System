@@ -18,11 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import net.argus.file.FileManager;
 import net.argus.file.Properties;
-import net.argus.system.InitializationSystem;
-import net.argus.system.UserSystem;
-import net.argus.util.Display;
 
 @Deprecated
 public class Splash extends JFrame {
@@ -138,7 +134,7 @@ public class Splash extends JFrame {
 			Panel westPanFlow = new Panel(splashConfig, false);
 			Panel westPan = new Panel(splashConfig, false);
 			westPan.setPreferredSize(new Dimension(400, 600));
-			Panel imgPan = new Panel(splashConfig, splashConfig.getString("panel.img.background"), fen);
+			Panel imgPan = new Panel(splashConfig, splashConfig.getString("panel.img.background"));
 			new PanelRepaint(fen, parent).initImage(2);
 			ImageIcon image = new ImageIcon(imgPan.getBackgroundImageFloat());
 			ImageIcon icon = Icon.getIcon(iconPath, fen.getWidth() / 11, fen.getHeight() / 8);
@@ -211,7 +207,7 @@ public class Splash extends JFrame {
 	}	
 	
 	
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
 		Properties config = new Properties("config", "bin");
 		Splash splash = new Splash("Splash", Icon.getIcon(FileManager.getPath("res/logo.png"), Display.getWidth() - 20), 1000);
@@ -220,12 +216,12 @@ public class Splash extends JFrame {
 		String iconPath = FileManager.getPath("res/favIcon32x32.png");
 		@SuppressWarnings("unused")
 		boolean[] isE = new boolean[] {true, true, true};
-		
+	
 		Frame fen = new Frame("School", iconPath, config);
 		
 		Panel pan = new Panel(config, FileManager.getPath("res/favIcon16x16.png"), fen);
 		new PanelRepaint(fen, splash).initImage();
-		
+	
 		fen.setIcon(FileManager.getPath("res/favIcon16x16.png"));
 		fen.add(pan);
 		
@@ -234,5 +230,5 @@ public class Splash extends JFrame {
 		}
 			
 		fen.setVisible(true);
-	}
+	}*/
 }

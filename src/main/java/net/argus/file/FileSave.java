@@ -67,19 +67,6 @@ public class FileSave extends CardinalFile {
 	}
 	
 	/**
-	 * Ce constructeur permer d'initialiser FileSave et de cr�er le fichier si il n'existe pas
-	 * @param file
-	 * @param info[]
-	 * @param instance
-	 */
-	public FileSave(File file, String[] info, Instance instance) {
-		super(file, instance);
-		this.firstType = info[0];
-		this.idType = info[1];
-		this.secondType = info[2];
-	}
-	
-	/**
 	 * Cette methode permer de lire dans un fichier de type Save
 	 * @param id
 	 * @return result

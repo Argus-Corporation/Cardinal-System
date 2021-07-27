@@ -4,9 +4,9 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import net.argus.cjson.CJSON;
-import net.argus.event.tree.EventTree;
-import net.argus.event.tree.TreeEvent;
-import net.argus.event.tree.TreeListener;
+import net.argus.event.gui.tree.EventTree;
+import net.argus.event.gui.tree.TreeEvent;
+import net.argus.event.gui.tree.TreeListener;
 import net.argus.gui.BackgoundRegister;
 import net.argus.gui.FontRegister;
 import net.argus.gui.ForegroundRegiter;
