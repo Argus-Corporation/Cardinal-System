@@ -153,7 +153,7 @@ public class Version {
 				if(t.suf.equals(suf))
 					return t;
 			
-			return null;
+			return RELEASE;
 		}
 	}
 	

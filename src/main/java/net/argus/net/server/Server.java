@@ -20,7 +20,7 @@ import net.argus.util.debug.Info;
 
 public class Server {
 	
-	public static final Version VERSION = new Version("1.0");
+	public static final Version VERSION = new Version("1.1");
 	
 	private BanRegister serverBanRegister;
 	private ServerConnector connector;
@@ -38,7 +38,7 @@ public class Server {
 	public Server(int max, int port) {
 		this.port = port;
 		
-		server = createSocket(port);
+		server = createServerSocket(port);
 		if(server == null)
 			return;
 		
@@ -51,10 +51,10 @@ public class Server {
 	}
 		
 	public Server(int port) {
-		this(10, port);
+		this(Room.DEFUALT_ROOM_SIZE, port);
 	}
 	
-	private ServerSocket createSocket(int port) {
+	private ServerSocket createServerSocket(int port) {
 		try {return new ServerSocket(port);}
 		catch(BindException e) {Debug.log("Port " + port + " is not available", Info.ERROR);}
 		catch (IOException e) {e.printStackTrace();}
@@ -68,10 +68,10 @@ public class Server {
 			
 			systemUser.start(System.in, System.out);
 
-			event.startEvent(EventServer.OPEN, new ServerEvent(this));
+			event.startEvent(EventServer.OPEN, new ServerEvent(socket, this));
 		}else {
 			Debug.log("The operation could not be completed", Info.ERROR);
-			event.startEvent(EventServer.ERROR, new ServerEvent(this));
+			event.startEvent(EventServer.ERROR, new ServerEvent(socket, this));
 		}
 	}
 	
@@ -86,7 +86,7 @@ public class Server {
 			}catch(IOException e) {Debug.log("Error when closing rooms", Info.ERROR);}
 			
 			Debug.log("Server stoped: " + arg);
-			event.startEvent(EventServer.STOP, new ServerEvent(this));
+			event.startEvent(EventServer.STOP, new ServerEvent(arg, this));
 		}
 	}
 	

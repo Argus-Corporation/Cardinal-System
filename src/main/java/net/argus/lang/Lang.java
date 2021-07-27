@@ -9,7 +9,9 @@ import net.argus.file.FileLang;
 import net.argus.file.FileSave;
 import net.argus.file.Properties;
 import net.argus.file.css.CSSFile;
+import net.argus.gui.BackgoundRegister;
 import net.argus.gui.FontRegister;
+import net.argus.gui.ForegroundRegiter;
 import net.argus.instance.Instance;
 import net.argus.util.debug.Debug;
 import net.argus.util.debug.Info;
@@ -66,12 +68,13 @@ public class Lang {
 		setLang(type);
 	}
 	
-	public static void updateCSS() {
-		CSSFile cssFile = LangManager.getCSSFile();
-		if(cssFile != null)
-			cssFile.execut();
+	public static void updateCSS() {		
+		for(CSSFile css : LangManager.getCSS())
+			css.execut();
 		
 		FontRegister.update();
+		BackgoundRegister.update();
+		ForegroundRegiter.update();
 	}
 	
 	public static void save() {

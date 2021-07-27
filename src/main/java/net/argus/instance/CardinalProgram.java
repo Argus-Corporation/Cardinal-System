@@ -7,18 +7,16 @@ import net.argus.util.debug.Info;
 public abstract class CardinalProgram {
 	
 	private Instance instance;
-	
-	private int exitCode = 0;
-	
+		
 	public CardinalProgram() {}
 	
-	public abstract int main(String[] args) throws InstanceException;
+	public abstract void main(String[] args) throws InstanceException;
 	
-	public int launch(String[] args, boolean wait) {
+	public void launch(String[] args, boolean wait) {
 		Thread inst = new Thread(() -> {
 			Thread.currentThread().setName(instance.getName());
 			
-			try {exitCode = main(args);}
+			try {main(args);}
 			catch (InstanceException e) {	
 				Debug.log(("Error while running the instance") + (e.getMessage()!=null?": " + e.getMessage():""), Info.ERROR);
 			}
@@ -30,8 +28,6 @@ public abstract class CardinalProgram {
 		
 		if(wait)
 			wait(this);
-		
-		return exitCode;
 	}
 	
 	protected void setInstance(Instance instance) {

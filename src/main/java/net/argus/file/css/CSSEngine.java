@@ -10,10 +10,6 @@ public class CSSEngine {
 		new CSSFile(path).execut();
 	}
 	
-	public static void run(File path, Instance instance) {
-		new CSSFile(path, instance).execut();
-	}
-	
 	public static void run(String fileName, String rep, Instance instance) {
 		new CSSFile(fileName, rep, instance).execut();
 	}

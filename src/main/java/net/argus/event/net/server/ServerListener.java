@@ -9,5 +9,11 @@ public interface ServerListener extends Listener {
 	public void error(ServerEvent e);
 	
 	public void stop(ServerEvent e);
+	
+	public void roomCreate(ServerEvent e);
+	
+	public void roomRemove(ServerEvent e);
+	
+	public void userJoin(ServerEvent e);
 
 }

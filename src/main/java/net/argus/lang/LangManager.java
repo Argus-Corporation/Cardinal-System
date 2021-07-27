@@ -13,12 +13,12 @@ public class LangManager {
 	
 	private LangType type;
 	private LangValues values;
-	private CSSFile cssFile;
+	private LangCSS css = new LangCSS();
 	
 	public LangManager(LangType type, LangValues values, CSSFile cssFile) {
 		this.type = type;
 		this.values = values;
-		this.cssFile = cssFile;
+		this.css.addCSS(cssFile);
 	}
 	
 	public static void addLang(LangType type, LangValues values, CSSFile cssFile) {
@@ -28,7 +28,8 @@ public class LangManager {
 			int index = getIndex(type);
 			if(index != -1) {
 				LangManager mana = LangManager.langValues.get(index);
-				mana.cssFile = cssFile;
+				
+				mana.css.addCSS(cssFile);
 				
 				if(mana.values != null) {
 					Set<Entry<String, String>> enu = values.getValues().entrySet();
@@ -60,10 +61,10 @@ public class LangManager {
 				
 	}
 	
-	public static CSSFile getCSSFile() {
+	public static LangCSS getCSS() {
 		int index = getIndex();
 		if(index != -1 && index < langValues.size())
-			return langValues.get(index).cssFile;
+			return langValues.get(index).css;
 			
 		return null;
 	}

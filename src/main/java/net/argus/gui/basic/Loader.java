@@ -2,6 +2,7 @@ package net.argus.gui.basic;
 
 import java.awt.Graphics;
 
+@Deprecated
 public class Loader extends Animate {
 
 	/**

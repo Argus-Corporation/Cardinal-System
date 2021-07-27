@@ -69,9 +69,7 @@ public class Loader {
 			UserSystem.exit(ExitCode.ERROR);
 		}
 		
-		int exit = main.launch(args, true);
-		
-		UserSystem.exit(exit);
+		main.launch(args, true);
 	}
 
 }

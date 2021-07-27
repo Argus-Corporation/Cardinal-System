@@ -1,26 +1,32 @@
 package net.argus.gui.component;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.FocusListener;
-import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.JDialog;
-
+import net.argus.event.gui.frame.FrameListener;
+import net.argus.gui.GUI;
 import net.argus.gui.Panel;
+import net.argus.gui.dialog.Dialog;
+import net.argus.lang.Lang;
+import net.argus.lang.LangRegister;
 
-public abstract class DialogComponent {
+public abstract class DialogComponent implements GUI {
 	
-	private JDialog dialog = new JDialog();
-	private Component parent;
+	private Dialog dialog = new Dialog();
 	
-	private boolean pack, cloes = true;
-	
-	public DialogComponent(Component parnet) {
-		this.parent = parnet;
+	private String title;
 		
-		dialog.addWindowListener(getWindowListener());
+	private boolean pack, titleLang;
+	
+	public DialogComponent() {
+		
+		LangRegister.addElementLanguage(this);
+		
+		load();
 	}
 	
 	/**
@@ -66,6 +72,14 @@ public abstract class DialogComponent {
 	}
 	
 	/**
+	 * setIcon
+	 * @param icon
+	 */
+	public void setDialogIcon(Image icon) {
+		dialog.setFrameIconImage(icon);
+	}
+	
+	/**
 	 * setPack
 	 * @param pack
 	 */
@@ -74,11 +88,19 @@ public abstract class DialogComponent {
 	}
 	
 	/**
-	 * setClose
+	 * setTitleLang
+	 * @param tl
+	 */
+	public void setTitleLang(boolean tl) {
+		this.titleLang = tl;
+	}
+	
+	/**
+	 * setLocationRelativeTo
 	 * @param c
 	 */
-	public void setClose(boolean c) {
-		this.cloes = c;
+	public void setLocationRelativeTo(Component c) {
+		dialog.setLocationRelativeTo(c);
 	}
 	
 	/**
@@ -86,15 +108,29 @@ public abstract class DialogComponent {
 	 * @param title
 	 */
 	public void setTitle(String title) {
-		dialog.setTitle(title);
+		if(titleLang) {
+			this.title = title;
+			dialog.setTitle(Lang.get(TITLE + "." + title + ".name"));
+		}else
+			dialog.setTitle(title);
+			
 	}
 	
 	/**
 	 * addWindowListener
 	 * @param l
 	 */
+	@Deprecated
 	public void addWindowListener(WindowListener l) {
 		dialog.addWindowListener(l);
+	}
+	
+	/**
+	 * addFrameListener
+	 * @param listener
+	 */
+	public void addFrameListener(FrameListener listener) {
+		dialog.addFrameListener(listener);
 	}
 	
 	/**
@@ -118,51 +154,66 @@ public abstract class DialogComponent {
 	 */
 	protected void load() {
 		dialog.setContentPane(getComponent());
-		dialog.setLocationRelativeTo(parent);
 		
 		if(pack) dialog.pack();
-	}
+ 	}
 	
 	/**
 	 * show
 	 */
-	@SuppressWarnings("deprecation")
 	public void show() {
-		load();
-		dialog.show();
+		dialog.setVisible(true);
 	}
 	
 	/**
 	 * hide
 	 */
-	@SuppressWarnings("deprecation")
 	public void hide() {
-		dialog.hide();
+		dialog.setVisible(false);
 	}
 	
 	/**
 	 * getDialog
 	 * @return
 	 */
-	public JDialog getDialog() {
+	public Dialog getDialog() {
 		return dialog;
 	}
 	
 	/**
-	 * getWindowListener
-	 * @return
+	 * setFont
+	 * @param font
 	 */
-	private WindowListener getWindowListener() {
-		return new WindowListener() {
-			public void windowOpened(WindowEvent e) {}
-			public void windowIconified(WindowEvent e) {}
-			public void windowDeiconified(WindowEvent e) {}
-			public void windowDeactivated(WindowEvent e) {}
-			@SuppressWarnings("deprecation") public void windowClosing(WindowEvent e) {if(cloes) hide(); else Thread.currentThread().stop();}
-			public void windowClosed(WindowEvent e) {}
-			public void windowActivated(WindowEvent e) {}
-			
-		};
+	@Override
+	public void setFont(Font font) {}
+	
+	/**
+	 * setBackground
+	 * @param bg
+	 */
+	@Override
+	public void setBackground(Color bg) {}
+	
+	/**
+	 * setForeground
+	 * @param fore
+	 */
+	@Override
+	public void setForeground(Color fore) {}
+	
+	/**
+	 * getElementName
+	 */
+	@Override
+	public String getElementName() {return "Dialog";}
+	
+	/**
+	 * setText
+	 */
+	@Override
+	public void setText() {
+		if(titleLang && title != null)
+			setTitle(title);
 	}
 	
 	/**

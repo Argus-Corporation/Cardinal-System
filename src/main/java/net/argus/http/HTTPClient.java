@@ -1,7 +1,6 @@
 package net.argus.http;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -64,7 +63,7 @@ public class HTTPClient {
 		File openFile = getFile();
 		HTTPCode code = getCode(openFile);
 		
-		DataInputStream dataIn = getStream(openFile);
+		BufferedReader dataIn = getStream(openFile);
 		
 		addHeader(writer, dataIn, code);
 		addFile(writer, dataIn, code);
@@ -78,7 +77,7 @@ public class HTTPClient {
 		
 	}
 	
-	public void addHeader(PrintWriter writer, DataInputStream dataIn, HTTPCode code) {
+	public void addHeader(PrintWriter writer, BufferedReader dataIn, HTTPCode code) {
 		writer.println("HTTP/1.1" + " " + code.getMessage());
 		writer.println("Content-Type: " + header.get("Accept").split(",")[0] + "; charset=UTF-8");
 		writer.println("Connection: close");
@@ -86,15 +85,14 @@ public class HTTPClient {
 		writer.println();
 	}
 	
-	public void addFile(PrintWriter writer, DataInputStream dataIn, HTTPCode code) throws IOException {
+	public void addFile(PrintWriter writer, BufferedReader dataIn, HTTPCode code) throws IOException {
 		if(dataIn == null)
 			dataIn = getStream(getFile(String.valueOf(code.getCode())));
 		
 		println(writer, dataIn);
 	}
 	
-	@SuppressWarnings("deprecation")
-	public void println(PrintWriter writer, DataInputStream dataIn) throws IOException {
+	public void println(PrintWriter writer, BufferedReader dataIn) throws IOException {
 		String line;
 		while((line = dataIn.readLine()) != null)
 			writer.println(line);
@@ -109,11 +107,11 @@ public class HTTPClient {
 		return code;
 	}
 	
-	public DataInputStream getStream(File file) throws FileNotFoundException {
-		DataInputStream dataIn = null;
+	public BufferedReader getStream(File file) throws FileNotFoundException {
+		BufferedReader dataIn = null;
 		
 		if(file.exists())
-			dataIn = new DataInputStream(new FileInputStream(file));
+			dataIn = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 		
 		return dataIn;
 	}

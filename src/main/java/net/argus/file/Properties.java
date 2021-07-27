@@ -57,15 +57,6 @@ public class Properties extends CardinalFile {
 	}
 	
 	/**
-	 * Ce constructeur permer d'initialiser Properties et de cr�er le fichier si il n'existe pas
-	 * @param path
-	 * @param instance
-	 */
-	public Properties(String path, Instance instance) {
-		super(path, instance);
-	}
-	
-	/**
 	 * Cette méthode permer d'écrire dans un fichier properties
 	 * @param key
 	 * @param value

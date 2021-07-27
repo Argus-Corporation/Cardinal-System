@@ -16,11 +16,14 @@ public class CommandParser {
 		String[] com = strCom.split(" ");
 		com = StringManager.valueOf(com);
 		
+		int size = struc.size() - 1;
+		
 		if(com.length < struc.length())
 			return null;
 		
-		for(int i = 1; i < com.length && i < struc.size() - 1; i++) {
+		for(int i = 1; i < com.length && i < size; i++) {
 			KeyType type = getType(struc, i);
+
 			if(!keyIsValid(com[i], type))
 				return null;
 			
@@ -29,11 +32,11 @@ public class CommandParser {
 		
 		if(com.length >= struc.size()) {
 			String last = "";
-			for(int i = struc.size() - 1; i < com.length; i++)
+			for(int i = size; i < com.length; i++)
 				last += com[i] + " ";
 			last = last.substring(0, last.length() - 1);
 		
-			keys.add(new StructuredKey(last, getType(struc, struc.size() - 1)));
+			keys.add(new StructuredKey(last, getType(struc, size)));
 		}
 		
 		

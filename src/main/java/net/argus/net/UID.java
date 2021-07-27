@@ -22,7 +22,7 @@ public class UID {
 		int id = 0;
 		do {
 			id = Math.random(0, 999999);
-		}while(isUsed(id));
+		}while(id > 0 && isUsed(id));
 		
 		return id;
 	}

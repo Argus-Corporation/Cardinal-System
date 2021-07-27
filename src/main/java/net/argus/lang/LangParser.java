@@ -16,10 +16,10 @@ public class LangParser {
 		
 		CSSFile cssFile = null;
 		if(isInfoFile(file)) {
-			FileInfo infoFile = new FileInfo(new File(getPathInfo(file[0]) + "/" + getFileInfoName(file[0]) + ".info"), Instance.currentInstance());
+			FileInfo infoFile = new FileInfo(new File(getPathInfo(file[0]) + "/" + getFileInfoName(file[0]) + ".info"));
 			String cssPath = infoFile.getValue("CSS-Path");
 			
-			cssFile = new CSSFile(cssPath.substring(cssPath.lastIndexOf("/")+1), cssPath.substring(0, cssPath.lastIndexOf("/")), Instance.currentInstance());
+			cssFile = new CSSFile(cssPath.substring(cssPath.lastIndexOf("/")+1), cssPath.substring(0, cssPath.lastIndexOf("/")));
 
 		}
 		

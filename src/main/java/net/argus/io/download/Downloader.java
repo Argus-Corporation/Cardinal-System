@@ -68,6 +68,7 @@ public class Downloader {
 	
 	public URL getURL() {return url;}
 	
+	public String[] getOptionalFiles() {return optionalFiles;}
 	public String[] getCommonFiles() {return commonFiles;}
 	public String[] getNativeFiles() {return nativeFiles;}
 	

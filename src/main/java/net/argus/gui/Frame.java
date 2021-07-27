@@ -1,36 +1,15 @@
 package net.argus.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import net.argus.event.gui.frame.EventFrame;
-import net.argus.event.gui.frame.FrameEvent;
-import net.argus.event.gui.frame.FrameListener;
-import net.argus.file.Properties;
-import net.argus.gui.animation.Animation;
-import net.argus.gui.animation.FrameAnimation;
-import net.argus.gui.top.TitleBar;
-import net.argus.util.Display;
-
+@Deprecated
 public class Frame extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6058458405056389502L;
-	
+	/*
 	public static final int MIN_WIDTH = 140;
 	public static final int MIN_HEIGHT = 35;
 	
@@ -82,7 +61,7 @@ public class Frame extends JFrame {
 
 			//getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#DADADA")));
 		}
-		
+		*/
 		/*this.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {}
@@ -104,7 +83,7 @@ public class Frame extends JFrame {
 				
 			}
 		});*/
-
+/*
 	}
 
 	public Frame(String title, String pathIcon, Properties config) {
@@ -119,7 +98,7 @@ public class Frame extends JFrame {
 	public Frame(URL iconPath) {
 		this("", new Dimension(1200, 700), true, false, new ImageIcon(iconPath), new ImageIcon(iconPath));
 	}
-	
+	*/
 	/*protected Frame(String title, String iconPath, Properties config) {
 		this.setTitle(title);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -127,7 +106,7 @@ public class Frame extends JFrame {
 		this.setSize(config.getDimension("frame.size"));
 		this.setAlwaysOnTop(config.getBoolean("frame.alwaysontop"));
 	}*/
-	
+	/*
 	public void removeAll() {
 		super.removeAll();
 		this.add(BorderLayout.NORTH, titleBar);
@@ -208,6 +187,20 @@ public class Frame extends JFrame {
 	}
 	
 	@Override
+	public void setVisible(boolean b) {
+		setOpacity(0f);
+		super.setVisible(b);
+		
+		if(b) {
+			if(anim instanceof FrameAnimation) {
+				//int i = (int) (1 / FrameAnimation.ADD);
+				//super.setSize(getWidth() - FrameAnimation.SIZE_ADD * i, getHeight() - FrameAnimation.SIZE_ADD * i);
+				anim.play(FrameAnimation.UNMINIIZE);
+			}
+		}
+	}
+	
+	@Override
 	public void setLocation(int x, int y) {
 		Rectangle winSize = Display.getMaximumWindowBounds();
 		
@@ -282,6 +275,6 @@ public class Frame extends JFrame {
 	
 	public LayoutManager getMainLayout() {
 		return mainPan.getLayout();
-	}
+	}*/
 	
 }

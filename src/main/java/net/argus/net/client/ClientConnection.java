@@ -29,7 +29,8 @@ public class ClientConnection extends Connection {
 					socket.setMatchSocket(true);
 				else
 					return new StatusConnection(false, "socket");
-			
+			else if(reply.getType().equals(PackageType.LOG_OUT))
+				return new StatusConnection(false, reply.getValue("Argument"));
 			
 			Object[] infos = reply.getArray("Socket-Info");
 			if(infos != null)

@@ -17,7 +17,7 @@ import net.argus.util.debug.Info;
 
 public class Client {
 	
-	public static final Version VERSION = new Version("1.0");
+	public static final Version VERSION = new Version("1.1");
 	
 	private Connection clientConnect;
 	private Process clientProcess;

@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.event.net.server.EventServer;
+import net.argus.event.net.server.ServerEvent;
 import net.argus.instance.Instance;
 import net.argus.instance.InstanceRegister;
 import net.argus.net.BanRegister;
@@ -51,6 +53,8 @@ public class Room {
 		ban = new BanRegister(roomInstance);
 		
 		RoomRegister.addRoom(this);
+
+		parent.getEvent().startEvent(EventServer.ROOM_CREATE, new ServerEvent(this, parent));
 	}
 	
 	private void add(ServerProcess client) {
@@ -76,8 +80,8 @@ public class Room {
 		return -1;
 	}
 	
-	public boolean join(ServerProcess process, String password) {
-		StatusConnection status = checkConnection(process.getCardinalSocket(), password);
+	public StatusConnection join(ServerProcess process, String password) {
+		StatusConnection status = checkConnection(process, password);
 		if(status.isConnected()) {
 			process.setRoom(this);
 			add(process);
@@ -85,13 +89,13 @@ public class Room {
 			try {process.send(PackagePrefab.genSystemPackage("You have joined room \"" + name + "\""));
 			}catch(IOException e) {e.printStackTrace();}
 
-			return true;
+			return status;
 		}else {
 			Debug.log("Error on connection: " + status.getArgument());
 			try {process.send(PackagePrefab.genSystemPackage("Error on connection: " + status.getArgument()));}
 			catch(IOException e) {}
 			
-			return false;
+			return status;
 		}
 	}
 	
@@ -118,8 +122,8 @@ public class Room {
 	
 	public void move(ServerProcess process, String password, Room room) {
 		try {
-			boolean join = room.join(process, password);
-			if(join) {
+			StatusConnection status = room.join(process, password);
+			if(status.isConnected()) {
 				for(int i = 0; i < clients.length; i++)
 					if(clients[i] != null && clients[i].equals(process))
 						clients[i] = null;
@@ -139,17 +143,20 @@ public class Room {
 			for(ServerProcess sock : getClients())
 				move(sock, null, mainRoom);
 		}
+		
 		Debug.log("Room \"" + name + "\" is closed");
 		
 		InstanceRegister.remove(roomInstance);
 		RoomRegister.remove(this);
+		
+		parent.getEvent().startEvent(EventServer.ROOM_REMOVE, new ServerEvent(this, parent));
 	}
 	
-	public StatusConnection checkConnection(CardinalSocket client, String password) {
+	public StatusConnection checkConnection(ServerProcess client, String password) {
 		if(isFull())
 			return new StatusConnection(false, "room full");
 		
-		InetAddress address = client.getInetAddress();
+		InetAddress address = client.getCardinalSocket().getInetAddress();
 		if(address != null)
 			if(getBanRegister().isBanned(address.getHostAddress()))
 				return new StatusConnection(false, "user banned");
@@ -160,6 +167,9 @@ public class Room {
 			else
 				if(!this.password.equals(password))
 					return new StatusConnection(false, "invalid password");
+		
+		if(client.getRoom() != null && client.getRoom().equals(this))
+			return new StatusConnection(false, "already connected");
 		
 		return new StatusConnection(true, "connected");
 	}

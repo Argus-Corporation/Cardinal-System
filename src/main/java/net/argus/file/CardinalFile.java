@@ -16,20 +16,12 @@ public class CardinalFile {
 	
 	private File file;
 	
-	public CardinalFile(File file, Instance instance) {
-		init(file, instance);
-	}
-	
 	public CardinalFile(File file) {
 		init(file);
 	}
 	
 	public CardinalFile(String path) {
 		init(path);
-	}
-	
-	public CardinalFile(String path, Instance instance) {
-		init(path, instance);
 	}
 	
 	public CardinalFile(String fileName, String extention, String rep, Instance instance) {
@@ -41,30 +33,15 @@ public class CardinalFile {
 	}
 	
 	/**--INIT--**/
-	private void init(File file, Instance instance) {
-		if(instance == null) 
-			throw InstanceException.getInstanceNull();
-		
+	private void init(File file) {
 		this.file = file;
 
 		if(file.exists())	
 			Debug.log("File Loaded: " + file.getAbsolutePath());
-		
-	}
-	
-	private void init(File file) {
-		init(file, Instance.currentInstance());
 	}
 	
 	private void init(String path) {
-		init(path, Instance.currentInstance());
-	}
-	
-	private void init(String path, Instance instance) {
-		if(instance == null) 
-			throw InstanceException.getInstanceNull();
-		
-		init(new File(path), instance);
+		init(new File(path));
 
 	}
 	
@@ -72,7 +49,7 @@ public class CardinalFile {
 		if(instance == null) 
 			throw InstanceException.getInstanceNull();
 		
-		init(instance.getRootPath() + "/" + rep + "/" + fileName + "." + extention, instance);
+		init(instance.getRootPath() + "/" + rep + "/" + fileName + "." + extention);
 	}
 	
 	private void init(String fileName, String extention, String rep) {

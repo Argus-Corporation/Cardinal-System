@@ -40,11 +40,6 @@ public class CSSFile extends CardinalFile {
 		fileComplied = compile(toArray());
 	}
 	
-	public CSSFile(File path, Instance instance) {
-		super(path, instance);
-		fileComplied = compile(toArray());
-	}
-	
 	public String compile(String[] file) {
 		boolean valid = false;
 		String lines = "";

@@ -12,6 +12,9 @@ public class BanRegister {
 
 	public BanRegister(Instance instance) {
 		banFile = new FileSave("ip", "ban", "/", new String[] {"ban", "ip", "num"}, instance);
+		
+		if(!banFile.exists())
+			banFile.createFile();
 	}
 	
 	public void ban(CardinalSocket client) throws IOException {

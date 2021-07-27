@@ -45,6 +45,12 @@ public class FileManager {
 		} 
 	}
 	
+	public static String getCodeSourcePath() {
+		String path = getCodeSourceLocation().getAbsolutePath();
+		
+		return path.substring(0, path.lastIndexOf(File.separator));
+	}
+	
 	public static String getFileName(File file) {
 		if(file == null)
 			return null;

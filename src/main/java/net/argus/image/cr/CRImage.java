@@ -68,6 +68,7 @@ public class CRImage {
 	public String parser(List<String> words) {
 		String mainWord = words.get(0);
 		char[] mainChar = mainWord.toCharArray();
+		System.out.println(words);
 		
 		String result = "";
 		

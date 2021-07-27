@@ -36,8 +36,6 @@ public class Panel extends JPanel implements Element, GUI {
 	
 	private static Panel selected;
 	private static Panel triggered;
-	
-	private Frame fen;
 
 	public Panel(Properties config, boolean isRondBorder) {
 		super();
@@ -52,10 +50,9 @@ public class Panel extends JPanel implements Element, GUI {
 		this.setBackground(config.getColor(nameType + ".color.background"));
 	}
 	
-	public Panel(Properties config, String imgPath, Frame fen) {
+	public Panel(Properties config, String imgPath) {
 		super();
 		allPanel.add(this);
-		this.fen = fen;
 		this.imgPath = imgPath;
 		this.isBackImg = true;
 		this.isRondBorder = false;
@@ -130,20 +127,20 @@ public class Panel extends JPanel implements Element, GUI {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		if(isBackImg) {
+		/*if(isBackImg) {
 			if(fen.isMaximized()) {g.drawImage(backImg.get(1), 0, 0, null);}
 			else {if(backImg.size() > 0) {g.drawImage(backImg.get(0), 0, 0, null);}}
 		}else if(isRondBorder) {
 			g.setColor(getBackground());
-			g.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);	
-		}else {
+			g.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);	*/
+		//}else {
 			
 			
 			Graphics2D g2d = (Graphics2D) g.create();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			
 			super.paintComponent(g);
-		}
+	//	}
 	}
 
 	@Override

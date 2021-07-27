@@ -7,6 +7,7 @@ import net.argus.instance.Instance;
 import net.argus.net.BanRegister;
 import net.argus.net.server.room.Room;
 import net.argus.net.socket.CardinalSocket;
+import net.argus.system.Network;
 import net.argus.util.debug.Debug;
 
 public class ServerConnector {
@@ -26,16 +27,18 @@ public class ServerConnector {
 	public void open(CardinalSocket socket) {
 		Thread connect = new Thread(() ->  {
 			try {
-				while(!closed) 
-					new ServerConnection(new ServerProcess(null), defaultRoom, serverBanRegister).connect(socket.create(this.serverSocket.accept()));
+				while(!closed)
+					new ServerConnection(new ServerProcess(null), defaultRoom, serverBanRegister).connect(socket.create(this.serverSocket.accept()));		
 			}catch(IOException e) {}
-			Debug.log("Thread of server connection was closed");
+			Debug.log("Thread of server connector was closed");
 		});
 		
 		connect.setName("Server-Connector");
 		
 		Instance.startThread(connect);
 		Debug.log("Server version: " + Server.VERSION);
+		Debug.log("Server address: " + Network.getLocalHost());
+		Debug.log("Server port: " + serverSocket.getLocalPort());
 		Debug.log("Server opened");
 	}
 	

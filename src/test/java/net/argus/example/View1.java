@@ -28,13 +28,13 @@ public class View1 extends JPanel implements KeyListener {
 	private final BufferedImage image 
         = new BufferedImage(120, 90, BufferedImage.TYPE_INT_RGB);
     
-    private static final int NUMBER_OF_POINTS = 100000;
+    private static final int NUMBER_OF_POINTS = 1000;
     private final List<Point> points = new ArrayList<>();
     
     private final List<Point> tree = new ArrayList<>();
     
-    private static final int ROOM_MAX_SIZE = 10;
-    private static final int ROOM_MIN_SIZE =5;
+    private static final int ROOM_MAX_SIZE = 100;
+    private static final int ROOM_MIN_SIZE = 20;
     
     // minimum distance between 2 rooms
     private static final int ROOM_MIN_DISTANCE = 20;

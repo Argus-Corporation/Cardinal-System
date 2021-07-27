@@ -14,19 +14,13 @@ public class Debug {
 	
 	private static boolean enableBlackList = true;
 	private static boolean enable = true;
-	private static boolean init;
 	
 	public static void log(Object text) {
 		log(text, Info.INFO);
 	}
 	
 	public static void log(Object text, Info info) {
-		if(init)
-			verify(text, info);
-		else {
-			init = true;
-			verify(text, info);
-		}
+		verify(text, info);
 	}
 	
 	private static void verify(Object text, Info info) {
@@ -35,7 +29,7 @@ public class Debug {
 	}
 	
 	private static synchronized void print(Object text, Info info) {
-		String prefix =  "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "[thread/" + Thread.currentThread().getName().toUpperCase() + "]: ";
+		String prefix =  "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "[" + Thread.currentThread().getName() + "/" + info + "]: ";
 		for(Logger logger : loggers)
 			if(info == Info.INFO)
 				logger.log(prefix + text);
@@ -44,11 +38,8 @@ public class Debug {
 
 	}
 	
-	public static boolean isInitialized() {return init;}
-	
 	public static void setEnableBlackList(boolean enable) {Debug.enableBlackList = enable;}
 	public static void setEnable(boolean enable) {Debug.enable = enable;}
-	public static void setInitialized(boolean init) {Debug.init = init;}
 	public static void addLoggeur(Logger logger) {Debug.loggers.add(logger);}
 	
 	public static void addBlackList(String s) {blackList.add(s.toUpperCase());}

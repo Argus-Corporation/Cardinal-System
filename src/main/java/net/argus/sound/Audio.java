@@ -11,19 +11,19 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class Audio {
+public class Audio implements Cloneable {
 	
 	private URL path;
 	private AudioInputStream audioIn;
 	private Clip clip;
 	private FloatControl gain;
-	private boolean isPlay;
-	private boolean isStoped;
+	private boolean played;
+	private boolean opened;
 
 	public Audio(String path) {
 		try {
 			this.path = new File(path).toURI().toURL();
-			this.audioIn= AudioSystem.getAudioInputStream(this.path);
+			this.audioIn = AudioSystem.getAudioInputStream(this.path);
 			this.clip = AudioSystem.getClip();
 			
 		}catch(UnsupportedAudioFileException | IOException | LineUnavailableException e) {e.printStackTrace();}
@@ -31,29 +31,33 @@ public class Audio {
 	
 	public void play() {
 		try {
-			if(!isStoped) {
-				clip.open(audioIn);				
+			if(!opened) {
+				clip.open(audioIn);
+				opened = true;
 			}
+			if(clip.getMicrosecondPosition() != 0)
+				stop();
+			
 			clip.start();
-			isPlay = true;
+			played = true;
 		}catch(LineUnavailableException | IOException e) {e.printStackTrace();}
 	}
 	
 	public void pause() {
 		clip.stop();
-		isPlay = true;
+		played = false;
 	}
 	
 	public void resume() {
 		clip.start();
-		isPlay = true;
+		played = true;
 	}
 	
 	public void stop() {
 		clip.setMicrosecondPosition(0);
 		clip.stop();
-		isStoped = true;
-		isPlay = false;
+
+		played = false;
 	}
 	
 	public void setLevel(double level) {
@@ -67,8 +71,12 @@ public class Audio {
 		return gain.getValue();
 	}
 	
+	@Override
+	public Audio clone() throws CloneNotSupportedException {
+		return (Audio) super.clone();
+	}
 	
-	public boolean isPlay() {return isPlay;}
+	public boolean isPlaying() {return played;}
 	public Clip getClip() {return clip;}
 
 }

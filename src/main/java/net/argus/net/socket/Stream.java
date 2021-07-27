@@ -30,9 +30,8 @@ public class Stream {
 		List<String> lines = new ArrayList<String>();
 		
 		String line;
-		while((line = nextLine()) != null && !line.equals("")) {
+		while((line = nextLine()) != null && !line.equals(""))
 			lines.add(line);
-		}
 		
 		return PackageAnalizer.convertToKey(lines);
 	}

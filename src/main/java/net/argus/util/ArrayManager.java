@@ -29,6 +29,10 @@ public class ArrayManager {
 	
 	public static <E> E[] add(E[] array, E[] add) {
 		int oldLength = array.length;
+		
+		if(add == null)
+			return array;
+		
 		array = Arrays.copyOf(array, array.length + add.length);
 		for(int i = 0; i < add.length; i++)
 			array[i + oldLength] = add[i];

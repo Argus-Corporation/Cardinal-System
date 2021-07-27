@@ -98,6 +98,8 @@ public abstract class Command {
 	public Command setRank(int rank) {this.rank = rank; return this;}
 	public int getRank() {return rank;}
 	
+	public String getName() {return name;}
+	
 	@Override
 	public String toString() {
 		return "/" + name;

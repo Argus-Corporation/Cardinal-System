@@ -2,6 +2,8 @@ package net.argus.net.server;
 
 import java.io.IOException;
 
+import net.argus.event.net.server.EventServer;
+import net.argus.event.net.server.ServerEvent;
 import net.argus.instance.Instance;
 import net.argus.net.BanRegister;
 import net.argus.net.Connection;
@@ -11,6 +13,7 @@ import net.argus.net.pack.PackageBuilder;
 import net.argus.net.pack.PackageType;
 import net.argus.net.server.role.Role;
 import net.argus.net.server.room.Room;
+import net.argus.net.server.room.RoomRegister;
 import net.argus.net.socket.CardinalSocket;
 import net.argus.util.Version;
 import net.argus.util.Version.State;
@@ -69,7 +72,7 @@ public class ServerConnection extends Connection {
 		builder.addKey("Argument", sec.getArgument());
 		
 		client.send(builder.genPackage());
-		
+
 		return sec;
 	}
 	
@@ -83,7 +86,10 @@ public class ServerConnection extends Connection {
  		
 		if(defaultRoom.isFull())
 			return new StatusConnection(false, "full");
-			
+		
+		if(RoomRegister.isUserExist(client.getProfile().getName()))
+			return new StatusConnection(false, "username");
+		
 		return new StatusConnection(true, "connected");
 	}
 	
@@ -95,6 +101,8 @@ public class ServerConnection extends Connection {
 		defaultRoom.join(p, null);
 		
 		super.connectionAccepted(socket);
+		
+		defaultRoom.getParent().getEvent().startEvent(EventServer.USER_JOIN, new ServerEvent(p, defaultRoom.getParent()));
 	}
 	
 	/*@Override
