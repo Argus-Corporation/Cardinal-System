@@ -33,13 +33,16 @@ public class ServerConnection extends Connection {
 	
 	@Override
 	public StatusConnection check(CardinalSocket client) throws IOException {
-		boolean security = ServerSecurity.check(client);
+		StatusConnection security = ServerSecurity.check(client);
 		
-		if(security == false)
-			return new StatusConnection(false, "socket");
+		if(!security.isConnected())
+			return security;
 		
 		/**--VERSION--**/
 		Package version = client.nextPackage();
+		
+		if(version == null || version.isNull())
+			return new StatusConnection(false, "package");
 		
 		Version.State state = Server.VERSION.getState(new Version(version.getValue("Version")));
 		PackageBuilder versionBuilder = new PackageBuilder(PackageType.CONNECTION);
@@ -48,12 +51,14 @@ public class ServerConnection extends Connection {
 		
 		client.send(versionBuilder.genPackage());
 		
-		if(state != Version.State.EQUALS){
+		if(state != Version.State.EQUALS)
 			return new StatusConnection(false, "version");
-		}
 		
 		/**--MORE_INFO--**/
 		Package moreInfo = client.nextPackage();
+		
+		if(moreInfo == null || moreInfo.isNull())
+			return new StatusConnection(false, "package");
 		
 		String name = moreInfo.getValue("Profile-Name");
 		if(name != null)

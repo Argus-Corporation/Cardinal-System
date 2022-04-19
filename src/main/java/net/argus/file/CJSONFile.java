@@ -19,6 +19,7 @@ public class CJSONFile extends CardinalFile {
 	public CJSONFile(String fileName, String rep) {this(fileName, EXTENTION, rep);}
 	public CJSONFile(String fileName, String rep, Instance instance) {super(fileName, EXTENTION, rep, instance);}
 	
+	public CJSONFile(String path) {super(path);}
 	public CJSONFile(File path) {super(path);}
 	
 	public void write(CJSONBuilder builder) throws IOException {

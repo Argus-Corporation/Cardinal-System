@@ -4,7 +4,7 @@ import net.argus.util.Version;
 
 public final class Cardinal {
 	
-	public static final Version VERSION = new Version("1.5");
+	public static final Version VERSION = new Version("1.5.1b");
 	public static final String NAME = "Cardinal-System";
 	
 	public static final String WEB = "https://argus.alwaysdata.net/";

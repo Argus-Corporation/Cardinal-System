@@ -18,7 +18,6 @@ import net.argus.gui.GUI;
 public class Bubble implements GUI {
 	
 	private static int MAX_WIDTH = 200;
-	
 	protected String info;
 	protected String text;
 	

@@ -9,13 +9,11 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 
-import net.argus.exception.SecurityException;
-
 public class FTPClient {
 	
 	private String host, user, password;
 	
-	public FTPClient(String host, String user, String password) throws SecurityException, IOException {
+	public FTPClient(String host, String user, String password) throws IOException {
 		this.host = host;
 		this.user = user;
 		this.password = password;

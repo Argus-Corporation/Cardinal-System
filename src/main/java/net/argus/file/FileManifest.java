@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.argus.instance.Instance;
 
-public class FileInfo extends CardinalFile {
+public class FileManifest extends CardinalFile {
 	
 	private String[] file;
 	
@@ -14,7 +14,7 @@ public class FileInfo extends CardinalFile {
 	 * @param extention
 	 * @param rep
 	 */
-	public FileInfo(String fileName, String extention, String rep) {
+	public FileManifest(String fileName, String extention, String rep) {
 		super(fileName, extention, rep);
 		copyFile();
 	}
@@ -26,7 +26,7 @@ public class FileInfo extends CardinalFile {
 	 * @param rep
 	 * @param instance
 	 */
-	public FileInfo(String fileName, String extention, String rep, Instance instance) {
+	public FileManifest(String fileName, String extention, String rep, Instance instance) {
 		super(fileName, extention, rep, instance);
 		copyFile();
 	}
@@ -35,7 +35,7 @@ public class FileInfo extends CardinalFile {
 	 * 
 	 * @param file
 	 */
-	public FileInfo(File file) {
+	public FileManifest(File file) {
 		super(file);
 		copyFile();
 	}

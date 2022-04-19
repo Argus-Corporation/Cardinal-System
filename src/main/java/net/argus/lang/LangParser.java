@@ -2,7 +2,7 @@ package net.argus.lang;
 
 import java.io.File;
 
-import net.argus.file.FileInfo;
+import net.argus.file.FileManifest;
 import net.argus.file.css.CSSFile;
 import net.argus.instance.Instance;
 import net.argus.util.DoubleStock;
@@ -16,7 +16,7 @@ public class LangParser {
 		
 		CSSFile cssFile = null;
 		if(isInfoFile(file)) {
-			FileInfo infoFile = new FileInfo(new File(getPathInfo(file[0]) + "/" + getFileInfoName(file[0]) + ".info"));
+			FileManifest infoFile = new FileManifest(new File(getPathInfo(file[0]) + "/" + getFileInfoName(file[0]) + ".info"));
 			String cssPath = infoFile.getValue("CSS-Path");
 			
 			cssFile = new CSSFile(cssPath.substring(cssPath.lastIndexOf("/")+1), cssPath.substring(0, cssPath.lastIndexOf("/")));

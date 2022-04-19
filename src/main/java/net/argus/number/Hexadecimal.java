@@ -3,8 +3,6 @@ package net.argus.number;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.argus.util.Math;
-
 public class Hexadecimal {
 	
 	private static final char[] character = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', '-'};
@@ -113,6 +111,6 @@ public class Hexadecimal {
 		return n;
 	}
 	
-	public Binary toBinary() {return Math.toBinary(toInt());}
+	public Binary toBinary() {return net.argus.util.Math.toBinary(toInt());}
 	
 }
