@@ -1,14 +1,11 @@
 package net.argus.example;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import net.argus.exception.InstanceException;
+import java.io.IOException;
 
 public class Test {
 	
-	public static void main(String[] args) throws InstanceException, UnknownHostException {
-		System.out.println(InetAddress.getByName("localhost").getHostName());
+	public static void main(String[] args) throws IOException {
+		
 	}
 	
 }

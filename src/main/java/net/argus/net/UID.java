@@ -2,8 +2,7 @@ package net.argus.net;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.argus.util.Math;
+import java.util.Random;
 
 public class UID {
 	
@@ -21,7 +20,7 @@ public class UID {
 	private int genUID() {
 		int id = 0;
 		do {
-			id = Math.random(0, 999999);
+			id = new Random().nextInt(999999);
 		}while(id > 0 && isUsed(id));
 		
 		return id;

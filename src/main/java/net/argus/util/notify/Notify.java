@@ -2,7 +2,6 @@ package net.argus.util.notify;
 
 import net.argus.event.notify.EventNotify;
 import net.argus.event.notify.NotifyListener;
-import net.argus.system.UserSystem;
 import net.argus.util.Display;
 import net.argus.util.notify.center.NotifyCenter;
 
@@ -56,10 +55,10 @@ public class Notify {
 	protected EventNotify getEvent() {return event;}
 	
 	public static void main(String[] args) {
-		UserSystem.notify.show("Test", "Hello World!");
+	/*	UserSystem.notify.show("Test", "Hello World!");
 		UserSystem.notify.show("Test", ":ldwrfgn:krdnjgkjfdngkdfhngkidfhngifdhfxdgfdx jknfgdxjfdb jhdfb gjxfdbgkjbngkidhfj!gndkguuirdkjhkghjkjhgkhjsfdugdf");
 		UserSystem.notify.show("Test", "eqfpdgklfdnjgifdjgndfih.");
-		
+		*/
 	}
 	
 	{

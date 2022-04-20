@@ -42,6 +42,9 @@ public class PackageKey {
 			String line = lines.get(0);
 			
 			String name = getName(line);
+			if(name == null)
+				continue;
+			
 			if(name.contains("["))
 				keys.add(ArrayKey.getArrayKey(name, lines));
 			else
@@ -57,7 +60,7 @@ public class PackageKey {
 	}
 	
 	public static String getName(String line) {
-		return line.substring(0, line.indexOf(':'));
+		return line.indexOf(':')!=-1?line.substring(0, line.indexOf(':')):null;
 	}
 	
 	public static String getValue(String line) {

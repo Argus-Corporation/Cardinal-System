@@ -2,6 +2,7 @@ package net.argus.net.server;
 
 import java.io.IOException;
 
+import net.argus.net.StatusConnection;
 import net.argus.net.pack.Package;
 import net.argus.net.pack.PackageBuilder;
 import net.argus.net.pack.PackageType;
@@ -10,8 +11,11 @@ import net.argus.util.debug.Debug;
 
 public class ServerSecurity {
 	
-	public static boolean check(CardinalSocket client) throws IOException {
+	public static StatusConnection check(CardinalSocket client) throws IOException {
 		Package pack = client.nextPackage();
+		
+		if(pack == null || pack.isNull())
+			return new StatusConnection(false, "package");
 		
 		boolean match = true;
 		
@@ -39,7 +43,7 @@ public class ServerSecurity {
 		client.send(builder.genPackage());
 		client.setMatchSocket(match);
 		
-		return match;
+		return new StatusConnection(match, match?"match":"socket");
 	}
 
 }

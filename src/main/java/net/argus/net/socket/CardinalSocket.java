@@ -100,13 +100,13 @@ public abstract class CardinalSocket {
 		
 		if(connected) {
 			event.startEvent(EventSocket.CONNECT, sockEvent);
-			Debug.log(PROFILE.getName() + " is connected");
+			Debug.log(PROFILE.getName() + " is connected: " + arg);
 		}else if(error) {
 			event.startEvent(EventSocket.CONNECTION_REFUSED, sockEvent);
-			Debug.log("Connection was refused");
+			Debug.log("Connection was refused: " + arg);
 		}else {
 			event.startEvent(EventSocket.DISCONNECT, sockEvent);
-			Debug.log(PROFILE.getName() + " is disconected");
+			Debug.log(PROFILE.getName() + " is disconected: " + arg);
 		}
 			
 	}
