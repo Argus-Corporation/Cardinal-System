@@ -3,6 +3,8 @@ package net.argus.csv;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.csv.value.CSVDescripteur;
+import net.argus.csv.value.CSVObject;
 import net.argus.file.CSVFile;
 
 public class CSVParser {

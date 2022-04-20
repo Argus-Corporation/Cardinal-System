@@ -1,13 +1,19 @@
-package net.argus.csv;
+package net.argus.csv.value;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.csv.CSV;
+import net.argus.util.ArrayManager;
 import net.argus.util.StringManager;
 
 public class CSVObject {
 	
 	private List<CSVValue> values = new ArrayList<CSVValue>();
+	
+	public CSVObject(CSVValue ... values) {
+		this.values = ArrayManager.convert(values);
+	}
 	
 	public CSVObject(List<CSVValue> values) {
 		this.values = values;

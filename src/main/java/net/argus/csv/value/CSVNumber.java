@@ -1,4 +1,4 @@
-package net.argus.csv;
+package net.argus.csv.value;
 
 public class CSVNumber extends CSVValue {
 	

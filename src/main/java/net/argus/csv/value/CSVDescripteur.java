@@ -1,7 +1,9 @@
-package net.argus.csv;
+package net.argus.csv.value;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.argus.csv.CSV;
 
 public class CSVDescripteur {
 	

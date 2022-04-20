@@ -3,6 +3,10 @@ package net.argus.csv;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.argus.csv.value.CSVDescripteur;
+import net.argus.csv.value.CSVObject;
+import net.argus.csv.value.CSVSeparator;
+import net.argus.csv.value.CSVValue;
 import net.argus.file.CSVFile;
 
 public class CSV {
@@ -14,6 +18,11 @@ public class CSV {
 	public CSV(List<CSVDescripteur> descripteurs, List<CSVObject> objects) {
 		this.descripteurs = descripteurs;
 		this.objects = objects;
+	}
+	
+	public CSV(CSVBuilder builder) {
+		this.descripteurs = builder.getDescripteurs();
+		this.objects = builder.getObjects();
 	}
 	
 	public CSVObject getObject(int i) {
@@ -30,6 +39,22 @@ public class CSV {
 			values.add(obj.get(i));
 		
 		return values;
+	}
+	
+	public List<CSVValue> getValues(String name) {
+		CSVDescripteur descripteur = getDescripteur(name);
+		
+		if(descripteur == null)
+			return null;
+		
+		return getValues(descripteur.getIndex());
+	}
+	
+	public CSVDescripteur getDescripteur(String name) {
+		for(CSVDescripteur des : descripteurs)
+			if(des.getName().equals(name))
+				return des;
+		return null;
 	}
 	
 	@Override
@@ -61,10 +86,5 @@ public class CSV {
 	public List<CSVDescripteur> getDescripteurs() {return descripteurs;}
 	
 	public static CSVSeparator getSeparator() {return separator;}
-	
-	public static void main(String[] args) {
-		CSVFile file = new CSVFile("D:\\Django\\Document 1\\Git\\Eclipse\\test.csv");
-		System.out.println(CSVParser.parseCSV(file));
-	}
 
 }
