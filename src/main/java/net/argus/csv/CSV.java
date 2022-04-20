@@ -7,7 +7,6 @@ import net.argus.csv.value.CSVDescripteur;
 import net.argus.csv.value.CSVObject;
 import net.argus.csv.value.CSVSeparator;
 import net.argus.csv.value.CSVValue;
-import net.argus.file.CSVFile;
 
 public class CSV {
 	

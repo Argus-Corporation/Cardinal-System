@@ -17,6 +17,8 @@ import net.argus.util.ThreadManager;
 import net.argus.util.Version;
 import net.argus.util.debug.Debug;
 import net.argus.util.debug.Logger;
+import net.argus.util.notify.DefaultNotify;
+import net.argus.util.notify.Notify;
 
 public class UserSystem {
 	
@@ -26,9 +28,9 @@ public class UserSystem {
 	private static CJSON manifest;
 		
 	public final static RunTime runTime = RunTime.getRunTime();
-	public final static Scanner in = new Scanner(System.in);
-	//public final static Notify notify = new DefaultNotify();
-	
+	public final static Scanner in = new Scanner(System.in);	
+	private static Notify notify;
+
 	
 	/**--INITIALIZATION--**/
 	private static InitializedSystemManager manager = new InitializedSystemManager() {
@@ -170,6 +172,12 @@ public class UserSystem {
 			setProperty(key, value);
 	}
 	
+	public static Notify getNotify() {
+		if(!Boolean.valueOf(System.getProperty("java.awt.headless")))
+			return notify;
+		return null;
+	}
+	
 	public static AutoUpdate getUpdate() {return update;}
 	public static CJSON getManifest() {return manifest;}
 	
@@ -181,6 +189,11 @@ public class UserSystem {
 	
 	public static void exit(ExitCode status) {
 		exit(status.getCode());
+	}
+	
+	static {
+		if(!Boolean.valueOf(System.getProperty("java.awt.headless")))
+			UserSystem.notify = new DefaultNotify();
 	}
 
 }
