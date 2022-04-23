@@ -48,5 +48,7 @@ public class RoomRegister {
 					return true;
 		return false;
 	}
+	
+	public static int length() {return rooms.size();}
 
 }
