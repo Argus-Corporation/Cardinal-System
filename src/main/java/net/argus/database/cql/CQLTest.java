@@ -14,6 +14,7 @@ public class CQLTest {
 		System.out.println(ret.getValue());
 		
 		System.out.println(base);*/
+		@SuppressWarnings("unused")
 		String savedBase = "data:DataTest@{table:empty@map@[{column:id@INT}={0, 1, 2}, {column:username@STRING}={'d', 'h', 'o'}]}";
 		
 	}

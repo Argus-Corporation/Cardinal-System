@@ -12,7 +12,7 @@ public class CSVObject {
 	private List<CSVValue> values = new ArrayList<CSVValue>();
 	
 	public CSVObject(CSVValue ... values) {
-		this.values = ArrayManager.convert(values);
+		this.values = ArrayManager.toList(values);
 	}
 	
 	public CSVObject(List<CSVValue> values) {
