@@ -5,7 +5,7 @@ import net.argus.util.debug.Debug;
 
 public class Profile {
 	
-	private String name;
+	private String name = "user";
 	private UID uid;
 	
 	private Role role = Role.DEFAULT;
@@ -15,7 +15,7 @@ public class Profile {
 	public Profile() {}
 	
 	public Profile(String name) {
-		this.name = name;
+		setName(name);
 		uid = new UID();
 	}
 	

@@ -19,7 +19,7 @@ public class StructuredCommand {
 	
 	@Override
 	public String toString() {
-		return ArrayManager.convert(keys).toString();
+		return ArrayManager.toList(keys).toString();
 	}
 
 }

@@ -9,7 +9,9 @@ public class RoomRegister {
 	
 	private static List<Room> rooms = new ArrayList<Room>();
 	
-	public static void addRoom(Room room) {rooms.add(room);}
+	public static void addRoom(Room room) {
+		rooms.add(room);
+	}
 	
 	public static int indexOf(Room room) {return rooms.indexOf(room);}
 	

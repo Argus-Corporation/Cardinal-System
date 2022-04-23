@@ -31,9 +31,8 @@ public class Network {
 	}
 	
 	public static boolean isIp(String host) {
-		if(checkConnection())
-			try{InetAddress.getByName(host);}
-			catch(IOException e) {return false;}
+		try{InetAddress.getByName(host);}
+		catch(IOException e) {return false;}
 		
 		return true;
 	}

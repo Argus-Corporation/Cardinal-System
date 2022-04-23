@@ -44,10 +44,10 @@ public class Launcher {
 	    	addClassPath(cp);
 	    }
 	    
-	    if(vmArgs != null) this.vmArgs = ArrayManager.convert(vmArgs.split(" "));
-	    if(args != null) this.args = ArrayManager.convert(args.split(" "));
+	    if(vmArgs != null) this.vmArgs = ArrayManager.toList(vmArgs.split(" "));
+	    if(args != null) this.args = ArrayManager.toList(args.split(" "));
 	    
-	    this.args = ArrayManager.convert(ArrayManager.add((String[]) this.args.toArray(new String[this.args.size()]), progArgs));
+	    this.args = ArrayManager.toList(ArrayManager.add((String[]) this.args.toArray(new String[this.args.size()]), progArgs));
 	}
 	
 	public static String valueOf(String str) {

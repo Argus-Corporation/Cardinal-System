@@ -158,19 +158,28 @@ public class ArrayManager {
 		return true;
 	}
 	
-	public static <T> List<T> convert(T[] array) {
+	public static <T> List<T> toList(T[] array) {
 		List<T> list = new ArrayList<T>();
 		for(T t : array)
 			list.add(t);
 		return list;
 	}
 	
-	public static <T> List<T> convert(T[][] array) {
+	public static <T> List<T> toList(T[][] array) {
 		List<T> list = new ArrayList<T>();
 		
 		for(T[] ta : array)
 			for(T t: ta)
 				list.add(t);
+		
+		return list;
+	}
+	
+	public static <T> List<T[]> toListArray(T[][] array) {
+		List<T[]> list = new ArrayList<T[]>();
+		
+		for(T[] ta : array)
+			list.add(ta);
 		
 		return list;
 	}

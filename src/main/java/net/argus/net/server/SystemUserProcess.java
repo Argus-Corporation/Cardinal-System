@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import net.argus.net.server.command.Command;
 import net.argus.net.socket.CardinalSocket;
-import net.argus.net.socket.SystemSocket;
+import net.argus.net.socket.system.SystemSocket;
 import net.argus.util.debug.Debug;
 
 public class SystemUserProcess implements Runnable {

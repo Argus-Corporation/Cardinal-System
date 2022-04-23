@@ -96,7 +96,7 @@ public class FileIO {
 	}
 	
 	public static void write(File file, String text, int line) throws IOException {
-		List<String> lines = ArrayManager.convert(readArray(file));
+		List<String> lines = ArrayManager.toList(readArray(file));
 		
 		lines.add(lines.get(lines.size()-1));
 		for(int i = lines.size() - 1; i > line; i--)

@@ -12,12 +12,6 @@ public class StringManager {
 		return true;
 	}
 	
-	public static boolean isFloat(String str) {
-		try {Float.valueOf(str);}
-		catch(NumberFormatException e) {return false;}
-		return true;
-	}
-	
 	public static boolean isBoolean(String str) {
 		if(str.equals("true") || str.equals("false"))
 			return true;

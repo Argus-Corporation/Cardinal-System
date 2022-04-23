@@ -22,6 +22,8 @@ public class Room {
 	
 	public static final int DEFUALT_ROOM_SIZE = 10;
 	
+	private int size;
+	
 	private String password;
 	
 	private Instance roomInstance;
@@ -45,6 +47,7 @@ public class Room {
 		
 		clients = new ServerProcess[size];
 		this.name = name;
+		this.size = size;
 		this.parent = parent;
 		this.password = password;
 		
@@ -208,6 +211,7 @@ public class Room {
 	
 	public BanRegister getBanRegister() {return ban;}
 	
+	public int getSize() {return size;}
 	public String getName() {return name;}
 	public Server getParent() {return parent;}
 	public String getPassword() {return password;}

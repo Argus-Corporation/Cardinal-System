@@ -99,7 +99,7 @@ public class CardinalFile {
 	 * @return
 	 */
 	public List<String> toList() {
-		return ArrayManager.convert(toArray());
+		return ArrayManager.toList(toArray());
 	}
 	
 	/**

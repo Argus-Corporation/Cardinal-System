@@ -13,7 +13,7 @@ public class CJSONBoolean extends CJSONValue {
 	
 	public static CJSONBoolean nextBoolean(List<Character> chars) {
 		boolean value = chars.get(0).equals('t');
-		
+
 		int rm;
 		if(value)
 			rm = 4;

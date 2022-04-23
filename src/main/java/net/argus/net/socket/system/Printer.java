@@ -61,8 +61,8 @@ public abstract class Printer {
 				Object[] val = new String[] {pack.getValue(key)};
 				if(val[0] == null)
 					val = pack.getArray(key);
-				
-				if(val.length > 0) {
+
+				if(val != null && val.length > 0) {
 					String befor = ret;
 					
 					ret += val[0] + "\n";
@@ -70,6 +70,7 @@ public abstract class Printer {
 						ret += befor + val[j] + "\n";
 					
 				}
+				
 				line = line.substring(key.length());
 				continue;
 				

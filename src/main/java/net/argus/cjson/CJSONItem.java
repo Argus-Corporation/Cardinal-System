@@ -34,6 +34,7 @@ public class CJSONItem {
 	public CJSONString getCJSONName() {return name;}
 	public CJSONValue getValue() {return value;}
 	
+	public void setName(String name) {setName(new CJSONString(name));}
 	public void setName(CJSONString name) {this.name = name;}
 	public void setValue(CJSONValue value) {this.value = value;}
 	

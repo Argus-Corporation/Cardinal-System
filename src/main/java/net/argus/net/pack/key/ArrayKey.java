@@ -35,11 +35,11 @@ public class ArrayKey extends PackageKey {
 	
 	@Override
 	public String toString() {
-		String s =  getName() + "[" + length() + "]:" + "\n";
+		String s =  getName() + "[" + length() + "]:\r\n";
 		for(Object v : getValues())
-			s += v + "\n";
+			s += v + "\r\n";
 		
-		s = s.substring(0, s.length() - 1);
+		s = s.substring(0, s.length() - 2);
 		return s;
 	}
 

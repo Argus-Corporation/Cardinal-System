@@ -13,7 +13,7 @@ public class ServerSecurity {
 	
 	public static StatusConnection check(CardinalSocket client) throws IOException {
 		Package pack = client.nextPackage();
-		
+
 		if(pack == null || pack.isNull())
 			return new StatusConnection(false, "package");
 		
