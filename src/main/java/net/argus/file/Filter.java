@@ -14,7 +14,7 @@ public class Filter extends FileFilter {
 	private String description;
 	
 	public Filter(String[] suffixs, String description) {
-		this(ArrayManager.convert(suffixs), description);
+		this(ArrayManager.toList(suffixs), description);
 	}
 	
 	public Filter(List<String> suffixs, String description) {

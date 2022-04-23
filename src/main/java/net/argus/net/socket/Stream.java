@@ -13,15 +13,17 @@ import net.argus.net.pack.key.PackageKey;
 
 public class Stream {
 	
-	private BufferedReader in;
+	protected Socket sock;
 	
-	private PrintWriter out;
+	protected BufferedReader in;
+	protected PrintWriter out;
 	
 	public Stream(Socket sock) throws IOException {
+		this.sock = sock;
 		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 		out = new PrintWriter(sock.getOutputStream());
 	}
-	
+		
 	public String nextLine() throws IOException {
 		return in.readLine();
 	}

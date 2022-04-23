@@ -12,7 +12,7 @@ public class CJSONArray extends CJSONValue {
 	
 	public CJSONArray() {}
 	public CJSONArray(List<CJSONValue> array) {this.array.setArray(array);}
-	public CJSONArray(CJSONValue[] array) {this.array.setArray(ArrayManager.convert(array));}
+	public CJSONArray(CJSONValue[] array) {this.array.setArray(ArrayManager.toList(array));}
 	
 	public static CJSONArray nextArray(List<Character> chars) {
 		List<CJSONValue> values = new ArrayList<CJSONValue>();

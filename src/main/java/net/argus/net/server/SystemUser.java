@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import net.argus.instance.Instance;
 import net.argus.net.server.role.Role;
 import net.argus.net.server.room.RoomRegister;
-import net.argus.net.socket.SystemSocket;
+import net.argus.net.socket.system.SystemSocket;
 
 public class SystemUser {
 	

@@ -88,7 +88,7 @@ public abstract class CJSONValue {
 	public boolean getBoolean() {
 		Object obj = getValue();
 		if(obj instanceof Boolean)
-			return Boolean.getBoolean(obj.toString());
+			return Boolean.valueOf(obj.toString());
 		
 		throw new CJSONException("this object is not a boolean");
 	}

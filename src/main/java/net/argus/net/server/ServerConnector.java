@@ -2,6 +2,7 @@ package net.argus.net.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 import net.argus.instance.Instance;
 import net.argus.net.BanRegister;
@@ -28,7 +29,7 @@ public class ServerConnector {
 		Thread connect = new Thread(() ->  {
 			try {
 				while(!closed)
-					new ServerConnection(new ServerProcess(null), defaultRoom, serverBanRegister).connect(socket.create(this.serverSocket.accept()));		
+					connect(socket, serverSocket.accept());
 			}catch(IOException e) {}
 			Debug.log("Thread of server connector was closed");
 		});
@@ -40,6 +41,10 @@ public class ServerConnector {
 		Debug.log("Server address: " + Network.getLocalHost());
 		Debug.log("Server port: " + serverSocket.getLocalPort());
 		Debug.log("Server opened");
+	}
+	
+	public void connect(CardinalSocket socket, Socket client) throws IOException {
+		new ServerConnection(new ServerProcess(null), defaultRoom, serverBanRegister).connect(socket.create(client));		
 	}
 	
 	public void close() {closed = true;}

@@ -16,15 +16,18 @@ public class Notify {
 	
 	private NotifyWait wait = new NotifyWait(this);
 	
-	public Notify(NotifyComponent component) {
+	private String iconPath;
+	
+	public Notify(NotifyComponent component, String iconPath) {
 		this.component = component;
+		this.iconPath = iconPath;
 	}
 	
 	public void show(String title, String message) {
 		NotifyInfo info = new NotifyInfo();
 		
 		info.setTitle(title);
-		info.setIcon("D:\\Django\\Document 1\\Chat\\Project\\res\\favicon16x16.png");
+		info.setIcon(iconPath);
 		info.setMessage(message);
 		
 		show(info);
@@ -50,6 +53,8 @@ public class Notify {
 	public NotifyComponent getComponent() {return component;}
 	
 	public NotifyCenter getCenter() {return center;}
+	
+	public String getIconPath() {return iconPath;}
 	
 	public void addNotifyListener(NotifyListener listener) {event.addListener(listener);}
 	protected EventNotify getEvent() {return event;}

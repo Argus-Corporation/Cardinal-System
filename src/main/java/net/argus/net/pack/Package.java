@@ -65,15 +65,16 @@ public class Package implements Cloneable {
 		PackageKey[] key = new PackageKey[keys.size()];
 		System.arraycopy(keys.toArray(), 0, key, 0, keys.size());
 		
-		clone.keys = ArrayManager.convert(key);
+		clone.keys = ArrayManager.toList(key);
 		return clone;
 	}
 	
 	@Override
 	public String toString() {
 		String s = "";
-		for(PackageKey k : keys)
-			s += k.toString() + "\n";
+		for(PackageKey k : keys) 
+			s += k.toString() + "\r\n";
+		
 		s += PackageKey.END_KEY;
 		
 		return s;

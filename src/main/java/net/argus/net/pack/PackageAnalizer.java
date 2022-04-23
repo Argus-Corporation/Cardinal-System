@@ -9,7 +9,7 @@ import net.argus.util.ArrayManager;
 public class PackageAnalizer {
 	
 	public static Package analyze(String[] lines) {
-		return analyze(ArrayManager.convert(lines));
+		return analyze(ArrayManager.toList(lines));
 	}
 	
 	public static Package analyze(List<String> lines) {
@@ -18,8 +18,9 @@ public class PackageAnalizer {
 	
 	public static List<PackageKey> convertToKey(List<String> lines){
 		List<PackageKey> keys = new ArrayList<PackageKey>();
-		
-		keys = PackageKey.getKeys(lines);
+		try {
+			keys = PackageKey.getKeys(lines);
+		}catch(StringIndexOutOfBoundsException e) {return PackagePrefab.genLogOutPackage("error").getKeys();};
 		return keys;
 	}
 

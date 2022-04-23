@@ -80,6 +80,8 @@ public class Server {
 			stop = true;
 			try {
 				connector.close();
+				event.startEvent(EventServer.STOP_ACTION, new ServerEvent(arg, this));
+
 				Room[] rooms = (Room[]) RoomRegister.getRooms().toArray(new Room[RoomRegister.getRooms().size()]);
 				for(Room room : rooms)
 					room.close(arg);
@@ -96,6 +98,7 @@ public class Server {
 	
 	public BanRegister getServerBanRegister() {return serverBanRegister;}
 	public ServerSocket getServerSocket() {return server;}
+	public ServerConnector getConnector() {return connector;}
 	public Room getMainRoom() {return mainRoom;}
 	public int getPort() {return port;}
 	

@@ -7,9 +7,11 @@ public class EventServer extends Event<ServerListener> {
 	public static final int OPEN = 0;
 	public static final int ERROR = 1;
 	public static final int STOP = 2;
-	public static final int ROOM_CREATE = 3;
-	public static final int ROOM_REMOVE = 4;
-	public static final int USER_JOIN = 5;
+	public static final int STOP_ACTION = 3;
+
+	public static final int ROOM_CREATE = 4;
+	public static final int ROOM_REMOVE = 5;
+	public static final int USER_JOIN = 6;
 	
 
 	@Override
@@ -21,6 +23,10 @@ public class EventServer extends Event<ServerListener> {
 				
 			case ERROR:
 				listener.error((ServerEvent) objs[0]);
+				break;
+				
+			case STOP_ACTION:
+				listener.stopAction((ServerEvent) objs[0]);
 				break;
 				
 			case STOP:

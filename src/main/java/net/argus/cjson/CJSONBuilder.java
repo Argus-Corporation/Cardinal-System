@@ -11,7 +11,7 @@ public class CJSONBuilder {
 	
 	private CJSONObject main = new CJSONObject();
 	
-	public CJSONBuilder() {main.addItem(new CJSONItem("test", new CJSONObject()));}
+	public CJSONBuilder() {}
 	public CJSONBuilder(CJSONObject main) {this.main = main;}
 	
 	public void addItem(String path, CJSONItem item) {
