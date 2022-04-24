@@ -26,7 +26,7 @@ public class DefaultLangValue {
 			
 			.add("Frame.titleErrorText", "Error")
 			
-			.add("Text.status", "Statuts")
+			.add("Text.status", "Status")
 			.add("Text.newVersion", "A new version is available do you want to download it?");
 	
 	public static final DefaultLangValue ja_JP = new DefaultLangValue()
@@ -38,6 +38,16 @@ public class DefaultLangValue {
 			
 			.add("Text.status", "状態")
 			.add("Text.newVersion", "新しいバージョンが利用可能です ダウンロードしますか?");
+	
+	public static final DefaultLangValue es_ES = new DefaultLangValue()
+			.add("OptionPane.cancelButtonText", "Anular")
+			.add("OptionPane.noButtonText", "No")
+			.add("OptionPane.yesButtonText", "Sí")
+			
+			.add("Frame.titleErrorText", "Error")
+			
+			.add("Text.status", "Estado")
+			.add("Text.newVersion", "Hay una nueva versión disponible, ¿quieres descargarla?");
 	
 	private List<DoubleStock<String, String>> elements = new ArrayList<DoubleStock<String,String>>();
 	
