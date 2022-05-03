@@ -25,9 +25,11 @@ public class CardinalCellRenderer implements TreeCellRenderer {
 	private static final String CLOSE = "closedIcon";
 	private static final String LEAF = "leafIcon";
 	
+	private boolean nameLang = true;
+	
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-		String text = Lang.get(GUI.TREE + "." + value + ".name");
+		String text = nameLang?Lang.get(GUI.TREE + "." + value + ".name"):value.toString();
 		Icon icon = getIcon(leaf, expanded);
 
 		JComponent comp = getComponent(icon, text, selected);
@@ -92,6 +94,10 @@ public class CardinalCellRenderer implements TreeCellRenderer {
 				g2.drawString(value, 20, metrics.getHeight() - 2);
 			}
 		};
+	}
+	
+	public void setNameLang(boolean nameLang) {
+		this.nameLang = nameLang;
 	}
 
 }

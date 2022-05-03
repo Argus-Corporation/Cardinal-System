@@ -23,9 +23,9 @@ public class Tree extends JTree implements GUI {
 	 */
 	private static final long serialVersionUID = -1496939304492998804L;
 	
-	public EventTree event = new EventTree();
-	
-	public TreePath oldPath;
+	private EventTree event = new EventTree();
+	private CardinalCellRenderer renderer;
+	private TreePath oldPath;
 	
 	public Tree(CJSON cjson) {
 		this(new CardinalTreeModel(cjson));
@@ -38,7 +38,8 @@ public class Tree extends JTree implements GUI {
 	public Tree(CardinalTreeModel treeModel) {
 		super(treeModel);
 		
-		setCellRenderer(new CardinalCellRenderer());
+		renderer = new CardinalCellRenderer();
+		setCellRenderer(renderer);
 		
 		LangRegister.addElementLanguage(this);
 		ForegroundRegiter.addElement(this);
@@ -121,6 +122,10 @@ public class Tree extends JTree implements GUI {
 	}
 	
 	public void addTreeListener(TreeListener listener) {event.addListener(listener);}
+	
+	public void setNameLang(boolean nameLang) {
+		renderer.setNameLang(nameLang);
+	}
 	
 	public TreePath getOldPath() {return oldPath;}
 	/*
