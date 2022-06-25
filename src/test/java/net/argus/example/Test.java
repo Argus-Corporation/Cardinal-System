@@ -1,31 +1,23 @@
 package net.argus.example;
 
-import java.io.IOException;
+import net.argus.gui.frame.Frame;
+import net.argus.instance.CardinalProgram;
+import net.argus.instance.Program;
 
-import net.argus.instance.Instance;
-import net.argus.net.socket.WebStream;
-import net.argus.net.web.WebServer;
-
-public class Test {
+@Program(instanceName = "Test")
+public class Test extends CardinalProgram {
 	
-	public static void main(String[] args) throws IOException {
-		Instance.setThreadInstance(new Instance("test"));
-		WebServer serv = new WebServer(11067);
+	public void main(String[] args) {
+		Frame fen = new Frame();
 		
-		serv.open();
-		
-		serv.addWebListener((e) -> {
-			try {
-				WebStream stream = new WebStream(e.getSocket());
-				System.out.println(stream.nextPackage());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
+		fen.setVisible(true);
 		
 				
     }
+	
+/*public static void main(String[] args) throws IOException {
+		InitializationSystem.initSystem(args);
+		System.out.println(FileManager.getMainPath());
+	}*/
 	
 }

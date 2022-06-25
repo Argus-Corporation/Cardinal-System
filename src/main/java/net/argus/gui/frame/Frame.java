@@ -21,6 +21,8 @@ import net.argus.event.gui.frame.FrameListener;
 import net.argus.gui.animation.FrameAnimation;
 import net.argus.gui.frame.top.TitleBar;
 import net.argus.gui.frame.top.button.TitleButtonType;
+import net.argus.system.OS;
+import net.argus.system.UserSystem;
 import net.argus.util.Display;
 
 public class Frame extends JFrame {
@@ -45,6 +47,8 @@ public class Frame extends JFrame {
 	
 	private EventFrame event = new EventFrame();
 	
+	private boolean newGraph = true;
+	
 	public Frame() {
 		super();
 		init();
@@ -65,7 +69,17 @@ public class Frame extends JFrame {
 		init();
 	}
 	
+	private void init0() {
+		System.out.println("init0");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
 	private void init() {
+		newGraph = UserSystem.getBooleanProperty("gui.frame.newgraph");
+		if(!newGraph) {
+			init0();
+			return;
+		}
 		super.setUndecorated(true);
 		
 		addWindowListener(getWindowListener());
@@ -96,8 +110,16 @@ public class Frame extends JFrame {
 	@Override
 	public void setUndecorated(boolean undecorated) {}
 	
+	private void setSize0(int width, int height) {
+		super.setSize(width, height);
+	}
+	
 	@Override
 	public void setSize(int width, int height) {
+		if(!newGraph) {
+			setSize0(width, height);
+			return;
+		}
 		width = width<=MIN_WIDTH?MIN_WIDTH:width;
 		height = height<=MIN_HEIGHT?MIN_HEIGHT:height;
 		
@@ -107,11 +129,23 @@ public class Frame extends JFrame {
 	
 	@Override
 	public void setSize(Dimension d) {
+		if(!newGraph) {
+			setSize0(d.width, d.height);
+			return;
+		}
 		setSize(d.width, d.height);
+	}
+	
+	private void setVisible0(boolean b) {
+		super.setVisible(b);
 	}
 	
 	@Override
 	public void setVisible(boolean b) {
+		if(!newGraph) {
+			setVisible0(b);
+			return;
+		}
 		if(frameAnimation != null) {
 			if(b && !isVisible()) {
 				setOpacity(0f);
@@ -144,12 +178,29 @@ public class Frame extends JFrame {
 			super.setVisible(b);
 	}
 	
+	private void removeAll0() {
+		super.removeAll();
+	}
+	
 	@Override
 	public void removeAll() {
+		if(!newGraph) {
+			removeAll0();
+			return;
+		}
 		contentPane.removeAll();
 	}
 	
+	public void maximize0() {
+		super.setExtendedState(MAXIMIZED_BOTH);
+	}
+	
 	private void maximize() {
+		if(newGraph) {
+			maximize0();
+			return;
+		}
+		
 		Dimension scrnSize = Display.getSize();
 		Rectangle winSize = Display.getMaximumWindowBounds();
 		
@@ -173,31 +224,61 @@ public class Frame extends JFrame {
 	}
 	
 	public void setFrameIconImage(ImageIcon image) {
+		if(!newGraph)
+			return;
 		titleBar.setIcon(image);
 	}
 	
-	public ImageIcon getFrameIconImage() {return titleBar.getIcon();}
+	public ImageIcon getFrameIconImage() {if(!newGraph)return null; return titleBar.getIcon();}
+	
+	private Component add0(Component comp) {
+		return super.add(comp);
+	}
 	
 	@Override
 	public Component add(Component comp) {
+		if(!newGraph)
+			return add0(comp);
 		return contentPane.add(comp);
+	}
+	
+	private Component add0(String name, Component comp) {
+		return super.add(comp);
 	}
 	
 	@Override
 	public Component add(String name, Component comp) {
+		if(!newGraph)
+			return add0(name, comp);
 		return contentPane.add(name, comp);
+	}
+	
+	private void setContentPane0(Container contentPane) {
+		super.setContentPane(contentPane);
 	}
 	
 	@Override
 	public void setContentPane(Container contentPane) {
+		if(!newGraph) {
+			setContentPane0(contentPane);
+			return;
+		}
 		super.remove(this.contentPane);
 		this.contentPane = contentPane;
 		
 		super.add(BorderLayout.CENTER, contentPane);
 	}
 	
+	private void setLocation0(int x, int y) {
+		super.setLocation(x, y);
+	}
+	
 	@Override
 	public void setLocation(int x, int y) {
+		if(!newGraph) {
+			setLocation0(x, y);
+			return;
+		}
 		Rectangle winSize = Display.getMaximumWindowBounds();
 		
 		if(y < winSize.y)
@@ -216,18 +297,26 @@ public class Frame extends JFrame {
 	}
 	
 	public void setContentPaneLayout(LayoutManager manager) {
+		if(!newGraph)
+			return;
 		contentPane.setLayout(manager);
 	}
 	
 	public LayoutManager getContentPaneLayout() {
+		if(!newGraph)
+			return null;
 		return contentPane.getLayout();
 	}
 	
 	public boolean isMaximized() {
+		if(!newGraph)
+			throw new IllegalStateException();
 		return maximize;
 	}
 	
 	public void setMaximize(boolean max) {
+		if(!newGraph)
+			return;
 		if(max)
 			maximize();
 		else if(size != null && position != null && isMaximized()) {
@@ -244,25 +333,29 @@ public class Frame extends JFrame {
 	
 	@Override
 	public void setTitle(String title) {
-		titleBar.setTitle(title);
+		if(newGraph)
+			titleBar.setTitle(title);
 		super.setTitle(title);
 	}
 	
 	private void saveSize() {
-		size = getSize();
+		if(newGraph)
+			size = getSize();
 	}
 	
 	private void savePosition() {
-		position = getLocation();
+		if(newGraph)
+			position = getLocation();
 	}
 	
 	public void setEnableButton(TitleButtonType type, boolean e) {
-		titleBar.setEnabled(type, e);
+		if(newGraph)
+			titleBar.setEnabled(type, e);
 	}
 	
 	public void addFrameListener(FrameListener listener) {event.addListener(listener);}
 	
-	public void setFrameAnimation(FrameAnimation frameAnimation) {this.frameAnimation = frameAnimation;}
+	public void setFrameAnimation(FrameAnimation frameAnimation) {if(newGraph) return; this.frameAnimation = frameAnimation;}
 	
 	public EventFrame getEvent() {return event;}
 	

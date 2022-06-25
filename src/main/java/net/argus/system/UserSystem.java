@@ -56,7 +56,9 @@ public class UserSystem {
 			}
 		}
 		
-		public void postInit(String[] args) {}
+		public void postInit(String[] args) {
+			UserSystem.defineProperty("gui.frame.newgraph", OS.currentOS()==OS.OSX?false:true);
+		}
 	};
 	
 	public static InitializedSystemManager getDefaultInitializedSystemManager() {return manager;}
@@ -79,6 +81,7 @@ public class UserSystem {
 	/**--LIBRARY--**/
 	public static final String LIBRARY_WINDOWS = "dll";
 	public static final String LIBRARY_LINUX = "so";
+	public static final String Library_OSX = "dylib";
 	
 	public static void loadLibrary(String name) {
 		ThreadManager.setTemporaryName(ThreadManager.SYSTEM.getName());
@@ -87,6 +90,8 @@ public class UserSystem {
 		
 		if(OS.currentOS() == OS.LINUX)
 			extention = LIBRARY_LINUX;
+		else if(OS.currentOS() == OS.OSX)
+			extention = Library_OSX;
 		
 		String libFile = name + System.getProperty("os.arch").substring(3) + "." + extention;
 		

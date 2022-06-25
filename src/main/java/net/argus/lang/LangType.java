@@ -10,7 +10,6 @@ public class LangType {
 	public static final LangType en_US = new LangType("en_US", "english", DefaultLangValue.en_US);
 	public static final LangType fr_FR = new LangType("fr_FR", "français", DefaultLangValue.fr_FR);
 	public static final LangType ja_JP = new LangType("ja_JP", "日本人", DefaultLangValue.ja_JP);
-	public static final LangType es_ES = new LangType("es_ES", "español", DefaultLangValue.es_ES);
 	
 	private String name;
 	private String realName;

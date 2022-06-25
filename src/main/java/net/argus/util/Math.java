@@ -79,18 +79,47 @@ public class Math {
 	
 	public static boolean isDivisible(int number, int div) {return number%div==0;}
 	
-	public static native double square(double n);
+	public static double square(double n) {
+		return n * n;
+	}
 	
-	public static native double sqrt(double n);
+	public static double sqrt(double n) {
+		double tmp;
+		double d = n / 2;
+		do {
+			tmp = d;
+			d = (tmp + (n / tmp)) / 2;
+		}while((tmp - d) != 0);
+		return d;
+	}
 	
-	public static native double pow(double a, double b);
+	public static double pow(double a, double b) {
+		double a0 = a;
+
+		if(b == 0) return 1;
+
+		for(int i = 0; i < b - 1; i++)
+			a = a * a0;
+		
+		return a;
+	}
 	
-	public static native int random(int min, int max);
-	
-	private static native int[] toIntArray0(int number, int len);
-	
-	public static int[] toIntArray(int number) {return toIntArray0(number, Integer.toString(number).length());}
-	
+	@Deprecated
+	public static int random(int min, int max) {
+		return -1;
+	}
+		
+	public static int[] toIntArray(int number) {
+		String num = Integer.toString(number);
+		char[] chars = num.toCharArray();
+		
+		int[] fin = new int[chars.length];
+		for(int i = 0; i < chars.length; i++)
+			fin[i] = Integer.valueOf(chars[i]);
+		
+		return fin;
+	}
+		
 	public static double getPercentage(double i, double numberMax) {return i * 100.0D / numberMax;}
 	
 	public static int abs(int a) {return (a < 0) ? -a : a;}
@@ -141,17 +170,6 @@ public class Math {
 			binS += bin.get(i);
 		
 		return new Quaternaire(binS);
-	}
-	
-	static {UserSystem.loadLibrary("math");}
-	
-	public static void main(String[] args) {
-		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
-		//
-		//System.out.println(new Hexadecimal("5457465517e5665a465274b654fffffff654265465d458414c54").toLong());
-		//UserSystem.exit(0);
-		
-		System.out.println(reverse(2));
 	}
 	
 }

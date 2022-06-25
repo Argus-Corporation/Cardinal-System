@@ -33,7 +33,7 @@ public class Loader {
 			return program;
 		}catch(InstantiationException | IllegalAccessException | ClassNotFoundException | ClassCastException e) {
 			if(e instanceof InstantiationException)	Debug.log("Instantiation error", Info.ERROR);
-			if(e instanceof ClassNotFoundException)	Debug.log(classPath + " not found", Info.ERROR);
+			if(e instanceof ClassNotFoundException)	{Debug.log(classPath + " not found", Info.ERROR); e.printStackTrace();}
 			if(e instanceof ClassCastException) Debug.log("Class \"" + classPath + "\" not extend \"" + CardinalProgram.class.getCanonicalName() + "\"", Info.ERROR);
 			if(e instanceof IllegalAccessException) Debug.log("Class \"" + classPath + "\" is not accessible", Info.ERROR);
 		}

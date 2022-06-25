@@ -13,7 +13,11 @@ public class FileManager {
 		String mainPath = System.getProperty("user.dir");
 		
 		String id = UserSystem.getProperty("id");
-		if(id != null && id.equals(Identifiant.DEV.getId())) mainPath = mainPath.substring(0, mainPath.lastIndexOf('\\'));
+		if(id != null && id.equals(Identifiant.DEV.getId())) {
+			File file = new File(mainPath);
+			
+			mainPath = file.getParent().toString();
+		}
 		return mainPath;
 	}
 	
