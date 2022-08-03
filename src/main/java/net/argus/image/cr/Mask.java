@@ -45,6 +45,7 @@ public class Mask {
 	}
 	
 	public static Mask getRandomMask() {
+		@SuppressWarnings("deprecation")
 		int rand = Math.random(0, masks.size());
 		System.out.println(rand);
 		

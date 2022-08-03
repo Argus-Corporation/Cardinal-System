@@ -22,6 +22,8 @@ public abstract class OSUtilities {
 				return WINDOWS_UTILITIES;
 			case LINUX:
 				return LINUX_UTILITIES;
+			case OSX:
+				return null;
 		}
 		return null;
 	}

@@ -7,8 +7,6 @@ import net.argus.number.Binary;
 import net.argus.number.Hexadecimal;
 import net.argus.number.Hexadecimal.CharHex;
 import net.argus.number.Quaternaire;
-import net.argus.system.InitializationSystem;
-import net.argus.system.UserSystem;
 import net.argus.util.debug.Debug;
 
 public class Math {

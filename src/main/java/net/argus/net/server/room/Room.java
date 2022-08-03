@@ -15,6 +15,7 @@ import net.argus.net.pack.Package;
 import net.argus.net.pack.PackagePrefab;
 import net.argus.net.server.Server;
 import net.argus.net.server.ServerProcess;
+import net.argus.net.server.role.Role;
 import net.argus.net.socket.CardinalSocket;
 import net.argus.util.debug.Debug;
 
@@ -156,6 +157,9 @@ public class Room {
 	}
 	
 	public StatusConnection checkConnection(ServerProcess client, String password) {
+		if(client.getCardinalSocket().getProfile().getRole().equals(Role.SYSTEM))
+			return new StatusConnection(true, "connected");
+		
 		if(isFull())
 			return new StatusConnection(false, "room full");
 		

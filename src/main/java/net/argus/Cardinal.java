@@ -8,7 +8,7 @@ public final class Cardinal {
 	public static final String NAME = "Cardinal-System";
 	
 	public static final String WEB = "https://argus.alwaysdata.net/";
-	public static final String GIT = "https://github.com/Argus-corporation/Cardinal-System/";
+	public static final String GIT = "https://github.com/Argus-Corporation/Cardinal-System/";
 	
 	public static void printInfo() {
 		System.out.println(NAME + " version " + VERSION);

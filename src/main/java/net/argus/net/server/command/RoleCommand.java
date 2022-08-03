@@ -33,6 +33,13 @@ public class RoleCommand extends Command {
 			return;
 		}
 		
+		if(process.getCardinalSocket().getProfile().getRole().equals(Role.SYSTEM)) {
+			Debug.log("The \"SYSTEM\" role prohibits role switching", Info.ERROR);
+			process.send(PackagePrefab.genInfoPackage("The \"SYSTEM\" role prohibits role switching"));
+			return;
+		}
+			
+		
 		process.getCardinalSocket().setRole(role);
 	}
 

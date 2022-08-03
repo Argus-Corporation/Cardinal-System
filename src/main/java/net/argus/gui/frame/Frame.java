@@ -21,7 +21,6 @@ import net.argus.event.gui.frame.FrameListener;
 import net.argus.gui.animation.FrameAnimation;
 import net.argus.gui.frame.top.TitleBar;
 import net.argus.gui.frame.top.button.TitleButtonType;
-import net.argus.system.OS;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 

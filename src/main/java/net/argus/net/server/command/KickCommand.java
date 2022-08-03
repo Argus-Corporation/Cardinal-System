@@ -7,6 +7,7 @@ import net.argus.net.server.ServerProcess;
 import net.argus.net.server.command.structure.KeyType;
 import net.argus.net.server.command.structure.Structure;
 import net.argus.net.server.command.structure.StructuredCommand;
+import net.argus.net.server.role.Role;
 import net.argus.util.debug.Debug;
 import net.argus.util.debug.Info;
 
@@ -29,17 +30,24 @@ public class KickCommand extends Command {
 		
 		ServerProcess target = process.getRoom().getClientByName(userName);
 		
+		if(target == null) {
+			Debug.log("Client target \"" + userName + "\" is not connected", Info.ERROR);
+			process.send(PackagePrefab.genInfoPackage("User target \"" + userName + "\" is not connected"));
+			return;
+		}
+		
+		if(target.getCardinalSocket().getProfile().getRole().equals(Role.SYSTEM)) {
+			Debug.log("Server can't kick user with the \"SYSTEM\" role", Info.ERROR);
+			process.send(PackagePrefab.genInfoPackage("Server can't kick user with the \"SYSTEM\" role"));
+			return;
+		}
+		
 		if(target == process) {
 			Debug.log("You can't self kick");
 			process.send(PackagePrefab.genInfoPackage("You can't self kick"));
 			return;
 		}
 		
-		if(target == null) {
-			Debug.log("Client target \"" + userName + "\" is not connected", Info.ERROR);
-			process.send(PackagePrefab.genInfoPackage("User target \"" + userName + "\" is not connected"));
-			return;
-		}
 		
 		process.getRoom().logOut(target, arg);
 	}
