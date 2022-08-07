@@ -26,6 +26,9 @@ public class WebStream extends Stream {
 		
 		while(sock.isConnected() && !sock.isClosed()) {
 			String pack = decodeMessage();
+			if(pack == null)
+				return new ArrayList<PackageKey>();
+			
 			String[] lines = pack.split("\r\n");
 			
 			for(String line : lines) {
@@ -57,7 +60,7 @@ public class WebStream extends Stream {
 	}
 	
 	private String decodeMessage() throws IOException {
-		byte[] data = new byte[1024];
+		byte[] data = new byte[2048];
 		int size = in.read(data);
 		return decode(data, size);
 	}
@@ -65,6 +68,8 @@ public class WebStream extends Stream {
 	public static String decode(byte[] data, int size) {
 	    try {
 	        byte[] decoded = new byte[size-6];
+	        
+	        
 	        byte[] key = new byte[] {data[2], data[3], data[4], data[5]};
 	        
 	        for(int i = 0; i < size - 6; i++)
@@ -81,6 +86,38 @@ public class WebStream extends Stream {
 	public static byte[] encode(String decoded) {
 	    return encode(decoded.getBytes());
 	}
+	
+/*	public static byte[] encode(byte[] decoded) {
+	    byte[] data = new byte[decoded.length + 6];
+		data[0] = (byte) 129;
+		int off = 1;
+		int size = decoded.length + 128;
+
+		if(size > 0 && size <= 125) {
+			data[1] = (byte) size;
+			off += 1;
+		}else if(size > 125 && size <= 256) {
+			data[1] = (byte) size;
+			data[2] = (byte) (Byte.MAX_VALUE);
+			data[3] = (byte) (decoded.length - Byte.MAX_VALUE);
+			off += 3;
+			//System.out.println(Byte.MAX_VALUE + (size - Byte.MAX_VALUE));
+		}
+
+		byte[] key = genKey();
+		
+		for(int i = 0; i < key.length; i++)
+			data[i+off] = key[i];
+		off += key.length;
+		
+		for(int i = 0; i < data.length - off; i++)
+		    data[i+off] = (byte) (decoded[i] ^ key[i & 0x3]);
+		
+		for(byte b : data)
+			System.out.print(b + ", ");
+		System.out.println();
+		return data;
+	}*/
 	
 	public static byte[] encode(byte[] decoded) {
 	    byte[] data = new byte[decoded.length + 6];
