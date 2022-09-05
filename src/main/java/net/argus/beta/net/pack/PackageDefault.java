@@ -23,7 +23,7 @@ public abstract class PackageDefault implements PackageDefaultHandler {
 		for(PackageDefault def : defaults)
 			if(def.path.equals(url.getPath()))
 				return def.getPackage(url);
-		return null;
+		return PackagePrefab.getDefaultPackage(url.getPath());
 	}
 	
 	public abstract Package getPackage(URL url);

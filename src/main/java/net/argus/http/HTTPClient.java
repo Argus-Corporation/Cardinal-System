@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import net.argus.file.FileManager;
+import net.argus.system.UserSystem;
 
 public class HTTPClient {
 	
@@ -86,8 +87,8 @@ public class HTTPClient {
 	}
 	
 	public void addFile(PrintWriter writer, BufferedReader dataIn, HTTPCode code) throws IOException {
-		if(dataIn == null)
-			dataIn = getStream(getFile(String.valueOf(code.getCode())));
+		if(code == HTTPCode.c_404)
+			dataIn = getStream(new File(UserSystem.getProperty("http.path.404")));
 		
 		println(writer, dataIn);
 	}
@@ -100,7 +101,7 @@ public class HTTPClient {
 	
 	public HTTPCode getCode(File file) {
 		HTTPCode code = HTTPCode.c_200;
-		
+
 		if(!file.exists())
 			code = HTTPCode.c_404;
 		
@@ -117,7 +118,7 @@ public class HTTPClient {
 	}
 	
 	public File getFile(String fileName) {
-		return new File(FileManager.getMainPath() + "/www/" + fileName + ".html");
+		return new File(FileManager.getMainPath() + "/www" + fileName);
 	}
 	
 	public File getFile() {

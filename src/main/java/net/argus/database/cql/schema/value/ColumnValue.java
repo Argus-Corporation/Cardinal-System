@@ -2,14 +2,17 @@ package net.argus.database.cql.schema.value;
 
 import java.util.List;
 
+import net.argus.database.TableMap;
+
 public class ColumnValue extends SchemaValue {
 	
 	private String name;
 	private List<Object> columnValue;
 	
-	public ColumnValue(String name, List<Object> columnValue) {
+	public ColumnValue(String name, List<net.argus.database.ColumnValue> columnValue) {
 		this.name = name;
-		this.columnValue = columnValue;
+		this.columnValue = TableMap.convertToObject(columnValue);
+		
 	}
 
 	@Override

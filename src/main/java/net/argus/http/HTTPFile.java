@@ -6,20 +6,16 @@ import net.argus.file.FileManager;
 
 public class HTTPFile {
 	
-	private String path, fileName, extention;
+	private String path;
 	
 	public HTTPFile() {
 		setPath(null);
-		setFileName(null);
-		setExtention(null);
 	}
 	
 	public File getFile() {
-		return new File(FileManager.getMainPath() + "/www/" + path + fileName + "." + extention);
+		return new File(FileManager.getMainPath() + "/www" + path);
 	}
 	
-	public void setPath(String path) {this.path = path!=null?path:"/";}
-	public void setFileName(String fileName) {this.fileName = fileName!=null?fileName:"index";}
-	public void setExtention(String extention) {this.extention = extention!=null?extention:"html";}
-
+	public void setPath(String path) {this.path = path;}
+	
 }

@@ -2,23 +2,25 @@ package net.argus.beta.net;
 
 import java.io.IOException;
 
-import net.argus.beta.net.cql.CqlClient;
 import net.argus.beta.net.cql.CqlServerPlugin;
 import net.argus.beta.net.ctp.CtpServer;
-import net.argus.beta.net.ctp.CtpURLStreamHandler;
-import net.argus.beta.net.pack.PackagePrefab;
-import net.argus.beta.net.pack.cql.CqlQueryPackageDefault;
-import net.argus.beta.net.pack.ctp.CtpRequestPackageDefault;
 import net.argus.database.ColumnInfo;
+import net.argus.database.ColumnValue;
 import net.argus.database.DataBase;
+import net.argus.database.LineValue;
 import net.argus.database.TableSchema;
 import net.argus.database.Type;
 import net.argus.database.state.TableState;
+import net.argus.system.InitializationSystem;
 
 public class NetTest {
 	
 	public static void main(String[] args) throws IOException {
-		DataBase base = DataBase.genDataBase("Beta", TableState.getEmptyTableState("profiles", new TableSchema(new ColumnInfo("name", Type.STRING), new ColumnInfo("pasword", Type.STRING))));
+		InitializationSystem.initSystem(args);
+		DataBase base = DataBase.genDataBase("Beta", TableState.getEmptyTableState("profiles", new TableSchema(new ColumnInfo("name", Type.STRING), new ColumnInfo("password", Type.STRING))));
+		base.instert("profiles", new LineValue(new ColumnValue("name", "Django"), new ColumnValue("password", "Coucou")));
+		base.instert("profiles", new LineValue(new ColumnValue("name", "Louise"), new ColumnValue("password", "Hello")));
+		System.out.println(base);
 		new Thread(() -> {
 			try {
 				CtpServer server = new CtpServer();
@@ -26,17 +28,15 @@ public class NetTest {
 				server.open();
 			}catch(IOException e) {e.printStackTrace();}
 		}).start();
-		Protocol.createProtocol("ctp", new CtpURLStreamHandler());
-		Protocol.register();
 		
-		PackagePrefab.addPackageDefaultHandler(new CtpRequestPackageDefault());
-		PackagePrefab.addPackageDefaultHandler(new CqlQueryPackageDefault());
 		
-		CqlClient client = new CqlClient("localhost");
+		//PackagePrefab.addPackageDefaultHandler(new CqlQueryPackageDefault());
+		/*
+		CqlClient client = new CqlClient("127.0.0.1");
 		
 		client.connect("Django", "passwordAzerty");
 		
-		client.query("SELECT * 'test'");
+		client.query("SELECT 'profiles' 'name'");*/
 		
 	}
 	

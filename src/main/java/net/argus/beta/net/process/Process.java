@@ -7,35 +7,33 @@ import javax.net.ssl.SSLSocket;
 import net.argus.beta.net.Stream;
 import net.argus.beta.net.pack.Package;
 import net.argus.beta.net.pack.PackageReturn;
-import net.argus.beta.net.process.server.ServerProcessRegister;
 import net.argus.instance.Instance;
 
 public abstract class Process extends Thread {
 	
 	public static final Instance PROCESS_INSTANCE = new Instance("process");
-	
+		
 	private SSLSocket socket;
 	private Stream stream;
 	
-	private ServerProcessRegister register;
-		
-	public Process(SSLSocket socket, ServerProcessRegister register) throws IOException {
+	private ProcessRegister register;
+	
+	public Process(SSLSocket socket, ProcessRegister register) throws IOException {
 		this.register = register;
 		if(socket == null)
 			return;
 		this.socket = socket;
-		
-		
+				
 		stream = new Stream(socket);
 	}
 	
 	@Override
 	public void run() {
-		try {process(null);
-		}catch(IOException e) {e.printStackTrace();}
+		try {process(null);}
+		catch(IOException e) {e.printStackTrace();}
 	}
 	
-	protected abstract void process(PackageReturn connectPackage) throws IOException;
+	protected abstract boolean process(PackageReturn connectPackage) throws IOException;
 	
 	public abstract Process create(SSLSocket socket) throws IOException;
 	
@@ -51,8 +49,8 @@ public abstract class Process extends Thread {
 		Instance.startThread(this, instance);
 	}
 	
-	public void startProcess(PackageReturn pack) throws IOException {
-		process(pack);
+	public boolean startProcess(PackageReturn pack) throws IOException {
+		return process(pack);
 	}
 	
 	protected void send(Package pack) {
@@ -60,15 +58,21 @@ public abstract class Process extends Thread {
 	}
 	
 	public void close() throws IOException {
-		stream.close();
-		socket.close();
+		if(stream != null)
+			stream.close();
+		if(socket != null)
+			socket.close();
+	}
+	
+	public Stream getStream() {
+		return stream;
 	}
 	
 	public SSLSocket getSocket() {
 		return socket;
 	}
 	
-	public ServerProcessRegister getRegister() {
+	public ProcessRegister getRegister() {
 		return register;
 	}
 	

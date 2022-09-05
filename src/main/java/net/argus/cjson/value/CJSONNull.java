@@ -24,7 +24,7 @@ public class CJSONNull extends CJSONValue {
 
 	@Override
 	public String toString() {
-		return null;
+		return "null";
 	}
 
 }

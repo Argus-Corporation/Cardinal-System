@@ -3,6 +3,11 @@ package net.argus.system;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import net.argus.beta.net.Protocol;
+import net.argus.beta.net.ctp.CtpURLStreamHandler;
+import net.argus.beta.net.pack.PackagePrefab;
+import net.argus.beta.net.pack.ctp.CtpRequestPackageDefault;
+import net.argus.beta.net.pack.def.PingPackageDefault;
 import net.argus.util.ListenerManager;
 import net.argus.util.debug.Debug;
 
@@ -49,6 +54,9 @@ public class InitializationSystem {
 		if(systemManager != null) systemManager.postInit(args);
 		if(manager != null) manager.postInit(args);
 		
+		Protocol.register();
+		
+		Debug.log("System initialized");
 		UserSystem.systemEventInit(new SystemEvent(InitializationSystem.class));
 	}
 	
@@ -68,13 +76,20 @@ public class InitializationSystem {
 		
 		UserSystem.setProperty("arch", System.getProperty("os.arch").substring(3));
 		UserSystem.defineProperty("log", true);
+		
+		UserSystem.defineProperty("isLocalSSLCert", true);
+		UserSystem.defineProperty("SSLCertPath", "/cert/");
+		
+		Protocol.createProtocol("ctp", new CtpURLStreamHandler());
+		
+		PackagePrefab.addPackageDefaultHandler(new CtpRequestPackageDefault());
+		PackagePrefab.addPackageDefaultHandler(new PingPackageDefault());
 	}
 	
 	public static void postInit(String[] args) {
 		init = true;
-		if(UserSystem.getBooleanProperty("update") && UserSystem.getUpdate() != null) UserSystem.getUpdate().check(InitializationSplash.getSplash());
-		
-		Debug.log("System initialized");
+		if(UserSystem.getBooleanProperty("update") && UserSystem.getUpdate() != null)
+			UserSystem.getUpdate().check(InitializationSplash.getSplash());
 	}
 	
 	public static void preInitUi(String[] args) {

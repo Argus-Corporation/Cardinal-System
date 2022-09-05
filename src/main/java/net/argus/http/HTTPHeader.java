@@ -35,9 +35,7 @@ public class HTTPHeader {
 			method = HTTPMethod.valueOf(part[0]);
 			
 			if(part[1].indexOf('.') != -1) {
-				file.setPath(part[1].substring(0, part[1].lastIndexOf('/')));
-				file.setFileName(part[1].substring(part[1].lastIndexOf('/') + 1, part[1].lastIndexOf('.')));
-				file.setExtention(part[1].substring(part[1].lastIndexOf('.') + 1));
+				file.setPath(part[1]);
 			}else
 				file.setPath(part[1]);
 				

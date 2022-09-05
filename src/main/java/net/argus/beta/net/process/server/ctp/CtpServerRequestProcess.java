@@ -6,7 +6,6 @@ import javax.net.ssl.SSLSocket;
 
 import net.argus.beta.net.pack.PackagePrefab;
 import net.argus.beta.net.pack.PackageReturn;
-import net.argus.beta.net.process.Process;
 import net.argus.beta.net.process.server.ServerProcessRegister;
 import net.argus.beta.net.session.SessionToken;
 import net.argus.beta.net.session.SessionTokenAuthority;
@@ -19,21 +18,21 @@ public class CtpServerRequestProcess extends CtpServerProcess {
 	}
 	
 	@Override
-	protected void process(PackageReturn connectPackage) throws IOException {
+	protected boolean process(PackageReturn connectPackage) throws IOException {
 		if(!(connectPackage.getValue("user_name") instanceof CJSONString))
-			return;
+			return false;
 		if(!(connectPackage.getValue("password") instanceof CJSONString))
-			return;
+			return false;
 		if(!(connectPackage.getValue("authority") instanceof CJSONString))
-			return;
+			return false;
 		
 		String userName = connectPackage.getString("user_name");
 		String password = connectPackage.getString("password");
 		String authority = connectPackage.getString("authority");
+				
 		SessionTokenAuthority tokenAuthority = SessionTokenAuthority.getTokenAuthority(authority);
 		if(tokenAuthority == null)
-			return;
-		
+			return false;
 		SessionToken token = SessionToken.genSessionToken(userName, password);
 		tokenAuthority.addToken(token);
 		
@@ -41,10 +40,11 @@ public class CtpServerRequestProcess extends CtpServerProcess {
 		
 		close();
 		
+		return true;
 	}
 
 	@Override
-	public Process create(SSLSocket socket) throws IOException {
+	public CtpServerRequestProcess create(SSLSocket socket) throws IOException {
 		return new CtpServerRequestProcess(socket, getRegister());
 	}
 	

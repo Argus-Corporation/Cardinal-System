@@ -28,4 +28,14 @@ public class CQLRequestReturn {
 	public boolean isError() {return error;}
 	public boolean isQuery() {return query;}
 	
+	@Override
+	public String toString() {
+		if(error || value == null)
+			return "Error";
+		if(!query)
+			return "Not query";
+		
+		return value.toString();
+	}
+	
 }

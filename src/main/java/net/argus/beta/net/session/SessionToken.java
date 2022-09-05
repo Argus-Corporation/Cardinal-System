@@ -11,11 +11,13 @@ public class SessionToken {
 	
 	public static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	
-	private String userName;
+	public static final String DEFUALT_KEY = "myhardworkbythesewordsguardedpleasedontsteal(c)ArgusInc";
+	
+	private String name;
 	private String sessionToken;
 	
-	public SessionToken(String userName, String sessionToken) {
-		this.userName = userName;
+	public SessionToken(String name, String sessionToken) {
+		this.name = name;
 		this.sessionToken = sessionToken;
 	}
 	
@@ -23,20 +25,23 @@ public class SessionToken {
 		return new SessionToken(userName, getSessionToken(userName, password));
 	}
 	
-	public String getUserName() {
-		return userName;
+	public String getName() {
+		return name;
 	}
 	
 	public String getSessionToken() {
 		return sessionToken;
 	}
 	
-	private static String getSessionToken(String userName, String password) {
+	private static String getSessionToken(String name, String password) {
 		try {
+			if(password == null || password.equals(""))
+				password = DEFUALT_KEY;
+			
 			SecretKeySpec signingKey = new SecretKeySpec(password.getBytes(), HMAC_SHA1_ALGORITHM);
 			Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
 			mac.init(signingKey);
-			return toHexString(mac.doFinal(userName.getBytes()));
+			return toHexString(mac.doFinal(name.getBytes()));
 		}catch(NoSuchAlgorithmException | InvalidKeyException e) {
 			e.printStackTrace();
 		}
@@ -56,7 +61,7 @@ public class SessionToken {
 
 	@Override
 	public String toString() {
-		return userName + "@" + sessionToken;
+		return name + "@" + sessionToken;
 	}
 
 }

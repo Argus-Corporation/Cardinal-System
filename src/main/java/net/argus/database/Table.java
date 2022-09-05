@@ -30,8 +30,8 @@ public class Table {
 		map.delete(columnName, value);
 	}
 	
-	public List<List<Object>> getAll() {
-		return map.getValues();
+	public List<List<ColumnValue>> getAll() {
+		return map.getAll();
 	}
 	
 	public ColumnValue get(String columnName, String whereColumn, Object whereValue) {
@@ -42,7 +42,7 @@ public class Table {
 		return values.getColumnValue(columnName);
 	}
 	
-	public List<Object> getColumn(String columnName){
+	public List<ColumnValue> getColumn(String columnName){
 		return map.getColumn(columnName);
 	}
 	

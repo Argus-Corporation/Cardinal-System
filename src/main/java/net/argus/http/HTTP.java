@@ -1,18 +1,20 @@
 package net.argus.http;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 
+import javax.net.ssl.SSLServerSocket;
+
+import net.argus.beta.net.ssl.CardinalSSLSocketFactory;
 import net.argus.system.InitializationSystem;
 
 public class HTTP {
 	
-	private ServerSocket server;
+	private SSLServerSocket server;
 	
 	private boolean running;
 	
 	public HTTP() throws IOException {
-		server = new ServerSocket(80);
+		server = CardinalSSLSocketFactory.getServerSocket(443);
 	}
 	
 	public void start() throws IOException {

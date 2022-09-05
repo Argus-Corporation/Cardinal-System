@@ -1,50 +1,43 @@
 package net.argus.beta.net.ctp;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
 
+import net.argus.beta.net.ctp.plugin.CtpClientServerNode;
+import net.argus.beta.net.ctp.plugin.CtpServerPlugin;
+import net.argus.beta.net.process.server.PingServerProcess;
 import net.argus.beta.net.process.server.ServerProcessRegister;
 import net.argus.beta.net.process.server.SwitchServerProcess;
 import net.argus.beta.net.process.server.ctp.CtpServerRequestProcess;
 import net.argus.beta.net.ssl.CardinalSSLSocketFactory;
 
-public class CtpServer {
-	
-	private List<CtpServerPlugin> plugins = new ArrayList<CtpServerPlugin>();
+public class CtpServer extends CtpClientServerNode<ServerProcessRegister, CtpServerPlugin> {
 	
 	private int port;
 	private boolean closed;
 	
 	private SSLServerSocket server;
 	
-	private ServerProcessRegister register;
-	
 	public CtpServer() throws IOException {
 		this(CtpURLConnection.DEFAULT_CTP_PORT);
 	}
 	
 	public CtpServer(int port) throws IOException {
+		super(new ServerProcessRegister());
 		this.port = port;
 		server = CardinalSSLSocketFactory.getServerSocket(port);
-		register = new ServerProcessRegister();
 		
-		register.linkPathToProcess(new CtpServerRequestProcess(null, register));
+		getRegister().setParent(this);
+		getRegister().linkPathToProcess(new CtpServerRequestProcess(null, getRegister()));
+		getRegister().linkPathToProcess(new PingServerProcess(null, getRegister()));
 	}
 	
-	public void addPlugin(CtpServerPlugin plugin) throws IOException {
-		if(!plugins.contains(plugin))
-			plugin.setDefault(register);
-	}
-	
-	public List<CtpServerPlugin> getPlugins() {return plugins;}
 	
 	public void open() throws IOException {
 		while(!closed) {
-			new SwitchServerProcess((SSLSocket) server.accept(), register).startThreadProcess();
+			new SwitchServerProcess((SSLSocket) server.accept(), getRegister()).startThreadProcess();
 		}
 	}
 	

@@ -9,6 +9,9 @@ public class URLQueryParser {
 	
 	
 	public URLQueryParser(String query) {
+		if(query == null)
+			return;
+		
 		parse(query);
 	}
 	

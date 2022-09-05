@@ -10,8 +10,10 @@ import java.net.UnknownServiceException;
 
 import javax.net.ssl.SSLSocket;
 
-import net.argus.beta.net.Stream;
+import net.argus.beta.net.Ping;
 import net.argus.beta.net.pack.Package;
+import net.argus.beta.net.pack.PackagePrefab;
+import net.argus.beta.net.process.client.ClientStream;
 import net.argus.beta.net.ssl.CardinalSSLSocketFactory;
 
 public class CtpURLConnection extends URLConnection {
@@ -19,7 +21,7 @@ public class CtpURLConnection extends URLConnection {
 	public static final int DEFAULT_CTP_PORT = 11066;
 		
 	private SSLSocket socket;
-	private Stream stream;
+	private ClientStream stream;
 	private Package connectPack;
 
 	protected CtpURLConnection(URL url, Package connectPack) {
@@ -34,10 +36,15 @@ public class CtpURLConnection extends URLConnection {
 			port = url.getDefaultPort();
 		
 		socket = CardinalSSLSocketFactory.getSocket(InetAddress.getByName(url.getHost()), port);
-		stream = new Stream(socket);
+		stream = new ClientStream(socket);
 
 		if(connectPack != null)
 			send(connectPack);
+	}
+	
+	public Ping ping() throws IOException {
+		stream.send(PackagePrefab.getPingPackage());
+		return new Ping(stream.nextPackage(true));
 	}
 	
 	@Override

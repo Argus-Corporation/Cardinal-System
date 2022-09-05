@@ -1,13 +1,11 @@
-package net.argus.beta.net.process.server;
+package net.argus.beta.net.process;
 
-import net.argus.beta.net.process.Process;
-
-public class ServerProcessHandler {
+public class ProcessHandler {
 	
 	private String path;
 	private Process process;
 
-	protected ServerProcessHandler(String path, Process process) {
+	public ProcessHandler(String path, Process process) {
 		this.path = path;
 		this.process = process;
 	}

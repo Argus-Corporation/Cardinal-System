@@ -8,11 +8,15 @@ public class PackageEntry {
 	private Object value;
 	
 	public PackageEntry(String name, Object value) {
-		if(!(value instanceof Integer) && !(value instanceof String) && !(value instanceof Boolean) && !(value instanceof CJSONValue[]))
-			return;
-		
 		this.name = name;
 		this.value = value;
+		
+		if(value == null)
+			return;
+		
+		if(!(value instanceof Integer) && !(value instanceof String) && !(value instanceof Boolean) && !(value instanceof CJSONValue[]))
+			throw new IllegalArgumentException();
+		
 	}
 	
 	public String getName() {

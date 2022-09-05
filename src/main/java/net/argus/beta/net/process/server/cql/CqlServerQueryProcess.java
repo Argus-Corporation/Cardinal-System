@@ -1,12 +1,17 @@
 package net.argus.beta.net.process.server.cql;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.net.ssl.SSLSocket;
 
+import net.argus.beta.net.pack.PackagePrefab;
 import net.argus.beta.net.pack.PackageReturn;
-import net.argus.beta.net.process.Process;
 import net.argus.beta.net.process.server.ServerProcessRegister;
+import net.argus.cjson.value.CJSONString;
+import net.argus.database.DataBase;
+import net.argus.database.cql.CQLParser;
+import net.argus.database.cql.CQLRequestReturn;
 
 public class CqlServerQueryProcess extends CqlServerProcess {
 	
@@ -15,12 +20,61 @@ public class CqlServerQueryProcess extends CqlServerProcess {
 	}
 
 	@Override
-	protected void process(PackageReturn connectPackage) throws IOException {
+	protected boolean securityProcess(PackageReturn pack) throws IOException {
+		DataBase base = getLinkedBase();
+		if(base == null)
+			return false;
 		
+		if(pack.getValue("query") == null || !(pack.getValue("query") instanceof CJSONString))
+			return false;
+		
+		String query = pack.getString("query");
+		CQLRequestReturn ret = CQLParser.analize(query, base);
+
+		if(ret.isError())
+			return false;
+		
+		String result = "";
+		if(ret.getValue() instanceof List<?>) {
+			List<?> objs = (List<?>) ret.getValue();
+			if(objs.size() < 1) {
+				close();
+				return false;
+			}
+			
+			if(objs.get(0) instanceof List<?>) {
+				for(Object obj : objs) {
+					List<?> list  = (List<?>) obj;
+					result += pack(list) + ", ";
+				}
+				if(result.length() >= 2)
+					result = result.substring(0, result.length() - 2);
+			}else
+				result = pack(objs);
+			
+		}
+		
+		send(PackagePrefab.getCqlQueryResultPackage(result));
+		
+		close();
+		
+		return true;
+	}
+	
+	private String pack(List<?> objs) {
+		String result = "";
+		for(Object obj : objs)
+			result += obj.toString()  +", ";
+		
+		
+		if(result.length() >= 2)
+			result = result.substring(0, result.length() - 2);
+		
+		return result;
 	}
 
 	@Override
-	public Process create(SSLSocket socket) throws IOException {
+	public CqlServerQueryProcess create(SSLSocket socket) throws IOException {
 		return new CqlServerQueryProcess(socket, getRegister());
 	}
 

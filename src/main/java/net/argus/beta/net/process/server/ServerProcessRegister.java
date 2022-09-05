@@ -1,41 +1,26 @@
 package net.argus.beta.net.process.server;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import net.argus.beta.net.ctp.CtpServer;
+import net.argus.beta.net.process.ProcessRegister;
 
-import javax.net.ssl.SSLSocket;
-
-import net.argus.beta.net.process.Process;
-
-public class ServerProcessRegister {
+public class ServerProcessRegister extends ProcessRegister {
 	
-	private List<ServerProcessHandler> handlers = new ArrayList<ServerProcessHandler>();
+	private CtpServer parent;
 	
-	protected void addServerProcessHandler(ServerProcessHandler handler) {
-		if(!handlers.contains(handler))
-			handlers.add(handler);
-	}
-
-	public void linkPathToProcess(String path, Process process) {
-		addServerProcessHandler(new ServerProcessHandler(path, process));
-	}
+	public ServerProcessRegister() {}
 	
 	public void linkPathToProcess(ServerProcess process) {
-		addServerProcessHandler(new ServerProcessHandler(process.getPath(), process));
+		linkPathToProcess(process.getPath(), process);
 	}
 	
-	public  Process getProcess(String path, SSLSocket socket) throws IOException {
-		for(ServerProcessHandler h : handlers)
-			if(path.equals(h.getPath()))
-				return h.getProcess().create(socket);
-		
-		return null;
+	public CtpServer getParent() {
+		return parent;
 	}
 	
-	@Override
-	public String toString() {
-		return handlers.toString();
+	public void setParent(CtpServer parent) {
+		if(parent == null)
+			throw new NullPointerException();
+		this.parent = parent;
 	}
 	
 }

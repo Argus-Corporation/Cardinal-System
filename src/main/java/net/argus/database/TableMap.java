@@ -74,22 +74,26 @@ public class TableMap {
 		
 		List<ColumnValue> colVals = new ArrayList<ColumnValue>();
 		for(int i = 0; i < infos.size(); i++)
-			colVals.add(new ColumnValue(infos.get(i).getName(), values.get(i).get(yIndex)));
+			colVals.add(new ColumnValue(infos.get(i), values.get(i).get(yIndex)));
 		
 		return new LineValue(colVals);
 		
 	}
 	
-	public List<Object> getColumn(ColumnInfo info) {
+	public List<ColumnValue> getColumn(ColumnInfo info) {
 		return getColumn(info.getName());
 	}
 	
-	public List<Object> getColumn(String name) {
+	public List<ColumnValue> getColumn(String name) {
 		int index = indexOf(name);
 		if(index == -1 || values.size() < index)
 			return null;
 		
-		return values.get(index);
+		List<ColumnValue> cValues = new ArrayList<ColumnValue>();
+		ColumnInfo info = infos.get(index);
+		for(Object obj : values.get(index))
+			cValues.add(new ColumnValue(info, obj));
+		return cValues;
 	}
 	
 	public int indexOf(ColumnInfo info) {
@@ -104,7 +108,8 @@ public class TableMap {
 	}
 	
 	public int indexOfValue(String name, Object value) {
-		List<Object> objs = getColumn(name);
+		List<Object> objs = convertToObject(getColumn(name));
+		
 		if(objs != null)
 			return objs.indexOf(value);
 		
@@ -114,6 +119,15 @@ public class TableMap {
 	public List<ColumnInfo> getInfos() {return infos;}
 	public List<List<Object>> getValues() {return values;}
 	
+	public List<List<ColumnValue>> getAll() {
+		List<List<ColumnValue>> all = new ArrayList<List<ColumnValue>>();
+		
+		for(ColumnInfo info : infos)
+			all.add(getColumn(info));
+		
+		return all;
+	}
+	
 	public TableMapState getState() {
 		List<ColumnInfoState> infoState = new ArrayList<ColumnInfoState>();
 		
@@ -122,6 +136,18 @@ public class TableMap {
 		
 		return new TableMapState(infoState, values);
 	}
+	
+	public static List<Object> convertToObject(List<ColumnValue> values) {
+		if(values == null)
+			return null;
+		
+		List<Object> objs = new ArrayList<Object>();
+		for(ColumnValue val : values)
+			objs.add(val.getValue());
+		
+		return objs;
+	}
+	
 	
 	@Override
 	public String toString() {

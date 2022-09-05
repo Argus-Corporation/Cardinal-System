@@ -4,6 +4,7 @@ import net.argus.cjson.CJSONItem;
 import net.argus.cjson.value.CJSONArray;
 import net.argus.cjson.value.CJSONBoolean;
 import net.argus.cjson.value.CJSONInteger;
+import net.argus.cjson.value.CJSONNull;
 import net.argus.cjson.value.CJSONString;
 import net.argus.cjson.value.CJSONValue;
 
@@ -44,13 +45,16 @@ public class PackageBuilder {
 		
 		for(PackageEntry entry : entrys) {
 			CJSONValue val = null;
-			if(entry.getValue() instanceof String)
+
+			if(entry.getValue() == null)
+				val = new CJSONNull();
+			else if(entry.getValue() instanceof String)
 				val = new CJSONString((String) entry.getValue());
-			if(entry.getValue() instanceof Integer)
+			else if(entry.getValue() instanceof Integer)
 				val = new CJSONInteger((int) entry.getValue());
-			if(entry.getValue() instanceof Boolean)
+			else if(entry.getValue() instanceof Boolean)
 				val = new CJSONBoolean((boolean) entry.getValue());
-			if(entry.getValue() instanceof CJSONValue[])
+			else if(entry.getValue() instanceof CJSONValue[])
 				val = new CJSONArray((CJSONValue[]) entry.getValue());
 			
 			pack.addItem(new CJSONItem(entry.getName(), val));

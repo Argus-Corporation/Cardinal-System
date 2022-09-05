@@ -21,20 +21,47 @@ public class PackagePrefab {
 	
 	public static void addPackageDefaultHandler(PackageDefaultHandler h) {handlers.add(h);}
 	
+	public static Package genPack(String path, Object ... keys) {
+		Object[] objs = new Object[keys.length + 2];
+		objs[0] = "path";
+		objs[1] = path;
+		for(int i = 0; i < keys.length; i++)
+			objs[i + 2] = keys[i];
+		
+		return PackageBuilder.getPack(objs);
+	}
+	
+	public static Package getDefaultPackage(String path) {
+		return genPack(path);
+	}
+	
 	
 	/**CTP**/
 	public static Package getCtpRequestPackage(String userName, String password, String authority) {
-		return PackageBuilder.getPack("path", "/ctp/request", "user_name", userName, "password", password, "authority", authority);
+		return genPack("/ctp/request", "user_name", userName, "password", password, "authority", authority);
 	}
 	
 	public static Package getSessionTokenPackage(SessionToken sessionToken) {
-		return PackageBuilder.getPack("path", "/ctp/session-token", "session_token", sessionToken.getSessionToken());
+		return genPack("/ctp/session-token", "session_token", sessionToken.getSessionToken());
 	}
 	
 	
 	/**CQL**/
 	public static Package getCqlQueryPackage(String query, String token) {
-		return PackageBuilder.getPack("path", "/cql/query", "query", query, "session_token", token);
+		return genPack("/cql/query", "query", query, "session_token", token);
+	}
+	
+	public static Package getCqlQueryResultPackage(String result) {
+		return genPack("/cql/query-result", "result", result);
+	}
+	
+	/**PING**/
+	public static Package getPingPackage() {
+		return genPack("/ping", "start_time", Long.toString(System.currentTimeMillis()));
+	}
+	
+	public static Package getPongPackage(int ping) {
+		return genPack("/pong", "ping", ping);
 	}
 	
 }

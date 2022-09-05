@@ -4,19 +4,17 @@ import java.io.IOException;
 
 import javax.net.ssl.SSLSocket;
 
-import net.argus.beta.net.process.Process;
+import net.argus.beta.net.process.LocatedProcess;
 
-public abstract class ServerProcess extends Process {
-	
-	private String path;
+public abstract class ServerProcess extends LocatedProcess {
 
 	public ServerProcess(String path, SSLSocket socket, ServerProcessRegister register) throws IOException {
-		super(socket, register);
-		this.path = path;
+		super(path, socket, register);
 	}
 	
-	public String getPath() {
-		return path;
+	@Override
+	public ServerProcessRegister getRegister() {
+		return (ServerProcessRegister) super.getRegister();
 	}
 
 }

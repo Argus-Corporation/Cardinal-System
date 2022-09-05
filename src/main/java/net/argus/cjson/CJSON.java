@@ -97,7 +97,11 @@ public class CJSON {
 	}
 	
 	public String getString(String path) {
-		return getValue(path).getString();
+		CJSONValue value = getValue(path);
+		if(value == null)
+			return null;
+		
+		return value.getString();
 	}
 	
 	public boolean getBoolean(String path) {

@@ -76,17 +76,20 @@ public abstract class CJSONValue {
 	
 	public String getString() {
 		Object obj = getValue();
+		
+		if(obj == null)
+			return null;
+		
 		if(obj instanceof String)
 			return obj.toString();
 
-		if(obj == null)
-			return null;
 		
 		throw new CJSONException("this object is not a String");
 	}
 	
 	public boolean getBoolean() {
 		Object obj = getValue();
+		
 		if(obj instanceof Boolean)
 			return Boolean.valueOf(obj.toString());
 		

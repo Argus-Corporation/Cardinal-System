@@ -2,29 +2,38 @@ package net.argus.database;
 
 public class ColumnValue {
 	
-	private String columnName;
+	private ColumnInfo columnInfo;
 	private Object value;
 	
-	public ColumnValue(String columnName, Object value) {
-		this.columnName = columnName;
+	public ColumnValue(String name, Object value) {
+		this.columnInfo = new ColumnInfo(name, (value instanceof Boolean)?Type.BOOLEAN:(value instanceof Integer)?Type.INT:Type.STRING);
 		this.value = value;
 	}
 	
-	public String getColumnName() {return columnName;}
+	public ColumnValue(ColumnInfo columnInfo, Object value) {
+		this.columnInfo = columnInfo;
+		this.value = value;
+	}
+	
+	public ColumnInfo getColumnInfo() {return columnInfo;}
+	public String getColumnName() {return columnInfo.getName();}
 	public Object getValue() {return value;}
 	
-	public static ColumnValue getDefault(ColumnInfo inf) {
-		if(inf != null)
-			return getDefault(inf.getName(), inf.getType());
+	public static ColumnValue getDefault(ColumnInfo info) {
+		if(info != null)
+			return new ColumnValue(info, info.getType().getDefaultValue());
 		
 		return null;
 	}
 	
-	public static ColumnValue getDefault(String name, Type type) {
-		if(name != null && !name.equals("") && type != null)
-			return new ColumnValue(name, type.getDefaultValue());
+	@Override
+	public String toString() {
+		String value = this.value.toString();
 		
-		return null;
+		if(columnInfo.getType() == Type.STRING)
+			value = "'" + this.value + "'";
+		
+		return columnInfo + "={" + value + "}";
 	}
 
 }
