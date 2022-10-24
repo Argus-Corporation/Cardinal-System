@@ -26,11 +26,7 @@ public abstract class OSUtilities {
 			case LINUX:
 				return LINUX_UTILITIES;
 			case OSX:
-<<<<<<< Updated upstream
-				return null;
-=======
 				return OSX_UTILITIES;
->>>>>>> Stashed changes
 		}
 		return null;
 	}

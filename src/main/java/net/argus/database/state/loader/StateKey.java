@@ -15,7 +15,7 @@ public abstract class StateKey {
 	public static final StateKey MAP = new MapStateKey();
 	public static final StateKey COLUMN = new ColumnStateKey();
 	
-	private static final List<Character> SEPARATOR = ArrayManager.toList(new char[] {':', '@', '}', ','});
+	private static final List<Character> SEPARATOR = ArrayManager.toListChar(new char[] {':', '@', '}', ','});
 	
 	private String name;
 	

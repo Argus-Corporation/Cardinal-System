@@ -30,16 +30,7 @@ public class CQLRequestReturn {
 	
 	@Override
 	public String toString() {
-<<<<<<< Updated upstream
-		if(error || value == null)
-			return "Error";
-		if(!query)
-			return "Not query";
-		
-		return value.toString();
-=======
 		return error?"ERROR 001":value!=null?value.toString():"VALUE_NULL 002";
->>>>>>> Stashed changes
 	}
 	
 }
