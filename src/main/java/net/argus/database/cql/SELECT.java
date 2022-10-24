@@ -25,7 +25,6 @@ public class SELECT extends CQLKeyWord {
 		
 		if(values.size() == 1)
 			return new CQLRequestReturn(true, false, retVal);
-		
 		String columnName = values.getValue(1)[0].toString();
 		Comparator comp = (Comparator) values.getValue(2)[0];
 		Object val = values.getValue(3)[0];
@@ -34,10 +33,18 @@ public class SELECT extends CQLKeyWord {
 			return new CQLRequestReturn(true);
 		
 		LineValue value = values.getTable().getLine(columnName, val);
+		
 		if(value == null)
 			return new CQLRequestReturn(true);
+					
+		if(reg[0] != Registre.ALL)
+			retVal = value.getValue(reg[1].toString());
+		else
+			retVal = value;
+		if(retVal == null)
+			return new CQLRequestReturn(true);
 		
-		return new CQLRequestReturn(true, false, value);
+		return new CQLRequestReturn(true, false, retVal);
 	}
 
 }

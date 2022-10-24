@@ -165,9 +165,15 @@ public class ArrayManager {
 		return list;
 	}
 	
+<<<<<<< Updated upstream
 	public static List<Character> toListChar(char[] array) {
 		List<Character> list = new ArrayList<Character>();
 		for(Character t : array)
+=======
+	public static List<Character> toList(char[] array) {
+		List<Character> list = new ArrayList<Character>();
+		for(char t : array)
+>>>>>>> Stashed changes
 			list.add(t);
 		return list;
 	}

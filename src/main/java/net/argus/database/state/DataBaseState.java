@@ -3,7 +3,7 @@ package net.argus.database.state;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataBaseState {
+public class DataBaseState extends State {
 	
 	private String name;
 	

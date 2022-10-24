@@ -2,7 +2,7 @@ package net.argus.database.state;
 
 import net.argus.database.Type;
 
-public class ColumnInfoState {
+public class ColumnInfoState extends State {
 	
 	private String name;
 	private Type type;

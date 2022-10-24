@@ -3,7 +3,7 @@ package net.argus.database.state;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableMapState {
+public class TableMapState extends State {
 	
 	private List<ColumnInfoState> infos = new ArrayList<ColumnInfoState>();
 	private List<List<Object>> values = new ArrayList<List<Object>>();

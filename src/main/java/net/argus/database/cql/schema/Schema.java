@@ -23,21 +23,20 @@ public class Schema {
 	public SchematicValue getSchematicValue(String[] words, DataBase base) {
 		if(words.length < 1)
 			return null;
-		
 		Table table = getTable(words, base);
 		if(table == null)
 			return null;
-		
+
 		words = ArrayManager.remove(words, 0);
 		
 		for(int i = 0; i < schemas.size(); i++) {
 			if(words.length != size(i))
 				continue;
 			SchematicValue val = new SchematicValue(table);
-			
-			for(int j = 0; j < words.length; j++)
-				val.addValue(schemas.get(i)[j].parse(words[j], base, table));
 
+			for(int j = 0; j < words.length; j++) {
+				val.addValue(schemas.get(i)[j].parse(words[j], base, table));
+			}
 			return val;
 		}
 		return null;

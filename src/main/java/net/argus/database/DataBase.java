@@ -72,6 +72,12 @@ public class DataBase {
 		return null;
 	}
 	
+	public void addTable(TableState state) {
+		if(state == null)
+			return;
+		tables.add(new Table(state));
+	}
+	
 	public int indexOf(String tableName) {
 		for(int i = 0; i < tables.size(); i++)
 			if(tables.get(i).getName().toUpperCase().equals(tableName.toUpperCase()))
@@ -100,6 +106,8 @@ public class DataBase {
 		
 		if(tables.size() > 0)
 			ret = ret.substring(0, ret.length() - 3);
+		else
+			ret += "}";
 		
 		return ret;
 	}

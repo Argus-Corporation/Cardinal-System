@@ -6,7 +6,7 @@ import java.util.List;
 import net.argus.database.ColumnInfo;
 import net.argus.database.TableSchema;
 
-public class TableState {
+public class TableState extends State {
 	
 	private String name;
 	private TableMapState mapState = new TableMapState();
@@ -45,6 +45,10 @@ public class TableState {
 		}
 		
 		return new TableState(name, new TableMapState(infoStates, values));
+	}
+	
+	public static TableState getEmptyTableState(String name, ColumnInfo ... infos) {
+		return getEmptyTableState(name, new TableSchema(infos));
 	}
 
 }

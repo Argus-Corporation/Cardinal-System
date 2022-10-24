@@ -10,7 +10,7 @@ public class CQLParser {
 		String[] words = request.split(" ");
 		if(words.length < 1)
 			return new CQLRequestReturn(true);
-		
+
 		CQLKeyWord primary = CQLKeyWord.getKeyWord(words[0]);
 		if(primary == null)
 			return new CQLRequestReturn(true);
@@ -21,5 +21,5 @@ public class CQLParser {
 		
 		return primary.execute(values, base);
 	}
-	
+
 }
