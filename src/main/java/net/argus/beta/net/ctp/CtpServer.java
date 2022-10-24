@@ -12,6 +12,7 @@ import net.argus.beta.net.process.server.ServerProcessRegister;
 import net.argus.beta.net.process.server.SwitchServerProcess;
 import net.argus.beta.net.process.server.ctp.CtpServerRequestProcess;
 import net.argus.beta.net.ssl.CardinalSSLSocketFactory;
+import net.argus.util.Version;
 
 public class CtpServer extends CtpClientServerNode<ServerProcessRegister, CtpServerPlugin> {
 	
@@ -20,12 +21,12 @@ public class CtpServer extends CtpClientServerNode<ServerProcessRegister, CtpSer
 	
 	private SSLServerSocket server;
 	
-	public CtpServer() throws IOException {
-		this(CtpURLConnection.DEFAULT_CTP_PORT);
+	public CtpServer(Version version) throws IOException {
+		this(CtpURLConnection.DEFAULT_CTP_PORT, version);
 	}
 	
-	public CtpServer(int port) throws IOException {
-		super(new ServerProcessRegister());
+	public CtpServer(int port, Version version) throws IOException {
+		super(new ServerProcessRegister(), version);
 		this.port = port;
 		server = CardinalSSLSocketFactory.getServerSocket(port);
 		
@@ -37,7 +38,7 @@ public class CtpServer extends CtpClientServerNode<ServerProcessRegister, CtpSer
 	
 	public void open() throws IOException {
 		while(!closed) {
-			new SwitchServerProcess((SSLSocket) server.accept(), getRegister()).startThreadProcess();
+			new SwitchServerProcess((SSLSocket) server.accept(), getRegister()).startThreadProcess(null);
 		}
 	}
 	

@@ -6,6 +6,7 @@ import javax.net.ssl.SSLSocket;
 
 import net.argus.beta.net.pack.PackagePrefab;
 import net.argus.beta.net.pack.PackageReturn;
+import net.argus.beta.net.process.ProcessReturn;
 
 public class PingServerProcess extends ServerProcess {
 
@@ -14,10 +15,10 @@ public class PingServerProcess extends ServerProcess {
 	}
 
 	@Override
-	protected boolean process(PackageReturn connectPackage) throws IOException {
+	protected ProcessReturn process(PackageReturn connectPackage) throws IOException {
 		String start = connectPackage.getString("start_time");
 		if(start == null)
-			return false;
+			return new ProcessReturn(false, "start_time is not defined");
 		
 		long sTime = Long.valueOf(start);
 		int ping = (int) ((int) System.currentTimeMillis() - sTime);
@@ -26,7 +27,7 @@ public class PingServerProcess extends ServerProcess {
 		
 		send(PackagePrefab.getPongPackage(ping));
 		close();
-		return true;
+		return new ProcessReturn(true);
 	}
 
 	@Override

@@ -165,6 +165,13 @@ public class ArrayManager {
 		return list;
 	}
 	
+	public static List<Character> toListChar(char[] array) {
+		List<Character> list = new ArrayList<Character>();
+		for(Character t : array)
+			list.add(t);
+		return list;
+	}
+	
 	public static <T> List<T> toList(T[][] array) {
 		List<T> list = new ArrayList<T>();
 		

@@ -6,12 +6,16 @@ import javax.net.ssl.SSLSocket;
 
 import net.argus.beta.net.Stream;
 import net.argus.beta.net.pack.Package;
+import net.argus.beta.net.pack.PackagePrefab;
 import net.argus.beta.net.pack.PackageReturn;
 import net.argus.instance.Instance;
+import net.argus.util.ThreadLocal;
 
 public abstract class Process extends Thread {
 	
 	public static final Instance PROCESS_INSTANCE = new Instance("process");
+	
+	private ThreadLocal<PackageReturn> packs = new ThreadLocal<PackageReturn>();
 		
 	private SSLSocket socket;
 	private Stream stream;
@@ -29,11 +33,11 @@ public abstract class Process extends Thread {
 	
 	@Override
 	public void run() {
-		try {process(null);}
+		try {startProcess(packs.get());}
 		catch(IOException e) {e.printStackTrace();}
 	}
 	
-	protected abstract boolean process(PackageReturn connectPackage) throws IOException;
+	protected abstract ProcessReturn process(PackageReturn connectPackage) throws IOException;
 	
 	public abstract Process create(SSLSocket socket) throws IOException;
 	
@@ -41,16 +45,20 @@ public abstract class Process extends Thread {
 		return stream.nextPackage();
 	}
 	
-	public void startThreadProcess() {
-		startThread(PROCESS_INSTANCE);
+	public void startThreadProcess(PackageReturn connection) {
+		startThread(PROCESS_INSTANCE, connection);
 	}
 	
-	protected void startThread(Instance instance) {
+	protected void startThread(Instance instance, PackageReturn connection) {
+		packs.set(this, connection);
 		Instance.startThread(this, instance);
 	}
 	
-	public boolean startProcess(PackageReturn pack) throws IOException {
-		return process(pack);
+	public ProcessReturn startProcess(PackageReturn pack) throws IOException {
+		ProcessReturn ret = process(pack);
+		if(!ret.isSuccess() && pack != null)
+			send(PackagePrefab.getErrorPackage(pack.getString("path"), ret.getMessage()));
+		return ret;
 	}
 	
 	protected void send(Package pack) {

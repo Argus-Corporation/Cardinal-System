@@ -42,8 +42,10 @@ public class ThreadManager {
 		addThread(thread);
 	}
 	
-	public static void startThread(Thread run) {
-		new Thread(run).start();
+	public static Thread startThread(Thread run) {
+		Thread th = new Thread(run);
+		th.start();
+		return th;
 	}
 	
 	public static Thread createThread(String name, Runnable run) {

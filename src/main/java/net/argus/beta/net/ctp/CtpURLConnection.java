@@ -14,6 +14,7 @@ import net.argus.beta.net.Ping;
 import net.argus.beta.net.pack.Package;
 import net.argus.beta.net.pack.PackagePrefab;
 import net.argus.beta.net.process.client.ClientStream;
+import net.argus.beta.net.process.client.SwitchClientProcess;
 import net.argus.beta.net.ssl.CardinalSSLSocketFactory;
 
 public class CtpURLConnection extends URLConnection {
@@ -22,11 +23,11 @@ public class CtpURLConnection extends URLConnection {
 		
 	private SSLSocket socket;
 	private ClientStream stream;
-	private Package connectPack;
+	
+	private SwitchClientProcess switchClient; 
 
-	protected CtpURLConnection(URL url, Package connectPack) {
+	protected CtpURLConnection(URL url) {
 		super(url);
-		this.connectPack = connectPack;
 	}
 
 	@Override
@@ -36,15 +37,16 @@ public class CtpURLConnection extends URLConnection {
 			port = url.getDefaultPort();
 		
 		socket = CardinalSSLSocketFactory.getSocket(InetAddress.getByName(url.getHost()), port);
-		stream = new ClientStream(socket);
-
+		stream = new ClientStream(socket, switchClient);
+		
+		Package connectPack = PackagePrefab.getDefaultPackageWithPath(url);
 		if(connectPack != null)
 			send(connectPack);
 	}
 	
 	public Ping ping() throws IOException {
 		stream.send(PackagePrefab.getPingPackage());
-		return new Ping(stream.nextPackage(true));
+		return new Ping(stream.nextPackage(true, false));
 	}
 	
 	@Override
@@ -71,6 +73,10 @@ public class CtpURLConnection extends URLConnection {
 		if(stream == null)
 			return;
 		stream.send(pack);
+	}
+	
+	public void setSwitchClientProcess(SwitchClientProcess switchClient) {
+		this.switchClient = switchClient;
 	}
 	
 }

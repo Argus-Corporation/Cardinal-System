@@ -39,6 +39,20 @@ public class CtpSender {
 		this.token = token;
 	}
 	
+	public PackageReturn access(boolean returnFirstPack, String userName, String password, String path, String ... ctpQuerys) throws IOException {
+		ClientStream stream = getStream(userName, password, path, ctpQuerys);
+		
+		return stream.nextPackage(returnFirstPack, false);
+	}
+	
+	public PackageReturn accessWithToken(boolean returnFirstPack, String path, String ... ctpQuerys) throws IOException {
+		return access(returnFirstPack, getToken().getSessionToken(), null, path, ctpQuerys);
+	}
+	
+	public PackageReturn accessWithoutToken(boolean returnFirstPack, String path, String ... ctpQuerys) throws IOException {
+		return access(returnFirstPack, null, null, path, ctpQuerys);
+	}
+	
 	public static CtpURLConnection getConnection(String userName, String password, String host, int port, String path, String ... ctpQuerys) throws IOException {
 		String u = "ctp://";
 		
@@ -84,10 +98,11 @@ public class CtpSender {
 	public Ping ping() throws IOException {
 		URL pingUrl = getPingURL();
 		CtpURLConnection con = (CtpURLConnection) pingUrl.openConnection();
+		con.setSwitchClientProcess(switchClient);
 		con.connect();
 		
 		ClientStream str = new ClientStream(con, switchClient);
-		return new Ping(str.nextPackage(true));
+		return new Ping(str.nextPackage(true, false));
 	}
 	
 	public URL getPingURL() throws MalformedURLException {
@@ -102,7 +117,7 @@ public class CtpSender {
 		CtpURLConnection con = getConnection(userName, password, host, port, path, ctpQuerys);
 		if(con == null)
 			return null;
-		
+		con.setSwitchClientProcess(switchClient);
 		con.connect();
 		return new ClientStream(con, switchClient);
 	}
@@ -121,6 +136,10 @@ public class CtpSender {
 	
 	public SessionToken getToken() {
 		return token;
+	}
+	
+	public SwitchClientProcess getSwitchClient() {
+		return switchClient;
 	}
 	
 	protected void setToken(SessionToken token) {

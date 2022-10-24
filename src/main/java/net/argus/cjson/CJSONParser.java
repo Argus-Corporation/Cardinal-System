@@ -24,7 +24,7 @@ public class CJSONParser {
 	
 	public static String getLine(String[] lines) {
 		String l = "";
-		
+
 		boolean inString = false;
  line:  for(int i = 0; i < lines.length; i++) {
 			String line = lines[i];
@@ -53,19 +53,19 @@ public class CJSONParser {
 		boolean inString = false;
 		for(int i = 0; i < line.length(); i++) {
 			char ch = line.charAt(i);
-			if(ch == '\\'){
+			/*if(ch == '\\'){
 				char next = line.charAt(i+1);
 				if(next == '"' || next == '\\') {
 					chars.add(next);
 					i++;
 					continue;
 				}
-			}
+			}*/
 			
 			if(!inString && (ch == ' ' || ch == '\t'))
 				continue;
 			
-			if(ch == '"')
+			if(ch == '"' && line.charAt(i - 1) != '\\')
 				inString = !inString;
 			
 			chars.add(ch);

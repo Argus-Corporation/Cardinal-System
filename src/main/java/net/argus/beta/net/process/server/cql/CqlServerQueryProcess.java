@@ -7,6 +7,7 @@ import javax.net.ssl.SSLSocket;
 
 import net.argus.beta.net.pack.PackagePrefab;
 import net.argus.beta.net.pack.PackageReturn;
+import net.argus.beta.net.process.ProcessReturn;
 import net.argus.beta.net.process.server.ServerProcessRegister;
 import net.argus.cjson.value.CJSONString;
 import net.argus.database.DataBase;
@@ -20,26 +21,26 @@ public class CqlServerQueryProcess extends CqlServerProcess {
 	}
 
 	@Override
-	protected boolean securityProcess(PackageReturn pack) throws IOException {
+	protected ProcessReturn securityProcess(PackageReturn pack) throws IOException {
 		DataBase base = getLinkedBase();
 		if(base == null)
-			return false;
+			return new ProcessReturn(false, "base not connected");
 		
 		if(pack.getValue("query") == null || !(pack.getValue("query") instanceof CJSONString))
-			return false;
+			return new ProcessReturn(false, "query is not defined or is not a string");
 		
 		String query = pack.getString("query");
 		CQLRequestReturn ret = CQLParser.analize(query, base);
 
 		if(ret.isError())
-			return false;
+			return new ProcessReturn(false, "query error");
 		
 		String result = "";
 		if(ret.getValue() instanceof List<?>) {
 			List<?> objs = (List<?>) ret.getValue();
 			if(objs.size() < 1) {
 				close();
-				return false;
+				return new ProcessReturn(false, "query return empty");
 			}
 			
 			if(objs.get(0) instanceof List<?>) {
@@ -58,7 +59,7 @@ public class CqlServerQueryProcess extends CqlServerProcess {
 		
 		close();
 		
-		return true;
+		return new ProcessReturn(true);
 	}
 	
 	private String pack(List<?> objs) {

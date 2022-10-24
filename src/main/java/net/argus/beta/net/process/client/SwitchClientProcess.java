@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.net.ssl.SSLSocket;
 
-import net.argus.beta.net.process.Process;
 import net.argus.beta.net.process.SwitchProcess;
 
 public class SwitchClientProcess extends SwitchProcess {
@@ -14,7 +13,7 @@ public class SwitchClientProcess extends SwitchProcess {
 	}
 
 	@Override
-	public Process create(SSLSocket socket) throws IOException {
+	public SwitchClientProcess create(SSLSocket socket) throws IOException {
 		return new SwitchClientProcess(socket, (ClientProcessRegister) getRegister());
 	}
 

@@ -6,6 +6,7 @@ import javax.net.ssl.SSLSocket;
 
 import net.argus.beta.net.pack.PackagePrefab;
 import net.argus.beta.net.pack.PackageReturn;
+import net.argus.beta.net.process.ProcessReturn;
 import net.argus.beta.net.process.server.ServerProcessRegister;
 import net.argus.beta.net.session.SessionToken;
 import net.argus.beta.net.session.SessionTokenAuthority;
@@ -18,13 +19,13 @@ public class CtpServerRequestProcess extends CtpServerProcess {
 	}
 	
 	@Override
-	protected boolean process(PackageReturn connectPackage) throws IOException {
+	protected ProcessReturn process(PackageReturn connectPackage) throws IOException {
 		if(!(connectPackage.getValue("user_name") instanceof CJSONString))
-			return false;
+			return new ProcessReturn(false, "user_name is not defined");
 		if(!(connectPackage.getValue("password") instanceof CJSONString))
-			return false;
+			return new ProcessReturn(false, "password is not defined");
 		if(!(connectPackage.getValue("authority") instanceof CJSONString))
-			return false;
+			return new ProcessReturn(false, "authority is not defined");
 		
 		String userName = connectPackage.getString("user_name");
 		String password = connectPackage.getString("password");
@@ -32,15 +33,15 @@ public class CtpServerRequestProcess extends CtpServerProcess {
 				
 		SessionTokenAuthority tokenAuthority = SessionTokenAuthority.getTokenAuthority(authority);
 		if(tokenAuthority == null)
-			return false;
+			return new ProcessReturn(false, "authority \"" + authority + "\" not found");
+
 		SessionToken token = SessionToken.genSessionToken(userName, password);
 		tokenAuthority.addToken(token);
 		
 		send(PackagePrefab.getSessionTokenPackage(token));
 		
 		close();
-		
-		return true;
+		return new ProcessReturn(true);
 	}
 
 	@Override

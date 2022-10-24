@@ -45,6 +45,10 @@ public class PackagePrefab {
 		return genPack("/ctp/session-token", "session_token", sessionToken.getSessionToken());
 	}
 	
+	public static Package getErrorPackage(String originePath, String message) {
+		return genPack("/ctp/error", "origine_path", originePath, "message", message);
+	}
+	
 	
 	/**CQL**/
 	public static Package getCqlQueryPackage(String query, String token) {

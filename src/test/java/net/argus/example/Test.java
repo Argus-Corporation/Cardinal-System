@@ -1,23 +1,25 @@
 package net.argus.example;
 
-import net.argus.gui.frame.Frame;
-import net.argus.instance.CardinalProgram;
-import net.argus.instance.Program;
+import java.io.IOException;
 
-@Program(instanceName = "Test")
-public class Test extends CardinalProgram {
-	
-	public void main(String[] args) {
-		Frame fen = new Frame();
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+public class Test {
+
+	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		JFrame f = new JFrame("title");
+		f.setDefaultCloseOperation(3);
+		JInternalFrame fen = new JInternalFrame("coucuo");
 		
+		
+		
+		//fen.setDefaultCloseOperation(3);
+		f.add(fen);
 		fen.setVisible(true);
+		f.setVisible(true);
+	}
 		
-				
-    }
-	
-/*public static void main(String[] args) throws IOException {
-		InitializationSystem.initSystem(args);
-		System.out.println(FileManager.getMainPath());
-	}*/
-	
 }

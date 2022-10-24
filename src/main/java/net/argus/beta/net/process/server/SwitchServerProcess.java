@@ -18,14 +18,6 @@ public class SwitchServerProcess extends SwitchProcess {
 	public Process create(SSLSocket socket) throws IOException {
 		return new SwitchServerProcess(socket, (ServerProcessRegister) getRegister());
 	}
-	/*
-	static {
-		try {
-			ServerProcessHandler.linkPathToProcess(new CtpServerRequestProcess(null));
-			ServerProcessHandler.linkPathToProcess(new CqlServerQueryProcess(null));
-		}catch(IOException e) {e.printStackTrace();}
 	
-	}*/
-
 }
 	

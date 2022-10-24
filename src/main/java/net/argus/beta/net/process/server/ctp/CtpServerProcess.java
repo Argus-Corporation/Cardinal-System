@@ -15,5 +15,8 @@ public abstract class CtpServerProcess extends ServerProcess {
 	public CtpServerProcess(String path, SSLSocket socket, ServerProcessRegister register) throws IOException {
 		super("/" + DEFAULT_PATH + "/" + path, socket, register);
 	}
-
+	
+	@Override
+	public abstract CtpServerProcess create(SSLSocket socket) throws IOException;
+	
 }

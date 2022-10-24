@@ -5,9 +5,12 @@ import java.io.IOException;
 import net.argus.beta.net.Ping;
 import net.argus.beta.net.ctp.plugin.CtpClientPlugin;
 import net.argus.beta.net.ctp.plugin.CtpClientServerNode;
+import net.argus.beta.net.pack.PackageReturn;
 import net.argus.beta.net.process.client.ClientProcessRegister;
 import net.argus.beta.net.process.client.PongClientProcess;
 import net.argus.beta.net.process.client.SwitchClientProcess;
+import net.argus.beta.net.process.client.ctp.CtpErrorClientProcess;
+import net.argus.util.Version;
 
 public abstract class CtpClient extends CtpClientServerNode<ClientProcessRegister, CtpClientPlugin> {
 	
@@ -22,13 +25,14 @@ public abstract class CtpClient extends CtpClientServerNode<ClientProcessRegiste
 	
 	private CtpSender sender;
 		
-	public CtpClient(String host, int port, String authority) throws IOException {
-		super(new ClientProcessRegister());
+	public CtpClient(String host, int port, String authority, Version version) throws IOException {
+		super(new ClientProcessRegister(), version);
 		this.host = host;
 		this.port = port;
 		this.authority = authority;
 		
 		getRegister().linkPathToProcess(new PongClientProcess(null, getRegister()));
+		getRegister().linkPathToProcess(new CtpErrorClientProcess(null, getRegister()));
 		
 		this.sender = createSender(host, port, authority, new SwitchClientProcess(null, getRegister()));
 		if(sender == null)
@@ -60,4 +64,29 @@ public abstract class CtpClient extends CtpClientServerNode<ClientProcessRegiste
 	public Ping ping() throws IOException {
 		return sender.ping();
 	}
+	
+	public PackageReturn access(boolean returnFirstPack, String userName, String password, String path, String ... ctpQuerys) throws IOException {
+		return sender.access(returnFirstPack, userName, password, path, ctpQuerys);
+	}
+	
+	public PackageReturn access(String userName, String password, String path, String ... ctpQuerys) throws IOException {
+		return sender.access(true, userName, password, path, ctpQuerys);
+	}
+	
+	public PackageReturn accessWithToken(boolean returnFirstPack, String path, String ... ctpQuerys) throws IOException {
+		return sender.accessWithToken(returnFirstPack, path, ctpQuerys);
+	}
+	
+	public PackageReturn accessWithToken(String path, String ... ctpQuerys) throws IOException {
+		return sender.accessWithToken(true, path, ctpQuerys);
+	}
+	
+	public PackageReturn accessWithoutToken(boolean returnFirstPack, String path, String ... ctpQuerys) throws IOException {
+		return sender.accessWithoutToken(returnFirstPack, path, ctpQuerys);
+	}
+	
+	public PackageReturn accessWithoutToken(String path, String ... ctpQuerys) throws IOException {
+		return sender.accessWithoutToken(true, path, ctpQuerys);
+	}
+	
 }

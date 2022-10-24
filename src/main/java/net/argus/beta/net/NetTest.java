@@ -2,6 +2,7 @@ package net.argus.beta.net;
 
 import java.io.IOException;
 
+import net.argus.beta.net.cql.CqlClient;
 import net.argus.beta.net.cql.CqlServerPlugin;
 import net.argus.beta.net.ctp.CtpServer;
 import net.argus.database.ColumnInfo;
@@ -12,6 +13,7 @@ import net.argus.database.TableSchema;
 import net.argus.database.Type;
 import net.argus.database.state.TableState;
 import net.argus.system.InitializationSystem;
+import net.argus.util.Version;
 
 public class NetTest {
 	
@@ -23,7 +25,7 @@ public class NetTest {
 		System.out.println(base);
 		new Thread(() -> {
 			try {
-				CtpServer server = new CtpServer();
+				CtpServer server = new CtpServer(new Version("0.0.1b"));
 				server.addPlugin(new CqlServerPlugin(base));
 				server.open();
 			}catch(IOException e) {e.printStackTrace();}
@@ -31,12 +33,12 @@ public class NetTest {
 		
 		
 		//PackagePrefab.addPackageDefaultHandler(new CqlQueryPackageDefault());
-		/*
-		CqlClient client = new CqlClient("127.0.0.1");
+		
+		CqlClient client = new CqlClient("127.0.0.1", new Version("0.0.0"));
 		
 		client.connect("Django", "passwordAzerty");
-		
-		client.query("SELECT 'profiles' 'name'");*/
+	
+		client.query("SELECT 'profiles' 'name'");
 		
 	}
 	

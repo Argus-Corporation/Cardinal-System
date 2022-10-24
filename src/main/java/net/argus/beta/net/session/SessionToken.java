@@ -7,6 +7,9 @@ import java.util.Formatter;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import net.argus.beta.net.pack.PackageReturn;
+import net.argus.cjson.value.CJSONValue;
+
 public class SessionToken {
 	
 	public static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";

@@ -18,26 +18,26 @@ public abstract class SwitchProcess extends Process {
 	}
 
 	@Override
-	protected boolean process(PackageReturn connectPackage) throws IOException {
+	protected ProcessReturn process(PackageReturn connectPackage) throws IOException {
 		PackageReturn ret = connectPackage==null?nextPackage():connectPackage;
 		
 		if(ret == null)
-			return false;
+			return new ProcessReturn(false, "package null");
 		
 		CJSONValue path = null;
 		if((path = ret.getValue("path")) == null || !(path instanceof CJSONString))
-			return false;  //send close package and close
+			return new ProcessReturn(false, "path is not defined");  //send close package and close
 
 		Process process = getRegister().getProcess(ret.getString("path"), getSocket());
 		if(process == null)
-			return false;  //send close package and close
+			return new ProcessReturn(false, "server don't find process \"" + path.getValue() + "\"");  //send close package and close
 
 		return process.create(getSocket()).startProcess(ret);
 	}
 	
 	@Override
-	public void startThreadProcess() {
-		startThread(SWITCH_INSTANCE);
+	public void startThreadProcess(PackageReturn connection) {
+		startThread(SWITCH_INSTANCE, connection);
 	}
 
 }

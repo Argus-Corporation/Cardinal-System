@@ -6,6 +6,7 @@ import javax.net.ssl.SSLSocket;
 
 import net.argus.beta.net.Ping;
 import net.argus.beta.net.pack.PackageReturn;
+import net.argus.beta.net.process.ProcessReturn;
 import net.argus.util.debug.Debug;
 
 public class PongClientProcess extends ClientProcess {
@@ -15,10 +16,10 @@ public class PongClientProcess extends ClientProcess {
 	}
 
 	@Override
-	protected boolean process(PackageReturn connectPackage) throws IOException {
+	protected ProcessReturn process(PackageReturn connectPackage) throws IOException {
 		int ping = connectPackage.getInteger("ping");
 		Debug.log("Ping Pong successful in " + Ping.toStringPing(ping));
-		return true;
+		return new ProcessReturn(true);
 	}
 
 	@Override

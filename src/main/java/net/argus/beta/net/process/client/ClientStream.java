@@ -11,28 +11,39 @@ import net.argus.beta.net.pack.PackageReturn;
 public class ClientStream extends Stream {
 	
 	private SwitchClientProcess switchClient;
+	
+	private SSLSocket sock;
 
 	public ClientStream(CtpURLConnection connection, SwitchClientProcess switchClient) throws IOException {
-		super(connection.getInputStream(), connection.getOutputStream());
-		this.switchClient = switchClient;
+		this(connection.getSocket(), switchClient);
 	}
 	
-	public ClientStream(SSLSocket sock) throws IOException {
+	public ClientStream(SSLSocket sock, SwitchClientProcess switchClient) throws IOException {
 		super(sock);
+		this.switchClient = switchClient;
+		this.sock = sock;
 	}
 	
 	@Override
 	public PackageReturn nextPackage() throws IOException {
-		return nextPackage(false);
+		return nextPackage(false, false);
 	}
 	
-	public PackageReturn nextPackage(boolean returnFirstPack) throws IOException {
+	public PackageReturn nextPackage(boolean returnFirstPack, boolean directReturn) throws IOException {
 		PackageReturn ret = null;
-		do
-			ret = super.nextPackage();
-		while(switchClient.startProcess(ret) && !returnFirstPack);
+		try {
+			do {
+				ret = super.nextPackage();
+				if(directReturn)
+					break;
+			}while(switchClient.create(sock).startProcess(ret).isSuccess() && !returnFirstPack);
+		}catch(NullPointerException e) {}
 
 		return ret;
+	}
+	
+	public SSLSocket getSocket() {
+		return sock;
 	}
 
 }

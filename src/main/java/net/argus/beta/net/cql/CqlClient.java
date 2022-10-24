@@ -4,17 +4,18 @@ import java.io.IOException;
 
 import net.argus.beta.net.ctp.CtpClient;
 import net.argus.beta.net.process.client.SwitchClientProcess;
+import net.argus.util.Version;
 
 public class CqlClient extends CtpClient {
 	
 	public static final String CQL_AUTHORITY = "cql";
 	
-	public CqlClient(String host) throws IOException {
-		super(host, DEFAULT_PORT, CQL_AUTHORITY);
+	public CqlClient(String host, Version version) throws IOException {
+		super(host, DEFAULT_PORT, CQL_AUTHORITY, version);
 	}
 	
-	public CqlClient(String host, int port) throws IOException {
-		super(host, port, CQL_AUTHORITY);
+	public CqlClient(String host, int port, Version version) throws IOException {
+		super(host, port, CQL_AUTHORITY, version);
 	}
 
 	@Override

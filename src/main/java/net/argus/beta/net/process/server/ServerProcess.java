@@ -16,5 +16,8 @@ public abstract class ServerProcess extends LocatedProcess {
 	public ServerProcessRegister getRegister() {
 		return (ServerProcessRegister) super.getRegister();
 	}
+	
+	@Override
+	public abstract ServerProcess create(SSLSocket socket) throws IOException;
 
 }

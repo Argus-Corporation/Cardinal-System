@@ -47,6 +47,10 @@ public class SessionTokenAuthority {
 		return null;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	@Override
 	public String toString() {
 		return name + "@" + tokens;

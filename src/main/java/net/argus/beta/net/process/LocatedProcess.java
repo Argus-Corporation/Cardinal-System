@@ -23,5 +23,8 @@ public abstract class LocatedProcess extends Process {
 	public String getPath() {
 		return path;
 	}
+	
+	@Override
+	public abstract LocatedProcess create(SSLSocket socket) throws IOException;
 
 }
