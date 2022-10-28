@@ -20,7 +20,7 @@ public abstract class CtpClient extends CtpClientServerNode<ClientProcessRegiste
 	
 	private String host;
 	private int port;
-	
+		
 	private String authority;
 	
 	private CtpSender sender;

@@ -7,9 +7,6 @@ import java.util.Formatter;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import net.argus.beta.net.pack.PackageReturn;
-import net.argus.cjson.value.CJSONValue;
-
 public class SessionToken {
 	
 	public static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
@@ -60,6 +57,15 @@ public class SessionToken {
 			formatter.format("%02x", b);
 
 		return formatter.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof SessionToken))
+			return obj.toString().equals(toString());
+		SessionToken t = (SessionToken) obj;
+		
+		return t.getName().equals(getName()) && t.getSessionToken().equals(getSessionToken());
 	}
 
 	@Override
