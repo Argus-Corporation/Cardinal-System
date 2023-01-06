@@ -21,7 +21,8 @@ public class CQLTest {
 		System.out.println(ret.getValue());
 		
 		System.out.println(base);*/
-		String savedBase = "data:DataTest@{table:empty@map@[{column:id@INT}={0, 1, 2}, {column:username@STRING}={'django', 'harry potter', 'oceane'}]}, {table:profile@map@[{column:first-name@STRING}={}, {column:last-name@STRING}={}]}";
+		@SuppressWarnings("unused")
+		String savedBase = "data:DataTest@{table:empty@map@[{column:id@INT}={0, 1, 2}, {column:username@STRING}={'Name', 'harry potter', 'oceane'}]}, {table:profile@map@[{column:first-name@STRING}={}, {column:last-name@STRING}={}]}";
 		/*System.out.println(
 				//CQLParser.getCQL(savedBase)
 				new DataBase(DataBaseStateLoader.load(savedBase))
