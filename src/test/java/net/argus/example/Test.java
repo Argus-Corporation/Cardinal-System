@@ -21,7 +21,8 @@ public class Test {
 	    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	    // Créez un nouveau panneau qui dessine la fenêtre de manière distordue
-	    JPanel panel = new JPanel() {
+	    @SuppressWarnings("serial")
+		JPanel panel = new JPanel() {
 	      protected void paintComponent(Graphics g) {
 	        // Appelez la méthode paintComponent() de la superclasse
 	        super.paintComponent(g);

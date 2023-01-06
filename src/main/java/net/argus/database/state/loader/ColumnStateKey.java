@@ -6,7 +6,6 @@ import java.util.List;
 import net.argus.database.Type;
 import net.argus.database.state.ColumnInfoState;
 import net.argus.database.state.ColumnState;
-import net.argus.util.debug.Debug;
 
 public class ColumnStateKey extends StateKey {
 
