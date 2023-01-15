@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 
 import net.argus.number.Hexadecimal;
 
+@Deprecated
 public class Key {
 	
 	private BigInteger a, b;

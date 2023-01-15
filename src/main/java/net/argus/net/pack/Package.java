@@ -75,8 +75,6 @@ public class Package implements Cloneable {
 		for(PackageKey k : keys) 
 			s += k.toString() + "\r\n";
 		
-		s += PackageKey.END_KEY;
-		
 		return s;
 	}
 

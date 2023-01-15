@@ -4,16 +4,17 @@ import java.util.Random;
 
 import net.argus.util.debug.Debug;
 
-public class Crypto {
+@Deprecated
+public class CryptoOld {
 	
 	private Keys keys;
 	
-	public Crypto(int e) {
+	public CryptoOld(int e) {
 		this.keys = Keys.genKeys(e);
 	}
 	
-	public  static Crypto genCrypto() {
-		return new Crypto(new Random().nextInt(1000 - 100) + 100);
+	public  static CryptoOld genCrypto() {
+		return new CryptoOld(new Random().nextInt(1000 - 100) + 100);
 	}
 	
 	public CryptoValue crypt(int cr) {return new CryptoValue(keys.getPublicKey().crypt(cr));}
@@ -27,7 +28,7 @@ public class Crypto {
 	public Key getPublicKey() {return keys.getPublicKey();}
 	
 	public static void main(String[] args) {
-		Crypto cry = genCrypto();
+		CryptoOld cry = genCrypto();
 
 		CryptoValue cr = cry.crypt('q');
 		System.out.println(cr);

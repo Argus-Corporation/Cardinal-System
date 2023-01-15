@@ -28,17 +28,36 @@ public class Stream {
 		return in.readLine();
 	}
 	
-	public List<PackageKey> nextPackage() throws IOException {
+	public List<String> nextPackage() throws IOException {
+		List<String> lines = new ArrayList<String>();
+		
+		String line;
+		while((line = nextLine()) != null && !line.equals(""))
+			lines.add(line);
+		//System.out.println(lines + "\nin");
+		
+		
+		//return PackageAnalizer.convertToKey(lines);
+		return lines;
+	}
+	
+	public List<PackageKey> nextPackageKey() throws IOException {
 		List<String> lines = new ArrayList<String>();
 		
 		String line;
 		while((line = nextLine()) != null && !line.equals(""))
 			lines.add(line);
 		
+		
 		return PackageAnalizer.convertToKey(lines);
 	}
 	
 	public void send(Object pack) {
+		String s = pack.toString();
+		if(!s.endsWith("\r\n"))
+			pack = pack.toString() + "\r\n";
+		
+		//System.out.println(pack + "\nout");
 		out.println(pack);
 		out.flush();
 	}

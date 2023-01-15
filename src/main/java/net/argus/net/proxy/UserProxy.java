@@ -24,7 +24,7 @@ public class UserProxy {
 	
 	public Stream getStream() {return stream;}
 	
-	public List<PackageKey> nextPackage() throws IOException {return stream.nextPackage();}
+	public List<PackageKey> nextPackage() throws IOException {return stream.nextPackageKey();}
 	public void send(Object pack) {stream.send(pack);}
 	
 	public void close() throws IOException {socket.close(); stream.close();}

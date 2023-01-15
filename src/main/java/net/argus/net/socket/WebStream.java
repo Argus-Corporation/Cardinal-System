@@ -21,7 +21,7 @@ public class WebStream extends Stream {
 	}
 	
 	@Override
-	public List<PackageKey> nextPackage() throws IOException {
+	public List<PackageKey> nextPackageKey() throws IOException {
 		List<String> listLines = new ArrayList<String>();
 		
 		while(sock.isConnected() && !sock.isClosed()) {

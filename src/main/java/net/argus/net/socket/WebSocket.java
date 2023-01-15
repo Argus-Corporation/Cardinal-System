@@ -39,7 +39,7 @@ public class WebSocket extends CardinalSocket {
 
 	@Override
 	public Package nextPackage() throws IOException {
-		List<PackageKey> lines = stream.nextPackage();
+		List<PackageKey> lines = stream.nextPackageKey();
 		if(lines == null) {
 			close("web close");
 			return null;
@@ -47,12 +47,12 @@ public class WebSocket extends CardinalSocket {
 		
 		return new Package(lines);
 	}
-
+/*
 	@Override
 	public void send(Package pack) throws IOException {
 		stream.send(pack);
 	}
-
+*/
 	@Override
 	public CardinalSocket create() throws IOException {
 		return new WebSocket();
@@ -61,6 +61,12 @@ public class WebSocket extends CardinalSocket {
 	@Override
 	public CardinalSocket create(Socket socket) throws IOException {
 		return new WebSocket(socket);
+	}
+
+	@Override
+	public void send(Object pack) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

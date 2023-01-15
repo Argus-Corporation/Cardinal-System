@@ -41,6 +41,9 @@ public class PackageKey {
 		for(; 0 < lines.size(); lines.remove(0)) {
 			String line = lines.get(0);
 			
+			if(line.equals(""))
+				continue;
+			
 			String name = getName(line);
 			if(name.contains("["))
 				keys.add(ArrayKey.getArrayKey(name, lines));

@@ -26,14 +26,14 @@ public class DefaultSocket extends CardinalSocket {
 
 	@Override
 	public Package nextPackage() throws IOException {
-		return new Package(stream.nextPackage());
+		return new Package(stream.nextPackageKey());
 	}
-
+/*
 	@Override
 	public void send(Package pack) throws IOException {
 		stream.send(pack);
 	}
-
+*/
 	@Override
 	public CardinalSocket create() throws IOException {
 		return new DefaultSocket();
@@ -42,6 +42,11 @@ public class DefaultSocket extends CardinalSocket {
 	@Override
 	public CardinalSocket create(Socket socket) throws IOException {
 		return new DefaultSocket(socket);
+	}
+	@Override
+	public void send(Object pack) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

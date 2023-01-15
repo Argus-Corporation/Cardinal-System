@@ -31,7 +31,7 @@ public class SystemSocket extends CardinalSocket {
 	public Package nextPackage() throws IOException {
 		return null;
 	}
-
+/*
 	@Override
 	public void send(Package pack) throws IOException {
 		if(out == null || pack == null || pack.isNull())
@@ -39,7 +39,7 @@ public class SystemSocket extends CardinalSocket {
 		
 		Printer.printPackage(pack, out);
 	}
-
+*/
 	@Override
 	public CardinalSocket create() throws IOException {
 		return new SystemSocket();
@@ -64,6 +64,12 @@ public class SystemSocket extends CardinalSocket {
 	public synchronized void close(boolean error, String arg) throws IOException {
   		connect = false;
   		if(out != System.out) out.close();
+	}
+
+	@Override
+	public void send(Object pack) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.argus.util.Math;
 
+@Deprecated
 class Keys {
 	
 	private Key publicKey;
