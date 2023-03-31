@@ -18,8 +18,8 @@ public class CardinalSocketFactory {
 		Stream stream = new Stream(client);
 		
 		//--**CRYPTO**--\\
-		stream.send(rsa.getPublicKey().getEncoded());  // envoie de la clé public
-		CryptoAES crypto = new CryptoAES(new SecretKeySpec(rsa.decrypt(stream.read()), CryptoAES.ALGORITHM));  // décryptage et création de la clé et du crypto symétrique pour communiquer avec le client
+		stream.send(rsa.getPublicKey().getEncoded());  // envoie de la cle public
+		CryptoAES crypto = new CryptoAES(new SecretKeySpec(rsa.decrypt(stream.read()), CryptoAES.ALGORITHM));  // decryptage et creation de la cle et du crypto symetrique pour communiquer avec le client
 		
 		return new CardinalSocket(stream, crypto);
 	}
@@ -35,12 +35,12 @@ public class CardinalSocketFactory {
 		
 		
 		//--**CRYPTO**--\\
-		SecretKey key = CryptoAES.buildSecretKey();  // génération de la clé symétrique
-		CryptoAES crypto = new CryptoAES(key);  // création de l'objet crypto pour encrypter les messages
+		SecretKey key = CryptoAES.buildSecretKey();  // generation de la cle symetrique
+		CryptoAES crypto = new CryptoAES(key);  // creation de l'objet crypto pour encrypter les messages
 		
-		CryptoRSA serverC = new CryptoRSA();  // creation de l'objet rsacrypto du server pour encrypter la clé symétrique du client
+		CryptoRSA serverC = new CryptoRSA();  // creation de l'objet rsacrypto du server pour encrypter la cle symetrique du client
 		serverC.setPublicKey(stream.read());  // mise en place de la 'public key' du server
-		stream.send(serverC.encrypt(key.getEncoded()));  // envoie de la clé symétrique encrypter
+		stream.send(serverC.encrypt(key.getEncoded()));  // envoie de la cle symetrique encrypter
 
 		return new CardinalSocket(stream, crypto);
 	}

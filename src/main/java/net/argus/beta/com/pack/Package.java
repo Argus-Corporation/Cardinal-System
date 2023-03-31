@@ -17,5 +17,5 @@ public class Package extends CJSON {
 	public static Package parsePackage(String packageText) {
 		return new Package(CJSONParser.getCJSON(packageText).getMainObject());
 	}
-
+	
 }

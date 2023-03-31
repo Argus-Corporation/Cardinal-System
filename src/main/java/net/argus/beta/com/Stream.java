@@ -8,6 +8,8 @@ import java.net.Socket;
 public class Stream {
 	
 	public static final int DEFAULT_SIZE = 128;
+		
+	private Socket socket;
 	
 	private InputStream in;
 	private OutputStream out;
@@ -17,6 +19,8 @@ public class Stream {
 	public Stream(Socket socket, int size) throws IOException {
 		in = socket.getInputStream();
 		out = socket.getOutputStream();
+		
+		this.socket = socket;
 		this.size = size;
 	}
 	
@@ -58,6 +62,9 @@ public class Stream {
 	}
 
 	public synchronized void send(byte[] datas) throws IOException {
+		if(isClosed())
+			return;
+		
 		if(datas.length > getDataSize()) {  // 1024 - (1 bits pour l'entete)
 			int c = datas.length / (getDataSize()) + 1;  // calcule le nombre de package
 			
@@ -105,6 +112,11 @@ public class Stream {
 	public void close() throws IOException {
 		in.close();
 		out.close();
+		socket.close();
+	}
+	
+	public boolean isClosed() {
+		return socket.isClosed();
 	}
 	
 	public int getPackageSize() {return size;}

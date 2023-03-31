@@ -10,7 +10,6 @@ import net.argus.crypto.CryptoRSA;
 import net.argus.exception.InstanceException;
 import net.argus.instance.CardinalProgram;
 import net.argus.instance.Program;
-import net.argus.util.Counter;
 
 @net.argus.annotation.Test(info = "test class")
 @Program(instanceName = "test")
@@ -20,6 +19,7 @@ public class Test extends CardinalProgram {
 		
 		new Thread(() -> {
 			try {
+				@SuppressWarnings("resource")
 				ServerSocket socket = new ServerSocket(1575);
 				CryptoRSA rsa = new CryptoRSA();
 				

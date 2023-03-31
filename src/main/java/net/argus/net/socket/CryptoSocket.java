@@ -35,6 +35,7 @@ public class CryptoSocket extends CardinalSocket {
 	
 	@Override
 	public Object[] getInfos() {
+		@SuppressWarnings("unused")
 		String s = new String(Base64.getEncoder().encode(crypto.getPublicKey().getEncoded()));
 		/*System.out.println(new String(crypto.getPublicKey().getEncoded()));
 		System.out.println(new String(Base64.getDecoder().decode(s.getBytes())));*/
@@ -78,6 +79,7 @@ public class CryptoSocket extends CardinalSocket {
 	
 	@Override
 	public void send(Object p) throws IOException {
+		@SuppressWarnings("unused")
 		Package pack = null;
 		/*try {pack = p.clone();}
 		catch (CloneNotSupportedException e) {Debug.log("Error while cloning package"); return;}

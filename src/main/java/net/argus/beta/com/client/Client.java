@@ -13,7 +13,7 @@ public class Client {
 	
 	private InetAddress host;
 	private int port;
-	
+		
 	public Client(String host, int port) throws UnknownHostException {
 		this(InetAddress.getByName(host), port);
 	}
@@ -34,5 +34,5 @@ public class Client {
 	public InetAddress getHost() {
 		return host;
 	}
-
+	
 }
