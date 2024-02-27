@@ -1,12 +1,12 @@
 package net.argus.example;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.net.URL;
 
-import net.argus.beta.com.CardinalSocketFactory;
-import net.argus.crypto.CryptoRSA;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+
 import net.argus.exception.InstanceException;
 import net.argus.instance.CardinalProgram;
 import net.argus.instance.Program;
@@ -16,25 +16,23 @@ import net.argus.instance.Program;
 public class Test extends CardinalProgram {
 
 	public void main(String[] args) throws InstanceException {
-		
-		new Thread(() -> {
-			try {
-				@SuppressWarnings("resource")
-				ServerSocket socket = new ServerSocket(1575);
-				CryptoRSA rsa = new CryptoRSA();
-				
-				CardinalSocketFactory.createServerConnection(socket.accept(), rsa);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}).start();
+		JFrame fen = new JFrame();
+		fen.setDefaultCloseOperation(3);
+		fen.setSize(700, 1200);
+		fen.setLocationRelativeTo(null);
 		
 		try {
-			CardinalSocketFactory.createClientConnection("localhost", 1575);
-		} catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+			JEditorPane pan = new JEditorPane(); 
+			pan.setEditable(false);
+			pan.setPage(new URL("http://localhost:8100/log.html"));
+	        JScrollPane scrollPane = new JScrollPane(pan);
+			fen.add(scrollPane);
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		fen.setVisible(true);
 		
 				
 	//	System.out.println(Counter.countOccurrences("hello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis trophello World blblbl ! je suis t", 'h'));

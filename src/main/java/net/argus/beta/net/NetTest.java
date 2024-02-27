@@ -5,6 +5,8 @@ import java.io.IOException;
 import net.argus.beta.net.cql.CqlClient;
 import net.argus.beta.net.cql.CqlServerPlugin;
 import net.argus.beta.net.ctp.CtpServer;
+import net.argus.beta.net.pack.PackagePrefab;
+import net.argus.beta.net.pack.cql.CqlQueryPackageDefault;
 import net.argus.database.ColumnInfo;
 import net.argus.database.ColumnValue;
 import net.argus.database.DataBase;
@@ -32,9 +34,9 @@ public class NetTest {
 		}).start();
 		
 		
-		//PackagePrefab.addPackageDefaultHandler(new CqlQueryPackageDefault());
+		PackagePrefab.addPackageDefaultHandler(new CqlQueryPackageDefault());
 		
-		CqlClient client = new CqlClient("127.0.0.1", new Version("0.0.0"));
+		CqlClient client = new CqlClient("127.0.0.1", new Version("0.0.1b"));
 		
 		client.connect("Django", "passwordAzerty");
 	
