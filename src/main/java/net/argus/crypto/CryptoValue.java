@@ -2,6 +2,7 @@ package net.argus.crypto;
 
 import java.math.BigInteger;
 
+@Deprecated
 public class CryptoValue {
 	
 	private BigInteger value;

@@ -3,16 +3,13 @@ package net.argus.net.server;
 import java.io.IOException;
 
 import net.argus.net.StatusConnection;
-import net.argus.net.pack.Package;
-import net.argus.net.pack.PackageBuilder;
-import net.argus.net.pack.PackageType;
 import net.argus.net.socket.CardinalSocket;
-import net.argus.util.debug.Debug;
 
 public class ServerSecurity {
 	
 	public static StatusConnection check(CardinalSocket client) throws IOException {
-		Package pack = client.nextPackage();
+		
+		/*Package pack = client.nextPackage();
 
 		if(pack == null || pack.isNull())
 			return new StatusConnection(false, "package");
@@ -20,19 +17,19 @@ public class ServerSecurity {
 		boolean match = true;
 		
 		/**--SOCKET--**/
-		String socket = pack.getValue("Socket").toString();
+		/*String socket = pack.getValue("Socket").toString();
 		if(!socket.equals(client.getClass().getName())) {
 			match = false;
 			Debug.log("Socket \"" + socket + "\" is not supported on this server");
 		}
 		
 		/**--LIST--**/
-		Object[] clientInfos = pack.getArray("Socket-Info");
+		/*Object[] clientInfos = pack.getArray("Socket-Info");
 		if(clientInfos != null)
 			client.setInfos(clientInfos);
 		
 		/**--SEND--**/
-		PackageBuilder builder = new PackageBuilder(PackageType.CONNECTION);
+		/*PackageBuilder builder = new PackageBuilder(PackageType.CONNECTION);
 		builder.addKey("Match-Socket", match);
 		if(match) {
 			Object[] infos = client.getInfos();
@@ -43,7 +40,9 @@ public class ServerSecurity {
 		client.send(builder.genPackage());
 		client.setMatchSocket(match);
 		
-		return new StatusConnection(match, match?"match":"socket");
+		return new StatusConnection(match, match?"match":"socket");*/
+		
+		return null;
 	}
 
 }

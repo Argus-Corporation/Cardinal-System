@@ -46,7 +46,7 @@ public abstract class CardinalSocket {
 	
 	public abstract Package nextPackage() throws IOException;
 	
-	public abstract void send(Package pack) throws IOException;
+	public abstract void send(Object pack) throws IOException;
 	
 	public abstract CardinalSocket create() throws IOException;
 	public abstract CardinalSocket create(Socket socket) throws IOException;

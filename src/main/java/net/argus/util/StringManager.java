@@ -26,6 +26,14 @@ public class StringManager {
 		return str;
 	}
 	
+	public static String convertStringToString(List<String> strs) {
+		String str = "";
+		for(String s : strs)
+			str = str + "\n" + s;
+		
+		return str;
+	}
+	
 	public static String[] valueOf(String[] strs) {
 		boolean inStr = false;
 		List<String> list = new ArrayList<String>();

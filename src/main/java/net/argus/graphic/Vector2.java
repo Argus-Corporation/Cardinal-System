@@ -76,8 +76,4 @@ public class Vector2 {
 	@Override
 	public String toString() {return "[x: " + x + ", y: " + y + "]";}
 	
-	public static void main(String[] args) {
-		System.out.println(new Vector2(10, 10).normalize());
-	}
-
 }
