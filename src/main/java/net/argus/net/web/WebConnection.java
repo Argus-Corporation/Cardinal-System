@@ -7,11 +7,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.xml.bind.DatatypeConverter;
 
 import net.argus.event.net.web.EventWeb;
 import net.argus.event.net.web.WebEvent;
@@ -65,7 +64,7 @@ public class WebConnection extends Thread {
 				+ "Connection: Upgrade\r\n"
 				+ "Upgrade: websocket\r\n"
 				+ "Sec-WebSocket-Accept: "
-				+ DatatypeConverter.printBase64Binary(MessageDigest.getInstance("SHA-1").digest(
+				+ Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-1").digest(
 						(match.group(1) + MAGIC_KEY).getBytes("UTF-8")))
 				+ "\r\n\r\n").getBytes("UTF-8");
 	}
