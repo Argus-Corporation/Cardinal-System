@@ -2,7 +2,6 @@ package net.argus.image;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -16,10 +15,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import net.argus.gui.frame.Frame;
 
 public class Sprite {
 	
@@ -111,34 +106,4 @@ public class Sprite {
 		return imgs;
 	}
 	
-	public static Sprite s;
-	
-	public static void main(String[] args) {
-		JFrame fen = new JFrame();
-		SPanel pan = new SPanel();
-		pan.setBackground(new Color(64, 64, 64));
-		pan.setLayout(null);
-		fen.setContentPane(pan);
-		
-		s = new Sprite("C:\\Users\\Django\\Pictures\\among-us-sprite.png");
-		
-		fen.setSize(500, 500);
-		fen.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
-		fen.setVisible(true);
-	}
-	
-	static class SPanel extends JPanel {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -7838440476309512138L;
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			SpriteImage[] imgs = s.getSpriteImage();
-			imgs[2].render(g, getWidth() / 2, getHeight() / 2);
-		}
-		
-	}
 }

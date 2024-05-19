@@ -13,6 +13,7 @@ import net.argus.event.mouse.MouseTrackListener;
 import net.argus.gui.frame.Frame;
 import net.argus.system.UserSystem;
 
+@Deprecated
 public class GroupButton extends JPanel {
 	
 	/**

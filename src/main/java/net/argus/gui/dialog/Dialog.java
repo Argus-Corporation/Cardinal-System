@@ -2,6 +2,7 @@ package net.argus.gui.dialog;
 
 import net.argus.gui.frame.Frame;
 
+@Deprecated
 public class Dialog extends Frame {
 
 	/**

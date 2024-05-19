@@ -7,16 +7,16 @@ import java.awt.Image;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowListener;
 
-import net.argus.event.gui.frame.FrameListener;
+import javax.swing.JDialog;
+
 import net.argus.gui.GUI;
 import net.argus.gui.Panel;
-import net.argus.gui.dialog.Dialog;
 import net.argus.lang.Lang;
 import net.argus.lang.LangRegister;
 
 public abstract class DialogComponent implements GUI {
 	
-	private Dialog dialog = new Dialog();
+	private JDialog dialog = new JDialog();
 	
 	private String title;
 		
@@ -71,13 +71,6 @@ public abstract class DialogComponent implements GUI {
 		dialog.setIconImage(icon);
 	}
 	
-	/**
-	 * setIcon
-	 * @param icon
-	 */
-	public void setDialogIcon(Image icon) {
-		dialog.setFrameIconImage(icon);
-	}
 	
 	/**
 	 * setPack
@@ -126,14 +119,6 @@ public abstract class DialogComponent implements GUI {
 	}
 	
 	/**
-	 * addFrameListener
-	 * @param listener
-	 */
-	public void addFrameListener(FrameListener listener) {
-		dialog.addFrameListener(listener);
-	}
-	
-	/**
 	 * addFocusListener
 	 * @param l
 	 */
@@ -176,7 +161,7 @@ public abstract class DialogComponent implements GUI {
 	 * getDialog
 	 * @return
 	 */
-	public Dialog getDialog() {
+	public JDialog getDialog() {
 		return dialog;
 	}
 	

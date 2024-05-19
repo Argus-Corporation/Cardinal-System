@@ -14,6 +14,7 @@ import net.argus.gui.frame.Frame;
 import net.argus.gui.frame.top.button.GroupButton;
 import net.argus.gui.frame.top.button.TitleButtonType;
 
+@Deprecated
 public class TitleBar extends JComponent {
 
 	/**

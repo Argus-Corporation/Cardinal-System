@@ -8,6 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 import net.argus.util.Display;
 
+@Deprecated
 class Motion {
 	
 	private TitleBar titleBar;

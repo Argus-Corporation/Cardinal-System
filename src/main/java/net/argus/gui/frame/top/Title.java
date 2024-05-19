@@ -10,6 +10,7 @@ import javax.swing.JComponent;
 
 import net.argus.gui.Icon;
 
+@Deprecated
 class Title extends JComponent {
 
 	/**

@@ -16,6 +16,7 @@ import net.argus.event.mouse.EventMouse;
 import net.argus.event.mouse.MouseTrackListener;
 import net.argus.gui.frame.Frame;
 
+@Deprecated
 class Button extends JPanel {
 
 	/**

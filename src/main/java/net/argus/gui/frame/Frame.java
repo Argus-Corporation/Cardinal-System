@@ -24,6 +24,7 @@ import net.argus.gui.frame.top.button.TitleButtonType;
 import net.argus.system.UserSystem;
 import net.argus.util.Display;
 
+@Deprecated
 public class Frame extends JFrame {
 
 	/**

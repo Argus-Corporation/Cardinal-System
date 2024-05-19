@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import net.argus.gui.frame.Frame;
 
+@Deprecated
 public class FrameAnimation extends Animation {
 	
 	public static final int CLOSE = 0;

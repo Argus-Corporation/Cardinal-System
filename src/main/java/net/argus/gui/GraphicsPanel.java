@@ -88,7 +88,7 @@ public class GraphicsPanel extends Panel {
 		gp.setColor(Color.BLACK);
 		
 		fen.add(gp);
-		gp.addPoint(new Vector2(0, 0));
+		gp.addPoint(new Vector2(0, 10));
 		gp.addPoint(new Vector2(-100, 100));
 		
 		
