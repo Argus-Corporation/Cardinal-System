@@ -3,6 +3,7 @@ package net.argus.system;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import net.argus.Cardinal;
 import net.argus.beta.net.Protocol;
 import net.argus.beta.net.ctp.CtpURLStreamHandler;
 import net.argus.beta.net.pack.PackagePrefab;
@@ -33,11 +34,18 @@ public class InitializationSystem {
 		InitializedSystemManager systemManager = UserSystem.getDefaultInitializedSystemManager();
 		addInitializedUI(new InitializedUI());
 		
+		if(OS.currentOS() == OS.OSX) {
+			UserSystem.setProperty("apple.awt.application.appearance", "system");
+			UserSystem.defineProperty("apple.laf.useScreenMenuBar", "true");
+
+			String name = UserSystem.getProperty("name");
+			UserSystem.defineProperty("apple.awt.application.name", (name==null||name.isEmpty())?Cardinal.NAME:name);
+		}
+		if(ui) preInitUi(args);
 		UserSystem.defineProperty("showInfo", true);
 		UserSystem.setProperty("file.encoding", "UTF-8");
 		
 		preInit(args);
-		if(ui) preInitUi(args);
 		if(systemManager != null) systemManager.preInit(args);
 		if(manager != null) manager.preInit(args);
 		

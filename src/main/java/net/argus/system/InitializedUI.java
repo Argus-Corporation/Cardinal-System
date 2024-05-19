@@ -17,7 +17,6 @@ public class InitializedUI implements InitializedSystemManager {
 	public void init(String[] args) {
 		UIManager.put("Panel.background", Color.WHITE);
 		UIManager.put("OptionPane.background", Color.WHITE);
-		//UIManager.put("File", value)
 	}
 
 	@Override
