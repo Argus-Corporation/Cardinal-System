@@ -44,8 +44,13 @@ public class Downloader {
 		try {
 			url = new URL(cjson.getString("download.url"));
 			
-			commonFiles = cjson.getStringArray("download.files.common");
-			nativeFiles = cjson.getStringArray("download.files." + os.toString().toLowerCase());
+			try {
+				commonFiles = cjson.getStringArray("download.files.common");
+			}catch (NullPointerException e) {}
+			
+			try {
+				nativeFiles = cjson.getStringArray("download.files." + os.toString().toLowerCase());
+			}catch (NullPointerException e) {}
 			
 			optionalFiles = cjson.getStringArray("download.files.optional");
 		}catch(CJSONException e) {throw new Error(e);}
@@ -54,11 +59,17 @@ public class Downloader {
 	public void getAll(String writeFolder) throws IOException {
 		d = new ProcessDownload(url, event);
 		
-		event.startEvent(EventDownload.START_PROCESS, new DownloadEvent(url, "common", commonFiles.length + optionalFiles.length, true));
-		getCommons(d, writeFolder);
+		if(commonFiles != null) {
+			event.startEvent(EventDownload.START_PROCESS, new DownloadEvent(url, "common", commonFiles.length + optionalFiles.length, true));
+			getCommons(d, writeFolder);
+		}else
+			Debug.log("No common files: skipped");
 		
-		event.startEvent(EventDownload.START_PROCESS, new DownloadEvent(url, "native", nativeFiles.length, true));
-		getNatives(d, writeFolder);
+		if(nativeFiles != null) {
+			event.startEvent(EventDownload.START_PROCESS, new DownloadEvent(url, "native", nativeFiles.length, true));
+			getNatives(d, writeFolder);
+		}else
+			Debug.log("No native files: skipped");
 		
 		event.startEvent(EventDownload.END_DOWNLOAD, new DownloadEvent(url, "all", -1, true));
 	}

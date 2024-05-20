@@ -18,6 +18,7 @@ public class ExtractTemp {
 	public ExtractTemp() throws IOException, URISyntaxException {
 		jarFile = new JarFile(new File(ExtractTemp.class.getProtectionDomain().getCodeSource().getLocation().toURI()), false);
 		entities = jarFile.entries();
+		
 	}
 	
 	public void copy(List<String> fileNames) throws IOException {
@@ -28,7 +29,8 @@ public class ExtractTemp {
 				
 		while(entities.hasMoreElements()) {
 			JarEntry entry = entities.nextElement();
-	    	String fileJarName = entry.getName();
+
+			String fileJarName = entry.getName();
 	    	String fileExtention = fileJarName.substring(fileJarName.lastIndexOf('.') + 1);
 	    	
 	    	if(fileNames.contains(fileJarName))

@@ -9,6 +9,7 @@ import net.argus.gui.CFrame;
 import net.argus.instance.CardinalProgram;
 import net.argus.instance.Program;
 import net.argus.system.InitializationSystem;
+import net.argus.system.Temp;
 
 @Program(instanceName = "test")
 public class Test extends CardinalProgram {
@@ -52,7 +53,9 @@ public class Test extends CardinalProgram {
 		fen.setDefaultCloseOperation(3);
 		fen.setSize(1200, 700);
 		fen.setVisible(true);
-				
+		
+		System.out.println(Temp.getTempDir());
+		
 	}
 		
 }
