@@ -7,7 +7,6 @@ import net.argus.util.os.linux.LinuxUtilities;
 import net.argus.util.os.osx.OSXUtilities;
 import net.argus.util.os.windows.WindowsUtilities;
 
-@SuppressWarnings("deprecation")
 public abstract class OSUtilities {
 	
 	public static final WindowsUtilities WINDOWS_UTILITIES = new WindowsUtilities();
@@ -26,7 +25,7 @@ public abstract class OSUtilities {
 			case LINUX:
 				return LINUX_UTILITIES;
 			case OSX:
-				return null;
+				return OSX_UTILITIES;
 		}
 		return null;
 	}

@@ -35,7 +35,7 @@ public class Math {
 		obj = intConvert.toArray(perfect);
 		in = new int[obj.length];
 		
-		for(int i = 0; i < obj.length; i++) in[i] = new Integer(obj[i].toString());
+		for(int i = 0; i < obj.length; i++) in[i] = Integer.valueOf(obj[i].toString());
 		ThreadManager.PROGRESSE.restorOldParameter();
 		return in;
 	}
@@ -62,7 +62,7 @@ public class Math {
 		obj = intConvert.toArray(first);
 		in = new int[obj.length];
 		
-		for(int i = 0; i < obj.length; i++) in[i] = new Integer(obj[i].toString());
+		for(int i = 0; i < obj.length; i++) in[i] = Integer.valueOf(obj[i].toString());
 		ThreadManager.PROGRESSE.restorOldParameter();
 		return in;
 	}

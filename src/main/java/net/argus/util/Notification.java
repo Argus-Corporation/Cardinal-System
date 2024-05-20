@@ -7,10 +7,7 @@ import java.awt.TrayIcon.MessageType;
 
 import javax.swing.ImageIcon;
 
-import net.argus.file.FileManager;
-import net.argus.system.InitializationSystem;
 import net.argus.system.OS;
-import net.argus.system.UserSystem;
 
 public class Notification {
 	
@@ -57,13 +54,6 @@ public class Notification {
 		    } 
 		    trayIcon.displayMessage(mes, name, type);
 		}catch(Exception e) {e.printStackTrace();}
-	}
-	
-	public static void main(String[] args) {
-		InitializationSystem.initSystem(args, UserSystem.getDefaultInitializedSystemManager());
-
-		Notification.showNotification("test", " ", "Argus", MessageType.ERROR, FileManager.getPath("res/favIcon16x16.png"));
-		
 	}
 	
 }

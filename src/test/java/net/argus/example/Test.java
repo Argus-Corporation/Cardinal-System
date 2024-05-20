@@ -52,8 +52,7 @@ public class Test extends CardinalProgram {
 		fen.setDefaultCloseOperation(3);
 		fen.setSize(1200, 700);
 		fen.setVisible(true);
-		
-		
+				
 	}
 		
 }

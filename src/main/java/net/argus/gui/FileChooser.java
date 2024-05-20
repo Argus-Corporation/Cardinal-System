@@ -1,4 +1,4 @@
-package net.argus.util;
+package net.argus.gui;
 
 import java.awt.Component;
 import java.awt.HeadlessException;

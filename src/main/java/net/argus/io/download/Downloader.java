@@ -13,6 +13,7 @@ import net.argus.exception.CJSONException;
 import net.argus.file.CJSONFile;
 import net.argus.system.OS;
 import net.argus.util.debug.Debug;
+import net.argus.util.debug.Info;
 
 public class Downloader {
 	
@@ -78,7 +79,7 @@ public class Downloader {
 		if(d != null)
 			d.stop();
 		
-		Debug.log("The downlod wasn't started");
+		Debug.log("The downlod wasn't started", Info.ERROR);
 	}
 	
 }

@@ -29,7 +29,7 @@ public class Debug {
 	}
 	
 	private static synchronized void print(Object text, Info info) {
-		String prefix =  "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "[" + Thread.currentThread().getName() + "/" + info + "]: ";
+		String prefix =  "[" + (info==Info.INFO?"+":"-") + "][" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "[" + Thread.currentThread().getName() + "/" + info + "]: ";
 		for(Logger logger : loggers)
 			if(info == Info.INFO)
 				logger.log(prefix + text);

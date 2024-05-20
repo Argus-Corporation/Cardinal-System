@@ -25,6 +25,7 @@ public class Loader {
 	public static CardinalProgram load(String classPath) {
 		try {
 			Class<?> clas = Loader.class.getClassLoader().loadClass(classPath);
+			@SuppressWarnings("deprecation")
 			CardinalProgram program = (CardinalProgram) clas.newInstance();
 			
 			if(loadProgram(program) == -1)
