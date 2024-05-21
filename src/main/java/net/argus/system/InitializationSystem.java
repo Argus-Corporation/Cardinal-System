@@ -118,6 +118,8 @@ public class InitializationSystem {
 	private static void showInfo() {
 		Debug.log("OS: " + System.getProperty("os.name"));
 		Debug.log("Arch: " + System.getProperty("os.arch"));
+		Debug.log("Temp: " + Temp.getTempDir());
+
 		Debug.log("Network: " + (Network.isConnected()?"connected":"unconnected"));
 	}
 	
