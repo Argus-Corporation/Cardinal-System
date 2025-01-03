@@ -16,6 +16,7 @@ import net.argus.util.RunTime;
 import net.argus.util.ThreadManager;
 import net.argus.util.Version;
 import net.argus.util.debug.Debug;
+import net.argus.util.debug.Info;
 import net.argus.util.debug.Logger;
 
 public class UserSystem {
@@ -47,12 +48,16 @@ public class UserSystem {
 			}
 			
 			CJSONFile man = new CJSONFile("manifest", "/", Instance.SYSTEM);
-			if(man.exists()) {
-				manifest = CJSONParser.getCJSON(man);
-				
-				if(getBooleanProperty("update"))
-					if(Network.isConnected())
-						update = new AutoUpdate();
+			try {
+				if(man.exists()) {
+					manifest = CJSONParser.getCJSON(man);
+					
+					if(getBooleanProperty("update"))
+						if(Network.isConnected())
+							update = new AutoUpdate();
+				}
+			}catch(Exception e) {
+				Debug.log("Loading the manifest or the update failed", Info.ERROR);
 			}
 		}
 		
@@ -81,7 +86,7 @@ public class UserSystem {
 	/**--LIBRARY--**/
 	public static final String LIBRARY_WINDOWS = "dll";
 	public static final String LIBRARY_LINUX = "so";
-	public static final String Library_OSX = "dylib";
+	public static final String LIBRARY_OSX = "dylib";
 	
 	public static void loadLibrary(String name) {
 		ThreadManager.setTemporaryName(ThreadManager.SYSTEM.getName());
@@ -91,7 +96,7 @@ public class UserSystem {
 		if(OS.currentOS() == OS.LINUX)
 			extention = LIBRARY_LINUX;
 		else if(OS.currentOS() == OS.OSX)
-			extention = Library_OSX;
+			extention = LIBRARY_OSX;
 		
 		String libFile = name + System.getProperty("os.arch").substring(3) + "." + extention;
 		
