@@ -42,6 +42,11 @@ public class AutoUpdate {
 	public UpdateInfo isLatestVersion() {
 		DoubleStock<Version, Version> versions = getLatestVersion();
 		
+		if(versions == null) {
+			UserSystem.setProperty("update", false);
+			return new UpdateInfo(true);
+		}
+		
 		Version newVersion = versions.getFirst();
 		Version newDebug = versions.getSecond();
 		
